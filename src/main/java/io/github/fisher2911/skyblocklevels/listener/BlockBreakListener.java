@@ -6,6 +6,7 @@ import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -19,7 +20,7 @@ public class BlockBreakListener implements Listener {
         this.userManager = plugin.getUserManager();
     }
 
-    @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final User user = this.userManager.getUser(player);

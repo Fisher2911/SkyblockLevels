@@ -1,6 +1,8 @@
 package io.github.fisher2911.skyblocklevels.item;
 
+import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.impl.ExplosionTool;
+import io.github.fisher2911.skyblocklevels.item.impl.HealBlock;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import io.github.fisher2911.skyblocklevels.util.TriConsumer;
@@ -18,21 +20,23 @@ import java.util.Map;
 
 public class ItemManager {
 
+    private final SkyblockLevels plugin;
     private final Map<String, SpecialSkyItem> items;
 
     private final Map<Class<? extends Event>, Collection<Class<?>>> classMap = Map.of(
             BlockBreakEvent.class, List.of(SkyTool.class, SkyBlock.class),
             BlockPlaceEvent.class, List.of(SkyBlock.class),
             EntityDamageEvent.class, List.of(SkyWeapon.class),
-            PlayerInteractEvent.class, List.of(Usable.class)
+            PlayerInteractEvent.class, List.of(Usable.class, SkyBlock.class)
     );
     private final Map<Class<?>, TriConsumer<Object, Object, Object>> itemActions = Map.of(
             SkyTool.class, (u, s, e) -> {
+                if (!(s instanceof SkyTool skyTool)) return;
                 if (e instanceof BlockBreakEvent event) {
-                    ((SkyTool) s).onBreak((User) u, event);
+                    skyTool.onBreak((User) u, event);
                     return;
                 }
-                ((SkyTool) s).onUse((User) u, (PlayerInteractEvent) e);
+                skyTool.onUse((User) u, (PlayerInteractEvent) e);
             },
             SkyBlock.class, (u, s, e) -> {
                 if (!(s instanceof SkyBlock skyBlock)) return;
@@ -40,15 +44,27 @@ public class ItemManager {
                     (skyBlock).onBreak((User) u, event);
                     return;
                 }
+                if (e instanceof PlayerInteractEvent event) {
+                    (skyBlock).onClick((User) u, event);
+                    return;
+                }
                 skyBlock.onPlace((User) u, (BlockPlaceEvent) e);
             },
-            SkyWeapon.class, (u, s, e) -> ((SkyWeapon) s).onAttack((User) u, (EntityDamageEvent) e),
-            Usable.class, (u, s, e) -> ((Usable) s).onUse((User) u, (PlayerInteractEvent) e)
+            SkyWeapon.class, (u, s, e) -> {
+                if (!(s instanceof SkyWeapon skyWeapon)) return;
+                skyWeapon.onAttack((User) u, (EntityDamageEvent) e);
+            },
+            Usable.class, (u, s, e) -> {
+                if (!(s instanceof Usable usable)) return;
+                usable.onUse((User) u, (PlayerInteractEvent) e);
+            }
     );
 
-    public ItemManager(Map<String, SpecialSkyItem> items) {
+    public ItemManager(SkyblockLevels plugin, Map<String, SpecialSkyItem> items) {
+        this.plugin = plugin;
         this.items = items;
         this.register(new ExplosionTool());
+        this.register(new HealBlock(this.plugin.getWorlds()));
     }
 
     public void register(SpecialSkyItem item) {
@@ -60,7 +76,6 @@ public class ItemManager {
     }
 
     public void handle(User user, SpecialSkyItem item, Event event) {
-        user.sendMessage("Events: " + this.classMap.get(event.getClass()).size());
         for (Class<?> clazz : this.classMap.get(event.getClass())) {
             final TriConsumer<Object, Object, Object> consumer = this.itemActions.get(clazz);
             if (consumer == null) continue;
@@ -70,11 +85,11 @@ public class ItemManager {
 
     public void handle(User user, ItemStack itemStack, Event event) {
         final String id = Keys.getSkyItem(itemStack);
-        if (id.isEmpty()) {
-            user.sendMessage("Not sky item: " + id);
-            return;
-        }
-        user.sendMessage("Is sky item: " + id);
+        if (id.isEmpty()) return;
+        this.handle(user, this.getItem(id), event);
+    }
+
+    public void handle(User user, String id, Event event) {
         this.handle(user, this.getItem(id), event);
     }
 

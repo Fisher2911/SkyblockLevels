@@ -17,22 +17,31 @@ public class ChunkMap {
     }
 
     public int getChunkX() {
-        return chunkX;
+        return this.chunkX;
     }
 
     public int getChunkZ() {
-        return chunkZ;
+        return this.chunkZ;
     }
 
     public Map<Position, SkyBlock> getBlocks() {
-        return blocks;
+        return this.blocks;
+    }
+
+    public void addBlock(Position position, SkyBlock block) {
+        this.blocks.put(position, block);
+    }
+
+    public void removeBlock(Position position) {
+        this.blocks.remove(position);
     }
 
     public SkyBlock getBlockAt(Position position) {
-        return blocks.getOrDefault(position, SkyBlock.EMPTY);
+        return this.blocks.getOrDefault(position, SkyBlock.EMPTY);
     }
 
     public SkyBlock getBlockAt(int x, int y, int z) {
         return this.getBlockAt(new Position(x, y, z));
     }
+
 }

@@ -1,19 +1,44 @@
 package io.github.fisher2911.skyblocklevels.world;
 
+import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.jetbrains.annotations.Nullable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class WorldManager {
+public class WorldManager implements Listener {
 
+    private final SkyblockLevels plugin;
     private final World world;
     private final Map<Position2D, ChunkMap> chunks;
+    private BukkitTask task;
 
-    public WorldManager(World world, Map<Position2D, ChunkMap> chunks) {
+    public WorldManager(SkyblockLevels plugin, World world, Map<Position2D, ChunkMap> chunks) {
+        this.plugin = plugin;
         this.world = world;
         this.chunks = chunks;
+    }
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        final Chunk chunk = event.getChunk();
+        final Position2D position = new Position2D(chunk.getX(), chunk.getZ());
+        this.chunks.put(position, new ChunkMap(chunk.getX(), chunk.getZ(), new ConcurrentHashMap<>()));
+    }
+
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        final Chunk chunk = event.getChunk();
+        this.chunks.remove(new Position2D(chunk.getX(), chunk.getZ()));
     }
 
     public World getWorld() {
@@ -28,13 +53,64 @@ public class WorldManager {
         return this.chunks.get(new Position2D(chunkX, chunkZ));
     }
 
-    @Nullable
     public SkyBlock getBlockAt(int x, int y, int z) {
-        ChunkMap chunk = this.getChunkAt(x >> 4, z >> 4);
+        return this.getBlockAt(new Position(x, y, z));
+    }
+    public SkyBlock getBlockAt(Position position) {
+        final int x = (int) position.getX();
+        final int y = (int) position.getY();
+        final int z = (int) position.getZ();
+        final ChunkMap chunk = this.getChunkAt(x >> 4, z >> 4);
+        if (chunk == null) return SkyBlock.EMPTY;
+        return chunk.getBlockAt(x, y, z);
+    }
+
+    public void addBlock(SkyBlock block, WorldPosition worldPosition) {
+        final Position position = worldPosition.getPosition();
+        ChunkMap chunk = this.getChunkAt((int) position.getX() >> 4, (int) position.getZ() >> 4);
         if (chunk == null) {
-            return null;
+            chunk = new ChunkMap((int) position.getX() >> 4, (int) position.getZ() >> 4, new ConcurrentHashMap<>());
+            this.chunks.put(new Position2D(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         }
-        return chunk.getBlockAt(x & 15, y, z & 15);
+        chunk.addBlock(position, block);
+    }
+
+    public void removeBlock(WorldPosition worldPosition) {
+        final Position position = worldPosition.getPosition();
+        final ChunkMap chunk = this.getChunkAt((int) position.getX() >> 4, (int) position.getZ() >> 4);
+        if (chunk == null) return;
+        chunk.removeBlock(position);
+    }
+
+    public void startTicking() {
+        if (this.task != null) return;
+        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(
+                this.plugin,
+                () -> {
+                    final Map<WorldPosition, SkyBlock> syncBlocks = new HashMap<>();
+                    for (ChunkMap chunk : this.chunks.values()) {
+                        chunk.getBlocks().forEach((position, block) -> {
+                            final WorldPosition worldPosition = position.toWorldPosition(this.world);
+                            if (!block.isAsync()) {
+                                syncBlocks.put(worldPosition, block);
+                                return;
+                            }
+                            block.tick(worldPosition);
+                        });
+                    }
+                    Bukkit.getScheduler().runTask(
+                            this.plugin,
+                            () -> syncBlocks.forEach((worldPosition, block) -> block.tick(worldPosition))
+                    );
+                },
+                1,
+                1
+        );
+    }
+
+    public void shutdown() {
+        this.task.cancel();
+        this.task = null;
     }
 
 }

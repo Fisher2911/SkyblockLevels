@@ -4,6 +4,8 @@ import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -83,5 +85,40 @@ public class BukkitUser implements User {
         final Player player = this.getPlayer();
         if (player == null) return null;
         return player.getInventory();
+    }
+
+    @Override
+    public void setHealth(double health) {
+        final Player player = this.getPlayer();
+        if (player == null) return;
+        player.setHealth(health);
+    }
+
+    @Override
+    public double getHealth() {
+        final Player player = this.getPlayer();
+        if (player == null) return -1;
+        return player.getHealth();
+    }
+
+    @Override
+    public void setFood(int food) {
+        final Player player = this.getPlayer();
+        if (player == null) return;
+        player.setFoodLevel(food);
+    }
+
+    @Override
+    public void addPotionEffect(PotionEffect potionEffect) {
+        final Player player = this.getPlayer();
+        if (player == null) return;
+        player.addPotionEffect(potionEffect);
+    }
+
+    @Override
+    public void removePotionEffect(PotionEffectType potionEffectType) {
+        final Player player = this.getPlayer();
+        if (player == null) return;
+        player.removePotionEffect(potionEffectType);
     }
 }

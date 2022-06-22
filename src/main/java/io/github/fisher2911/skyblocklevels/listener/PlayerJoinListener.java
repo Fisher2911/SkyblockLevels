@@ -4,6 +4,7 @@ import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.Collection;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -17,7 +18,7 @@ public class PlayerJoinListener implements Listener {
         this.userManager = userManager;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         this.userManager.addUser(new BukkitUser(event.getPlayer().getUniqueId(), new Collection(new HashMap<>())));
     }

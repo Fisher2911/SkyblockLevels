@@ -12,14 +12,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ExplosionTool implements SkyTool {
 
-    private final SkyItem skyItem = new SkyItem("explosion_tool", ItemBuilder.from(Material.BEACON));
+    private final SkyItem skyItem = new SkyItem("explosion_tool", ItemBuilder.from(Material.WOODEN_PICKAXE));
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
         final Location location = event.getBlock().getLocation();
         final WorldPosition position = WorldPosition.fromLocation(location);
         position.getWorld().createExplosion(location, 1);
-        user.sendMessage("Exploded");
     }
 
     @Override
