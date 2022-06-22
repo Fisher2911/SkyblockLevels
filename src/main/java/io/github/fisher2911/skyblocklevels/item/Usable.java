@@ -5,7 +5,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public interface Usable {
 
-    SkyItem getItem();
     void onUse(User user, PlayerInteractEvent event);
 
 }

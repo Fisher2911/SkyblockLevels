@@ -13,4 +13,15 @@ public class LockedItem {
         this.lockedItem = lockedItem;
     }
 
+    public Condition<User> getCondition() {
+        return this.condition;
+    }
+
+    public Usable getLockedItem() {
+        return this.lockedItem;
+    }
+
+    public boolean isAllowed(User user) {
+        return this.condition.isAllowed(user);
+    }
 }

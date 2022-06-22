@@ -1,15 +1,9 @@
 package io.github.fisher2911.skyblocklevels.item;
 
-public abstract class SpecialSkyItem implements Usable {
+public interface SpecialSkyItem {
 
-    private final SkyItem skyItem;
+    SpecialSkyItem EMPTY = () -> SkyItem.EMPTY;
 
-    public SpecialSkyItem(SkyItem skyItem) {
-        this.skyItem = skyItem;
-    }
-
-    public SkyItem getSkyItem() {
-        return skyItem;
-    }
+    SkyItem getSkyItem();
 
 }

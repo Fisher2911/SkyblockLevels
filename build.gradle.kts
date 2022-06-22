@@ -13,6 +13,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.18-R0.1-SNAPSHOT")
     compileOnly("com.bgsoftware:SuperiorSkyblockAPI:1.10.0")
 }

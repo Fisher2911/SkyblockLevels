@@ -5,6 +5,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SkyItem {
 
+    public static SkyItem EMPTY = new SkyItem("", ItemBuilder.EMPTY);
+
     private final String id;
     private final ItemBuilder itemBuilder;
 

@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.world;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 public class WorldPosition {
@@ -18,5 +19,13 @@ public class WorldPosition {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Location toLocation() {
+        return new Location(world, position.getX(), position.getY(), position.getZ());
+    }
+
+    public static WorldPosition fromLocation(Location location) {
+        return new WorldPosition(location.getWorld(), new Position(location.getX(), location.getY(), location.getZ()));
     }
 }
