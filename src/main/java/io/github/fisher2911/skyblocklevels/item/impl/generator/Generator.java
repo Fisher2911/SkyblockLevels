@@ -4,6 +4,7 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
+import io.github.fisher2911.skyblocklevels.item.MineSpeeds;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -28,6 +29,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,13 @@ public class Generator implements SkyBlock, Delayed {
     private final Material resetBlock;
     private final Material generatorBlock;
     private final WeightedList<Supplier<ItemStack>> items;
+    private final int ticksToBreak;
+    private final MineSpeeds mineSpeeds;
 
     private int tickCounter;
     private boolean isGenerated;
     private boolean running = true;
+    private final Function<Player, Integer> mineSpeedFunction;
 
     public Generator(
             SkyblockLevels plugin,
@@ -54,7 +59,9 @@ public class Generator implements SkyBlock, Delayed {
             int tickDelay,
             Material resetBlock,
             Material generatorBlock,
-            WeightedList<Supplier<ItemStack>> items
+            WeightedList<Supplier<ItemStack>> items,
+            int ticksToBreak,
+            MineSpeeds mineSpeeds
     ) {
         this.plugin = plugin;
         this.id = id;
@@ -64,6 +71,12 @@ public class Generator implements SkyBlock, Delayed {
         this.resetBlock = resetBlock;
         this.generatorBlock = generatorBlock;
         this.items = items;
+        this.ticksToBreak = ticksToBreak;
+        this.mineSpeeds = mineSpeeds;
+        this.mineSpeedFunction = player -> {
+            final ItemStack inHand = player.getInventory().getItemInMainHand();
+            return this.mineSpeeds.getModifier(this.plugin.getItemManager(), inHand).modify(this.ticksToBreak);
+        };
     }
 
     @Override
@@ -76,13 +89,15 @@ public class Generator implements SkyBlock, Delayed {
             this.running = false;
             return;
         }
+        final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
+        this.plugin.getBlockBreakManager().reset(position);
         event.setCancelled(true);
         final Player player = event.getPlayer();
         this.plugin.getBlockBreakManager().startMining(
-                Integer.MAX_VALUE,
+                p -> Integer.MAX_VALUE,
                 player,
-                WorldPosition.fromLocation(block.getLocation()),
-                (position) -> Bukkit.getScheduler().runTask(
+                position,
+                p -> Bukkit.getScheduler().runTask(
                         this.plugin,
                         () -> this.onBreak(user, new BlockBreakEvent(block, player))
                 )
@@ -138,7 +153,7 @@ public class Generator implements SkyBlock, Delayed {
         block.setType(this.generatorBlock);
         this.isGenerated = true;
         this.plugin.getBlockBreakManager().updateTicks(
-                40,
+                this.mineSpeedFunction,
                 WorldPosition.fromLocation(block.getLocation())
         );
     }
@@ -150,7 +165,7 @@ public class Generator implements SkyBlock, Delayed {
         final Player player = bukkitUser.getPlayer();
         if (!this.isGenerated) {
             this.plugin.getBlockBreakManager().startMining(
-                    Integer.MAX_VALUE,
+                    p -> Integer.MAX_VALUE,
                     player,
                     WorldPosition.fromLocation(block.getLocation()),
                     (position) -> Bukkit.getScheduler().runTask(
@@ -162,7 +177,7 @@ public class Generator implements SkyBlock, Delayed {
         }
         if (player == null) return;
         this.plugin.getBlockBreakManager().startMining(
-                40,
+                this.mineSpeedFunction,
                 player,
                 WorldPosition.fromLocation(block.getLocation()),
                 (position) -> Bukkit.getScheduler().runTask(
@@ -228,6 +243,8 @@ public class Generator implements SkyBlock, Delayed {
         private static final String RESET_BLOCK = "reset-block";
         private static final String GENERATOR_BLOCK = "generator-block";
         private static final String ITEMS = "items";
+        private static final String TICKS_TO_BREAK = "ticks-to-break";
+        private static final String SPEED_MODIFIERS = "speed-modifiers";
 
         @Override
         public Supplier<Generator> deserialize(Type type, ConfigurationNode node) {
@@ -245,9 +262,10 @@ public class Generator implements SkyBlock, Delayed {
                                         stream().
                                         map(w -> new Weight<>((Supplier<ItemStack>) () -> w.getValue().get(), w.getWeight())).
                                         collect(Collectors.toList()));
-
+                final int ticksToBreak = node.node(TICKS_TO_BREAK).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Generator(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, tickDelay, resetBlock, generatorBlock, items);
+                final MineSpeeds speeds = MineSpeeds.serializer().deserialize(MineSpeeds.class, node.node(SPEED_MODIFIERS));
+                return () -> new Generator(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, tickDelay, resetBlock, generatorBlock, items, ticksToBreak, speeds);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

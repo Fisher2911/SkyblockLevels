@@ -81,8 +81,7 @@ public class WeightedList<T> {
                     map(child -> {
                         try {
                             if (serializer == null) return (Weight<T>) child.get(this.clazz);
-                            System.out.println(child.childrenMap());
-                            return (Weight<T>) this.serializer.deserialize(this.clazz, child);/* child.get(this.clazz, this.serializer);*/
+                            return (Weight<T>) this.serializer.deserialize(this.clazz, child);
                         } catch (SerializationException e) {
                             e.printStackTrace();
                             return null;

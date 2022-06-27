@@ -22,7 +22,7 @@ public class Random {
         return RANDOM.nextBoolean();
     }
 
-    public static int rand(int min, int max) {
+    public static int nextInt(int min, int max) {
         return RANDOM.nextInt(min, max);
     }
 

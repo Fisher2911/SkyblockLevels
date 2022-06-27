@@ -47,9 +47,9 @@ public class RTPCommand extends SkyCommand {
     }
 
     private Location getRandLocation() {
-        final int x = Random.rand(-10_000, 10_000);
+        final int x = Random.nextInt(-10_000, 10_000);
         final int y = 64;
-        final int z = Random.rand(-10_000, 10_000);
+        final int z = Random.nextInt(-10_000, 10_000);
         return new Location(this.plugin.getWorld().getWorld(), x, y, z);
     }
 }

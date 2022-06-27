@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class ItemLoader {
 
-    private static final Path ITEM_PATH = SkyblockLevels.getPlugin(SkyblockLevels.class).getDataFolder().toPath().resolve(Path.of("items", "items.yml"));
+    private static final Path ITEM_FOLDER_PATH = SkyblockLevels.getPlugin(SkyblockLevels.class).getDataFolder().toPath().resolve(Path.of("items"));
     private static final Map<String, Function<ConfigurationNode, Supplier<? extends SpecialSkyItem>>> suppliers = new HashMap<>();
 
     public static void register(String id, Function<ConfigurationNode, Supplier<? extends SpecialSkyItem>> supplier) {
@@ -44,35 +44,49 @@ public class ItemLoader {
     public static void load() {
         final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
         try {
-            final File file = ITEM_PATH.toFile();
-            if (!file.exists()) {
-                file.getParentFile().getParentFile().mkdirs();
-                file.getParentFile().mkdirs();
-                plugin.saveResource(Path.of("items", "items.yml").toString(), false);
-                if (!file.exists()) file.createNewFile();
+            final File folder = ITEM_FOLDER_PATH.toFile();
+            if (!folder.exists()) {
+                folder.getParentFile().mkdirs();
+//                plugin.saveResource(Path.of("items", "items.yml").toString(), false);
+                if (!folder.exists()) folder.mkdirs();
             }
-            final YamlConfigurationLoader loader = YamlConfigurationLoader.
-                    builder().
-                    path(ITEM_PATH).
-                    build();
-            final ConfigurationNode source = loader.load();
-            final var children = source.childrenMap();
-            children.values().forEach(node -> {
-                final String type = node.node(CLASS).getString("").replace("-", "");
-                final Function<ConfigurationNode, Supplier<? extends SpecialSkyItem>> function = suppliers.get(type);
-                if (function == null) {
-                    plugin.getLogger().severe("Could not load class: " + type + " from " + node.key());
-                    return;
-                }
-                final Supplier<? extends SpecialSkyItem> supplier = function.apply(node);
-                if (supplier == null) return;
-                final String id = node.node(ITEM_ID).getString("");
-                plugin.getLogger().info("Loaded item " + id);
-                plugin.getItemManager().register(id, supplier);
-            });
+            final File itemFile = ITEM_FOLDER_PATH.resolve("items.yml").toFile();
+            if (!itemFile.exists()) {
+                plugin.saveResource(Path.of("items", "items.yml").toString(), false);
+            }
+            final File[] files = folder.listFiles();
+            if (files == null) return;
+            for (File file : files) {
+               load(plugin, file);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void load(SkyblockLevels plugin, File file) throws IOException {
+        if (!file.exists()) {
+            plugin.saveResource(Path.of("items", file.getName()).toString(), false);
+        }
+        final YamlConfigurationLoader loader = YamlConfigurationLoader.
+                builder().
+                path(file.toPath()).
+                build();
+        final ConfigurationNode source = loader.load();
+        final var children = source.childrenMap();
+        children.values().forEach(node -> {
+            final String type = node.node(CLASS).getString("").replace("-", "");
+            final Function<ConfigurationNode, Supplier<? extends SpecialSkyItem>> function = suppliers.get(type);
+            if (function == null) {
+                plugin.getLogger().severe("Could not load class: " + type + " from " + node.key());
+                return;
+            }
+            final Supplier<? extends SpecialSkyItem> supplier = function.apply(node);
+            if (supplier == null) return;
+            final String id = node.node(ITEM_ID).getString("");
+            plugin.getLogger().info("Loaded item " + id);
+            plugin.getItemManager().register(id, supplier);
+        });
     }
 
 }

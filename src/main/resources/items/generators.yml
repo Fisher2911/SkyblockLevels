@@ -1,0 +1,322 @@
+6:
+  class: generator
+  item-id: "cobblestone-generator"
+  item:
+    material: "COBBLESTONE"
+    name: "<!i><green>Cobblestone Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: COBBLESTONE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "COBBLESTONE"
+7:
+  class: generator
+  item-id: "stone-generator"
+  item:
+    material: "STONE"
+    name: "<!i><green>Stone Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: STONE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "STONE"
+8:
+  class: generator
+  item-id: "diorite-generator"
+  item:
+    material: "DIORITE"
+    name: "<!i><green>Diorite Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: DIORITE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "DIORITE"
+9:
+  class: generator
+  item-id: "andesite-generator"
+  item:
+    material: "ANDESITE"
+    name: "<!i><green>Andesite Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: ANDESITE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "ANDESITE"
+10:
+  class: generator
+  item-id: "granite-generator"
+  item:
+    material: "GRANITE"
+    name: "<!i><green>Granite Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: GRANITE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "GRANITE"
+11:
+  class: generator
+  item-id: "coal-ore-generator"
+  item:
+    material: "COAL_ORE"
+    name: "<!i><green>Coal Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: COAL_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "COAL_ORE"
+12:
+  class: generator
+  item-id: "iron-ore-generator"
+  item:
+    material: "IRON_ORE"
+    name: "<!i><green>Iron Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: IRON_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "IRON_ORE"
+13:
+  class: generator
+  item-id: "lapis-ore-generator"
+  item:
+    material: "LAPIS_ORE"
+    name: "<!i><green>Lapis Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: LAPIS_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "LAPIS_LAZULI"
+14:
+  class: generator
+  item-id: "redstone-ore-generator"
+  item:
+    material: "REDSTONE_ORE"
+    name: "<!i><green>Redstone Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: REDSTONE_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "REDSTONE_ORE"
+15:
+  class: generator
+  item-id: "gold-ore-generator"
+  item:
+    material: "GOLD_ORE"
+    name: "<!i><green>Gold Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: GOLD_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "GOLD_ORE"
+16:
+  class: generator
+  item-id: "emerald-ore-generator"
+  item:
+    material: "EMERALD_ORE"
+    name: "<!i><green>Emerald Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: EMERALD_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "EMERALD_ORE"
+17:
+  class: generator
+  item-id: "diamond-ore-generator"
+  item:
+    material: "DIAMOND_ORE"
+    name: "<!i><green>Diamond Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: DIAMOND_ORE
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "DIAMOND_ORE"
+18:
+  class: generator
+  item-id: "ancient-debris-generator"
+  item:
+    material: "ANCIENT_DEBRIS"
+    name: "<!i><green>Ancient Debris Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: ANCIENT_DEBRIS
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "ANCIENT_DEBRIS"
+19:
+  class: generator
+  item-id: "obsidian-generator"
+  item:
+    material: "OBSIDIAN"
+    name: "<!i><green>Obsidian Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: OBSIDIAN
+  ticks-to-break: 80
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "OBSIDIAN"

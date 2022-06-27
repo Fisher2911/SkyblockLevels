@@ -2,18 +2,16 @@ package io.github.fisher2911.skyblocklevels.world;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
+import io.github.fisher2911.skyblocklevels.util.Random;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class BlockBreakManager implements Listener {
 
@@ -25,20 +23,30 @@ public class BlockBreakManager implements Listener {
         this.blockBreakData = new ConcurrentHashMap<>();
     }
 
-    public void startMining(int totalTicks, Player player, WorldPosition position, Consumer<WorldPosition> onBreak) {
-        this.blockBreakData.putIfAbsent(position, new BlockBreakData(player, player.getInventory().getItemInMainHand(), totalTicks, onBreak));
+    public void startMining(Function<Player, Integer> tickFunction, Player player, WorldPosition position, Consumer<WorldPosition> onBreak) {
+        final BlockBreakData current = this.blockBreakData.get(position);
+        final int entityId = current == null ? Random.nextInt(10_000, 20_000) : current.getEntityId();
+        this.blockBreakData.put(position, new BlockBreakData(entityId, player, player.getInventory().getItemInMainHand(), tickFunction.apply(player), onBreak));
     }
 
-    public void updateTicks(int totalTicks, WorldPosition position) {
+    public void updateTicks(Function<Player, Integer> tickFunction, WorldPosition position) {
         final BlockBreakData data = this.blockBreakData.get(position);
         if (data == null) return;
-        data.setTotalTicks(totalTicks);
+        data.setTotalTicks(tickFunction.apply(data.getPlayer()));
+    }
+
+
+
+    public void reset(WorldPosition position) {
+        final BlockBreakData data = this.blockBreakData.get(position);
+        if (data == null) return;
+        data.reset(position);
     }
 
     public void cancel(WorldPosition position) {
         final BlockBreakData data = this.blockBreakData.remove(position);
         if (data == null) return;
-        PacketHelper.sendBlockBreakAnimation(data.getPlayer(), position.toLocation(), (byte) 0);
+        data.reset(position);
     }
 
     @EventHandler
@@ -48,16 +56,15 @@ public class BlockBreakManager implements Listener {
                             final WorldPosition position = entry.getKey();
                             final BlockBreakData data = entry.getValue();
 //                            data.getPlayer().sendMessage("Updating");
-                            Bukkit.getScheduler().runTask(
-                                    this.plugin,
-                                    () -> data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5, -1, false, false)));
+//                            Bukkit.getScheduler().runTask(
+//                                    this.plugin,
+//                                    () -> data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5, -1, false, false)));
                             data.send(position);
-                            data.tick();
+                            data.tick(position);
                             if (data.isBroken()) {
                                 data.getOnBreak().accept(position);
-                                PacketHelper.sendBlockBreakAnimation(data.getPlayer(), position.toLocation(), (byte) 0);
                                 data.getPlayer().sendMessage("Broken");
-                                return true;
+                                return false;
                             }
                             return false;
                         })
