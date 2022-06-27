@@ -1,26 +1,80 @@
 package io.github.fisher2911.skyblocklevels.item;
 
-import io.github.fisher2911.skyblocklevels.util.ItemBuilder;
+import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
 
-public class SkyItem {
+import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
-    public static SkyItem EMPTY = new SkyItem("", ItemBuilder.EMPTY);
+public class SkyItem implements SpecialSkyItem {
 
-    private final String id;
-    private final ItemBuilder itemBuilder;
+    public static SkyItem EMPTY = new SkyItem(-1, "", ItemBuilder.EMPTY);
 
-    public SkyItem(String id, ItemBuilder itemBuilder) {
+    public SkyItem(long id, String itemId, ItemSupplier itemSupplier) {
         this.id = id;
-        this.itemBuilder = itemBuilder;
+        this.itemId = itemId;
+        this.itemSupplier = itemSupplier;
     }
 
-    public String getId() {
-        return id;
+    private final long id;
+    private final String itemId;
+    private final ItemSupplier itemSupplier;
+
+    @Override
+    public ItemStack getItemStack() {
+        return this.itemSupplier.get();
     }
 
-    public ItemStack getItem() {
-        return this.itemBuilder.build();
+    @Override
+    public String getItemId() {
+        return this.itemId;
+    }
+
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean uniqueInInventory() {
+        return this.id != -1;
+    }
+
+    public static Serializer serializer() {
+        return new Serializer();
+    }
+
+    public static class Serializer implements TypeSerializer<Supplier<SkyItem>> {
+
+        private static final Serializer INSTANCE = new Serializer();
+
+        private Serializer() {}
+
+        private static final String ITEM_ID = "item-id";
+        private static final String ITEM = "item";
+        private static final String UNIQUE = "unique";
+
+        @Override
+        public Supplier<SkyItem> deserialize(Type type, ConfigurationNode node) {
+            try {
+                final String itemId = node.node(ITEM_ID).getString();
+                final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
+                final boolean unique = node.node(UNIQUE).getBoolean();
+                final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+                return () -> new SkyItem(unique ? plugin.getItemManager().generateNextId() : -1, itemId, itemSupplier);
+            } catch (SerializationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void serialize(Type type, @Nullable Supplier<SkyItem> obj, ConfigurationNode node) throws SerializationException {
+
+        }
     }
 
 }

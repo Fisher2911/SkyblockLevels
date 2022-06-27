@@ -1,18 +1,28 @@
 package io.github.fisher2911.skyblocklevels.item.impl;
 
-import io.github.fisher2911.skyblocklevels.item.SkyItem;
+import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.SkyTool;
 import io.github.fisher2911.skyblocklevels.user.User;
-import io.github.fisher2911.skyblocklevels.util.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class ExplosionTool implements SkyTool {
 
-    private final SkyItem skyItem = new SkyItem("explosion_tool", ItemBuilder.from(Material.WOODEN_PICKAXE));
+    private final ItemStack itemStack = ItemBuilder.from(Material.WOODEN_PICKAXE).build();
+    private final long id;
+
+    @Nullable
+    private WorldPosition currentlyBreaking;
+    private long lastBreakTime;
+
+    public ExplosionTool(long id) {
+        this.id = id;
+    }
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
@@ -22,12 +32,26 @@ public class ExplosionTool implements SkyTool {
     }
 
     @Override
-    public SkyItem getSkyItem() {
-        return this.skyItem;
+    public ItemStack getItemStack() {
+        return this.itemStack;
     }
 
     @Override
     public void onUse(User user, PlayerInteractEvent event) {
-        user.sendMessage("Break a block to use me!");
+    }
+
+    @Override
+    public String getItemId() {
+        return "explosion_tool";
+    }
+
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public boolean uniqueInInventory() {
+        return true;
     }
 }

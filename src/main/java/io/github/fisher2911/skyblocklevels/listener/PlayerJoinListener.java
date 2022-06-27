@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.listener;
 
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.Collection;
+import io.github.fisher2911.skyblocklevels.user.Cooldowns;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,6 +21,6 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        this.userManager.addUser(new BukkitUser(event.getPlayer().getUniqueId(), new Collection(new HashMap<>())));
+        this.userManager.addUser(new BukkitUser(event.getPlayer().getUniqueId(), new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())));
     }
 }

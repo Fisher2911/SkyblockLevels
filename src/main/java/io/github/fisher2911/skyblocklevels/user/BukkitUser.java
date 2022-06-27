@@ -1,11 +1,14 @@
 package io.github.fisher2911.skyblocklevels.user;
 
+import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
@@ -15,11 +18,13 @@ public class BukkitUser implements User {
 
     private final UUID uuid;
     private final Collection collection;
+    private final Cooldowns cooldowns;
     private WeakReference<Player> playerReference;
 
-    public BukkitUser(UUID uuid, Collection collection) {
+    public BukkitUser(UUID uuid, Collection collection, Cooldowns cooldowns) {
         this.uuid = uuid;
         this.collection = collection;
+        this.cooldowns = cooldowns;
         this.playerReference = new WeakReference<>(Bukkit.getPlayer(this.uuid));
     }
 
@@ -31,6 +36,14 @@ public class BukkitUser implements User {
             if (player == null) return null;
             this.playerReference = new WeakReference<>(player);
         }
+        return player;
+    }
+
+    @Override
+    @NotNull
+    public Audience getAudience() {
+        final Player player = this.getPlayer();
+        if (player == null) return Audience.empty();
         return player;
     }
 
@@ -48,10 +61,9 @@ public class BukkitUser implements User {
     public void sendMessage(String message) {
         final Player player = this.getPlayer();
         if (player == null) return;
-        player.sendMessage(message);
+        player.sendMessage(Adventure.MINI_MESSAGE.deserialize(message));
     }
 
-    @Override
     public void forceChat(String message) {
         final Player player = this.getPlayer();
         if (player == null) return;
@@ -65,14 +77,12 @@ public class BukkitUser implements User {
         player.performCommand(command);
     }
 
-    @Override
     public void teleport(WorldPosition position) {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.teleport(position.toLocation());
     }
 
-    @Override
     @Nullable
     public WorldPosition getPosition() {
         final Player player = this.getPlayer();
@@ -80,45 +90,44 @@ public class BukkitUser implements User {
         return WorldPosition.fromLocation(player.getLocation());
     }
 
-    @Override
     public Inventory getInventory() {
         final Player player = this.getPlayer();
         if (player == null) return null;
         return player.getInventory();
     }
 
-    @Override
     public void setHealth(double health) {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.setHealth(health);
     }
 
-    @Override
     public double getHealth() {
         final Player player = this.getPlayer();
         if (player == null) return -1;
         return player.getHealth();
     }
 
-    @Override
     public void setFood(int food) {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.setFoodLevel(food);
     }
 
-    @Override
     public void addPotionEffect(PotionEffect potionEffect) {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.addPotionEffect(potionEffect);
     }
 
-    @Override
     public void removePotionEffect(PotionEffectType potionEffectType) {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.removePotionEffect(potionEffectType);
+    }
+
+    @Override
+    public Cooldowns getCooldowns() {
+        return this.cooldowns;
     }
 }

@@ -22,4 +22,8 @@ public class Collection {
         return this.itemsCollected.getOrDefault(id, 0);
     }
 
+    public static Collection empty() {
+        return new Collection(Map.of());
+    }
+
 }

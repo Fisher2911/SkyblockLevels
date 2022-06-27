@@ -4,30 +4,29 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.ItemManager;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
-import org.bukkit.entity.Player;
+import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import io.github.fisher2911.skyblocklevels.world.Worlds;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
 
-public class BlockPlaceListener implements Listener {
+public class BlockPowerListener implements Listener {
 
-    private final SkyblockLevels plugin;
+    private final Worlds worlds;
     private final ItemManager itemManager;
     private final UserManager userManager;
-    
-    public BlockPlaceListener(SkyblockLevels plugin) {
-        this.plugin = plugin;
+
+    public BlockPowerListener(SkyblockLevels plugin) {
         this.itemManager = plugin.getItemManager();
         this.userManager = plugin.getUserManager();
+        this.worlds = plugin.getWorlds();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event) {
-        final Player player = event.getPlayer();
-        final User user = this.userManager.getUser(player);
-        if (user == null) return;
-        this.itemManager.handle(user, event.getItemInHand(), event);
+    public void onPower(BlockRedstoneEvent event) {
+        final WorldPosition position = WorldPosition.fromLocation(event.getBlock().getLocation());
+        this.itemManager.handle(User.SERVER, this.worlds.getBlockAt(position), event);
     }
 
 }
