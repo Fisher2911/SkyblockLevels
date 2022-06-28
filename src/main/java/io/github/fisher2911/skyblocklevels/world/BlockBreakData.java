@@ -44,7 +44,6 @@ public class BlockBreakData {
 
     public void reset(WorldPosition position) {
         this.currentTicks = 0;
-        this.player.sendMessage("Reset");
         PacketHelper.sendBlockBreakAnimation(this.player, position.toLocation(), this.entityId, (byte) -1);
     }
 

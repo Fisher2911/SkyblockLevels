@@ -82,14 +82,16 @@ public class Generator implements SkyBlock, Delayed {
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
         final Block block = event.getBlock();
+        final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
         if (event.getPlayer().isSneaking()) {
             this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
             this.plugin.getItemManager().giveItem(user, this);
             block.setType(Material.AIR);
             this.running = false;
+            this.plugin.getBlockBreakManager().cancel(position);
+            user.sendMessage("Broke generator shifting");
             return;
         }
-        final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
         this.plugin.getBlockBreakManager().reset(position);
         event.setCancelled(true);
         final Player player = event.getPlayer();

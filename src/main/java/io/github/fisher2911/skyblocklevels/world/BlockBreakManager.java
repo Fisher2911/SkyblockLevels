@@ -35,8 +35,6 @@ public class BlockBreakManager implements Listener {
         data.setTotalTicks(tickFunction.apply(data.getPlayer()));
     }
 
-
-
     public void reset(WorldPosition position) {
         final BlockBreakData data = this.blockBreakData.get(position);
         if (data == null) return;
@@ -62,8 +60,8 @@ public class BlockBreakManager implements Listener {
                             data.send(position);
                             data.tick(position);
                             if (data.isBroken()) {
+                                data.reset(position);
                                 data.getOnBreak().accept(position);
-                                data.getPlayer().sendMessage("Broken");
                                 return false;
                             }
                             return false;
