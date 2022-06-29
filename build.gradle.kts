@@ -12,6 +12,7 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://maven.wolfyscript.com/repository/public/")
     maven("https://jitpack.io")
+    maven("https://repo.incendo.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -23,6 +24,8 @@ dependencies {
     compileOnly("com.github.angeschossen:LandsAPI:6.5.1")
     implementation("com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
+    implementation("org.incendo.interfaces:interfaces-core:1.0.0-SNAPSHOT")
+    implementation("org.incendo.interfaces:interfaces-paper:1.0.0-SNAPSHOT")
 }
 
 tasks {
@@ -39,6 +42,7 @@ tasks {
         relocate("cloud.commandframework", "io.github.fisher2911.skyblocklevels.cloud.commandframework")
         relocate("com.github.retrooper.packetevents", "io.github.fisher2911.skyblocklevels.packetevents.spigot")
         relocate("org.spongepowered.configurate.yaml", "io.github.fisher2911.skyblocklevels.configurate.yml")
+        relocate("org.incendo.interfaces", "io.github.fisher2911.skyblocklevels.interfaces")
         archiveFileName.set("SkyblockLevels.jar")
 
         dependencies {

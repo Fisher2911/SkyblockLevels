@@ -2,15 +2,19 @@ package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
+import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.MineSpeeds;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
+import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,6 +28,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.incendo.interfaces.core.click.ClickHandler;
+import org.incendo.interfaces.paper.PlayerViewer;
+import org.incendo.interfaces.paper.element.ItemStackElement;
+import org.incendo.interfaces.paper.transform.PaperTransform;
+import org.incendo.interfaces.paper.type.ChestInterface;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
@@ -45,6 +54,7 @@ public class Generator implements SkyBlock, Delayed {
     private final WeightedList<Supplier<ItemStack>> items;
     private final int ticksToBreak;
     private final MineSpeeds mineSpeeds;
+    private final CollectionCondition collectionCondition;
 
     private int tickCounter;
     private boolean isGenerated;
@@ -61,7 +71,8 @@ public class Generator implements SkyBlock, Delayed {
             Material generatorBlock,
             WeightedList<Supplier<ItemStack>> items,
             int ticksToBreak,
-            MineSpeeds mineSpeeds
+            MineSpeeds mineSpeeds,
+            CollectionCondition collectionCondition
     ) {
         this.plugin = plugin;
         this.id = id;
@@ -77,6 +88,7 @@ public class Generator implements SkyBlock, Delayed {
             final ItemStack inHand = player.getInventory().getItemInMainHand();
             return this.mineSpeeds.getModifier(this.plugin.getItemManager(), inHand).modify(this.ticksToBreak);
         };
+        this.collectionCondition = collectionCondition;
     }
 
     @Override
@@ -89,7 +101,6 @@ public class Generator implements SkyBlock, Delayed {
             block.setType(Material.AIR);
             this.running = false;
             this.plugin.getBlockBreakManager().cancel(position);
-            user.sendMessage("Broke generator shifting");
             return;
         }
         this.plugin.getBlockBreakManager().reset(position);
@@ -109,6 +120,19 @@ public class Generator implements SkyBlock, Delayed {
             block.setType(this.resetBlock);
             return;
         }
+        if (!this.collectionCondition.isAllowed(user.getCollection())) {
+            user.sendMessage("<red>You have not collected the required materials to be able to collect from this generator.");
+            this.plugin.getBlockBreakManager().startMining(
+                    this.mineSpeedFunction,
+                    player,
+                    position,
+                    p -> Bukkit.getScheduler().runTask(
+                            this.plugin,
+                            () -> this.onBreak(user, new BlockBreakEvent(block, player))
+                    )
+            );
+            return;
+        }
         final Location location = block.getLocation().add(0, 1, 0);
         final Supplier<ItemStack> weight = this.items.getRandom();
         if (weight == null) return;
@@ -116,6 +140,7 @@ public class Generator implements SkyBlock, Delayed {
         this.isGenerated = false;
         this.tickCounter = 0;
         block.setType(this.resetBlock);
+        user.getCollection().addAmount(this.itemId, 1);
     }
 
     @Override
@@ -134,11 +159,52 @@ public class Generator implements SkyBlock, Delayed {
     public void onClick(User user, PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (!this.isGenerated) {
-            user.sendMessage("<red>You must wait " + (this.getTimeLeft() / 20) + "seconds before you can mine this block");
+        if (event.getPlayer().isSneaking() && user instanceof BukkitUser bukkitUser) {
+            this.showCollectionRequirements(bukkitUser);
             return;
         }
-        user.sendMessage("<red>Mine this block to collect it");
+        if (!this.isGenerated) {
+            user.sendMessage("<red>You must wait " + (this.getTimeLeft() / 20) + "seconds before you can mine this block");
+        }
+    }
+
+    private void showCollectionRequirements(BukkitUser user) {
+        final int rows = (int) Math.ceil(this.collectionCondition.getRequiredItems().size() / 5.0) + 2;
+        final ChestInterface inventory = ChestInterface.builder().
+                rows(rows).
+                clickHandler(ClickHandler.cancel()).
+                addTransform(PaperTransform.chestFill(ItemStackElement.of(
+                        ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).
+                                name(" ").
+                                build()
+                ))).
+                addTransform((pane, view) -> {
+                    int x = 1;
+                    int y = 1;
+                    for (final var entry : this.collectionCondition.getRequiredItems().entrySet()) {
+                        final String itemType = entry.getKey();
+                        final SpecialSkyItem item = this.plugin.getItemManager().getItem(itemType);
+                        ItemBuilder itemBuilder = ItemBuilder.from(item.getItemStack());
+                        if (SpecialSkyItem.EMPTY == item) {
+                            itemBuilder = ItemBuilder.from(Material.valueOf(itemType));
+                        }
+                        itemBuilder.name("<!i>" + itemType);
+                        itemBuilder.amount(1);
+                        itemBuilder.lore("").
+                                lore(user.getCollection().getAmount(itemType) + "/" + entry.getValue());
+                        user.sendMessage(itemBuilder.build().toString() + " " + x + ", " + y);
+                        pane = pane.element(ItemStackElement.of(itemBuilder.build()), x++, y);
+                        if (x == 6) {
+                            x = 1;
+                            y++;
+                        }
+                    }
+
+                    return pane;
+                })
+                .title(Component.text(this.itemId))
+                .build();
+        inventory.open(PlayerViewer.of(user.getPlayer()));
     }
 
     @Override
@@ -247,6 +313,7 @@ public class Generator implements SkyBlock, Delayed {
         private static final String ITEMS = "items";
         private static final String TICKS_TO_BREAK = "ticks-to-break";
         private static final String SPEED_MODIFIERS = "speed-modifiers";
+        private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
 
         @Override
         public Supplier<Generator> deserialize(Type type, ConfigurationNode node) {
@@ -267,7 +334,20 @@ public class Generator implements SkyBlock, Delayed {
                 final int ticksToBreak = node.node(TICKS_TO_BREAK).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
                 final MineSpeeds speeds = MineSpeeds.serializer().deserialize(MineSpeeds.class, node.node(SPEED_MODIFIERS));
-                return () -> new Generator(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, tickDelay, resetBlock, generatorBlock, items, ticksToBreak, speeds);
+                final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
+                return () -> new Generator(
+                        plugin,
+                        plugin.getItemManager().generateNextId(),
+                        itemId,
+                        itemSupplier,
+                        tickDelay,
+                        resetBlock,
+                        generatorBlock,
+                        items,
+                        ticksToBreak,
+                        speeds,
+                        requirements
+                );
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

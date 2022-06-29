@@ -55,6 +55,7 @@ public class ItemBuilder implements ItemSupplier {
     }
 
     public ItemStack build() {
+        if (this.itemMeta == null) return this.itemStack.clone();
         final ItemStack itemStack = this.itemStack.clone();
         itemStack.setItemMeta(this.itemMeta.clone());
         return itemStack;
