@@ -1,9 +1,16 @@
 package io.github.fisher2911.skyblocklevels.item.impl.grower;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.DirectionUtil;
 import io.github.fisher2911.skyblocklevels.util.Random;
@@ -27,12 +34,65 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Grower implements SkyBlock {
+
+    private static final String TABLE = "grower";
+    private static final String ID = "id";
+    private static final String ITEM_ID = "item_id";
+    private static final String TICK_COUNTER = "tick_counter";
+
+    static {
+        final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+        final DataManager dataManager = plugin.getDataManager();
+
+        dataManager.addTable(CreateTableStatement.builder(TABLE).
+                addField(Long.class, ID, KeyType.PRIMARY).
+                addField(String.class, ITEM_ID).
+                addField(Integer.class, TICK_COUNTER).
+                build());
+
+        dataManager.registerItemSaveConsumer(Grower.class, (conn, collection) -> {
+            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+            collection.forEach(item -> {
+                builder.newEntry().
+                        addEntry(ID, item.getId()).
+                        addEntry(ITEM_ID, item.getItemId()).
+                        addEntry(TICK_COUNTER, ((Grower) item).tickCounter).
+                        build().
+                        execute(conn);
+            });
+        });
+
+
+        dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
+            final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
+                    selectAll().
+                    condition(ID, String.valueOf(id));
+            final List<Grower> list = builder.build().execute(conn, results -> {
+                final String itemId = results.getString(ITEM_ID);
+                if (!(plugin.getItemManager().getItem(itemId) instanceof final Grower item)) return null;
+                final int tickCounter = results.getInt(TICK_COUNTER);
+                final Grower grower = new Grower(plugin, id, itemId, item.itemSupplier, item.block, item.tickDelay, item.growChances);
+                grower.tickCounter = tickCounter;
+                return grower;
+            });
+            if (list.isEmpty()) return SpecialSkyItem.EMPTY;
+            return list.get(0);
+        });
+
+        dataManager.registerItemDeleteConsumer(Grower.class, (conn, item) -> {
+            DeleteStatement.builder(TABLE).
+                    condition(ID, String.valueOf(item.getId())).
+                    build().
+                    execute(conn);
+        });
+    }
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -142,6 +202,11 @@ public class Grower implements SkyBlock {
 
     public static Serializer serializer() {
         return Serializer.INSTANCE;
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE;
     }
 
     public static final class Serializer implements TypeSerializer<Supplier<Grower>> {

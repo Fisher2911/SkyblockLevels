@@ -30,6 +30,8 @@ import java.util.function.Supplier;
 
 public class Builder implements SkyBlock, RedstoneBlock, Delayed {
 
+    private static final String TABLE = "builder";
+
     private final SkyblockLevels plugin;
     private final long id;
     private final String itemId;
@@ -139,6 +141,11 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
     @Override
     public boolean uniqueInInventory() {
         return false;
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE;
     }
 
     public static Serializer serializer() {

@@ -1,8 +1,15 @@
 package io.github.fisher2911.skyblocklevels.item.impl.bridger;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -12,9 +19,60 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class LimitedBridger extends Bridger {
+
+    private static final String TABLE = "limited_bridger";
+    private static final String ID = "id";
+    private static final String ITEM_ID = "item_id";
+    private static final String STORED_BLOCKS = "stored_blocks";
+
+    static {
+        final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+        final DataManager dataManager = plugin.getDataManager();
+
+        dataManager.addTable(CreateTableStatement.builder(TABLE).
+                addField(Long.class, ID, KeyType.PRIMARY).
+                addField(String.class, ITEM_ID).
+                addField(Integer.class, STORED_BLOCKS).
+                build());
+
+        dataManager.registerItemSaveConsumer(LimitedBridger.class, (conn, collection) -> {
+            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+            collection.forEach(item -> {
+                builder.newEntry().
+                        addEntry(ID, item.getId()).
+                        addEntry(ITEM_ID, item.getItemId()).
+                        addEntry(STORED_BLOCKS, ((LimitedBridger) item).storedBlocks).
+                        build().
+                        execute(conn);
+            });
+            builder.build().execute(conn);
+        });
+
+        dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
+            final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
+                    selectAll().
+                    condition(ID, String.valueOf(id));
+            final List<LimitedBridger> list = builder.build().execute(conn, results -> {
+                final String itemId = results.getString(ITEM_ID);
+                if (!(plugin.getItemManager().getItem(itemId) instanceof final LimitedBridger item)) return null;
+                final int storedBlocks = results.getInt(STORED_BLOCKS);
+                return new LimitedBridger(plugin, id, itemId, item.itemSupplier, item.type, item.size, storedBlocks);
+            });
+            if (list.isEmpty()) return SpecialSkyItem.EMPTY;
+            return list.get(0);
+        });
+
+        dataManager.registerItemDeleteConsumer(LimitedBridger.class, (conn, item) -> {
+            DeleteStatement.builder(TABLE).
+                    condition(ID, String.valueOf(item.getId())).
+                    build().
+                    execute(conn);
+        });
+    }
 
     private final Material type;
     private final int size;
@@ -56,7 +114,8 @@ public class LimitedBridger extends Bridger {
 
         private static final Serializer INSTANCE = new Serializer();
 
-        private Serializer() {}
+        private Serializer() {
+        }
 
         private static final String ITEM_ID = "item-id";
         private static final String ITEM = "item";

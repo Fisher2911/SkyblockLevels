@@ -16,10 +16,13 @@ import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.fisher2911.skyblocklevels.command.GiveItemCommand;
 import io.github.fisher2911.skyblocklevels.command.RTPCommand;
 import io.github.fisher2911.skyblocklevels.command.ReloadCommand;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.entity.EntityManager;
 import io.github.fisher2911.skyblocklevels.item.ItemManager;
 import io.github.fisher2911.skyblocklevels.listener.BlockBreakListener;
 import io.github.fisher2911.skyblocklevels.listener.BlockPlaceListener;
 import io.github.fisher2911.skyblocklevels.listener.BlockPowerListener;
+import io.github.fisher2911.skyblocklevels.listener.EntityListener;
 import io.github.fisher2911.skyblocklevels.listener.PlayerInteractListener;
 import io.github.fisher2911.skyblocklevels.listener.PlayerJoinListener;
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
@@ -41,16 +44,20 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public final class SkyblockLevels extends JavaPlugin {
 
+    private DataManager dataManager;
     private SkyWorld world;
     private Worlds worlds;
     private BlockBreakManager blockBreakManager;
     private ItemManager itemManager;
+    private EntityManager entityManager;
     private UserManager userManager;
     private PaperCommandManager<User> commandManager;
     private CommandConfirmationManager<User> confirmationManager;
@@ -68,17 +75,22 @@ public final class SkyblockLevels extends JavaPlugin {
     @Override
     public void onEnable() {
         PacketEvents.getAPI().init();
+        this.dataManager = new DataManager(this);
         this.lands = new LandsIntegration(this);
         this.world = new SkyWorld();
         this.blockBreakManager = new BlockBreakManager(this);
         Bukkit.getScheduler().runTaskLater(this, this.world::createWorld, 1);
         this.worlds = new Worlds(this, new HashMap<>());
         this.itemManager = new ItemManager(this, new HashMap<>(), new HashMap<>());
+        this.entityManager = new EntityManager(this, new ConcurrentHashMap<>(), new HashMap<>());
         this.itemManager.registerAll();
-        this.userManager = new UserManager(new HashMap<>());
+        this.entityManager.loadTypes();
+        this.userManager = new UserManager(new HashMap<>(), new HashSet<>());
+        this.userManager.load(this);
         this.registerListeners();
         this.initCommands();
         PacketHelper.registerListeners(this);
+        this.dataManager.createTables();
     }
 
     private void initCommands() {
@@ -156,13 +168,19 @@ public final class SkyblockLevels extends JavaPlugin {
                 new BlockBreakListener(this),
                 new BlockPlaceListener(this),
                 new BlockPowerListener(this),
+                new EntityListener(this.entityManager),
                 this.worlds,
-                this.blockBreakManager
+                this.blockBreakManager,
+                this.entityManager
         ).forEach(this::registerListener);
     }
 
     public void registerListener(Listener listener) {
         this.getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public DataManager getDataManager() {
+        return dataManager;
     }
 
     public LandsIntegration getLands() {
@@ -175,6 +193,10 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public ItemManager getItemManager() {
         return this.itemManager;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public UserManager getUserManager() {

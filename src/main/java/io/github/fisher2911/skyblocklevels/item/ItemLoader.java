@@ -7,6 +7,7 @@ import io.github.fisher2911.skyblocklevels.item.impl.catcher.ItemCatcher;
 import io.github.fisher2911.skyblocklevels.item.impl.generator.Generator;
 import io.github.fisher2911.skyblocklevels.item.impl.grower.Grower;
 import io.github.fisher2911.skyblocklevels.item.impl.platformer.MaterialPlatformer;
+import io.github.fisher2911.skyblocklevels.item.impl.spawner.MobSpawner;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -36,6 +37,8 @@ public class ItemLoader {
         register(Grower.class.getSimpleName().toLowerCase(), node -> Grower.serializer().deserialize(Grower.class, node));
         register(MaterialPlatformer.class.getSimpleName().toLowerCase(), node -> MaterialPlatformer.serializer().deserialize(MaterialPlatformer.class, node));
         register(SkyItem.class.getSimpleName().toLowerCase(), node -> SkyItem.serializer().deserialize(SkyItem.class, node));
+        register(MobSpawner.class.getSimpleName().toLowerCase(), node -> MobSpawner.serializer().deserialize(MobSpawner.class, node));
+        register(SkyCrop.class.getSimpleName().toLowerCase(), node -> SkyCrop.serializer().deserialize(SkyCrop.class, node));
     }
 
     private static final String CLASS = "class";
@@ -47,7 +50,6 @@ public class ItemLoader {
             final File folder = ITEM_FOLDER_PATH.toFile();
             if (!folder.exists()) {
                 folder.getParentFile().mkdirs();
-//                plugin.saveResource(Path.of("items", "items.yml").toString(), false);
                 if (!folder.exists()) folder.mkdirs();
             }
             final File itemFile = ITEM_FOLDER_PATH.resolve("items.yml").toFile();

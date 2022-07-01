@@ -1,8 +1,15 @@
 package io.github.fisher2911.skyblocklevels.item.impl.platformer;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -13,9 +20,59 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class MaterialPlatformer extends Platformer {
+
+    private static final String TABLE = "material_platformer";
+    private static final String ID = "id";
+    private static final String ITEM_ID = "item_id";
+    private static final String STORED = "stored";
+
+    static {
+        final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+        final DataManager dataManager = plugin.getDataManager();
+
+        dataManager.addTable(CreateTableStatement.builder(TABLE).
+                addField(Long.class, ID, KeyType.PRIMARY).
+                addField(String.class, ITEM_ID).
+                addField(Integer.class, STORED).
+                build());
+
+        dataManager.registerItemSaveConsumer(MaterialPlatformer.class, (conn, collection) -> {
+            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+            collection.forEach(item -> {
+                builder.newEntry();
+                builder.addEntry(ID, item.getId());
+                builder.addEntry(ITEM_ID, item.getItemId());
+                builder.addEntry(STORED, ((MaterialPlatformer) item).stored);
+            });
+        });
+
+        dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
+            final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
+                    selectAll().
+                    condition(ID, String.valueOf(id));
+            final List<MaterialPlatformer> list = builder.build().execute(conn, results -> {
+                final String itemId = results.getString(ITEM_ID);
+                if (!(plugin.getItemManager().getItem(itemId) instanceof final MaterialPlatformer item)) return null;
+                final int stored = results.getInt(STORED);
+                final MaterialPlatformer platformer = new MaterialPlatformer(plugin, id, itemId, item.itemSupplier, item.radius, item.type, item.stored);
+                platformer.stored = stored;
+                return platformer;
+            });
+            if (list.isEmpty()) return SpecialSkyItem.EMPTY;
+            return list.get(0);
+        });
+
+        dataManager.registerItemDeleteConsumer(MaterialPlatformer.class, (conn, item) -> {
+            DeleteStatement.builder(TABLE).
+                    condition(ID, String.valueOf(item.getId())).
+                    build().
+                    execute(conn);
+        });
+    }
 
     private final int radius;
     private final Material type;

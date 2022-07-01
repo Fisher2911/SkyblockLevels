@@ -1,6 +1,12 @@
 package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
@@ -38,11 +44,76 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Generator implements SkyBlock, Delayed {
+
+    private static final String TABLE = "generator";
+    private static final String ID = "id";
+    private static final String ITEM_ID = "item_id";
+    private static final String TICK_COUNTER = "tick_counter";
+
+    static {
+        final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+        final DataManager dataManager = plugin.getDataManager();
+
+        dataManager.addTable(CreateTableStatement.builder(TABLE).
+                addField(Long.class, ID, KeyType.PRIMARY).
+                addField(String.class, ITEM_ID).
+                addField(Integer.class, TICK_COUNTER).
+                build());
+
+        dataManager.registerItemSaveConsumer(Generator.class, (conn, collection) -> {
+            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+            collection.forEach(item -> {
+                builder.newEntry().
+                        addEntry(ID, item.getId()).
+                        addEntry(ITEM_ID, item.getItemId()).
+                        addEntry(TICK_COUNTER, ((Generator) item).tickCounter).
+                        build().
+                        execute(conn);
+            });
+        });
+
+        dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
+            final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
+                    selectAll().
+                    condition(ID, String.valueOf(id));
+            final List<Generator> list = builder.build().execute(conn, results -> {
+                final String itemId = results.getString(ITEM_ID);
+                if (!(plugin.getItemManager().getItem(itemId) instanceof final Generator item)) return null;
+                final int tickCounter = results.getInt(TICK_COUNTER);
+                final Generator generator = new Generator(
+                        plugin,
+                        id,
+                        itemId,
+                        item.itemSupplier,
+                        item.tickDelay,
+                        item.resetBlock,
+                        item.generatorBlock,
+                        item.items,
+                        item.ticksToBreak,
+                        item.mineSpeeds,
+                        item.collectionCondition
+                );
+                generator.tickCounter = tickCounter;
+                generator.isGenerated = tickCounter >= item.tickDelay;
+                return generator;
+            });
+            if (list.isEmpty()) return SpecialSkyItem.EMPTY;
+            return list.get(0);
+        });
+
+        dataManager.registerItemDeleteConsumer(Generator.class, (conn, item) -> {
+            DeleteStatement.builder(TABLE).
+                    condition(ID, String.valueOf(item.getId())).
+                    build().
+                    execute(conn);
+        });
+    }
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -145,10 +216,7 @@ public class Generator implements SkyBlock, Delayed {
 
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) {
-            event.getPlayer().sendMessage("Slot: " + event.getHand());
-            return;
-        }
+        if (event.getHand() != EquipmentSlot.HAND) return;
         final Block block = event.getBlock();
         this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(this.resetBlock);
@@ -192,7 +260,6 @@ public class Generator implements SkyBlock, Delayed {
                         itemBuilder.amount(1);
                         itemBuilder.lore("").
                                 lore(user.getCollection().getAmount(itemType) + "/" + entry.getValue());
-                        user.sendMessage(itemBuilder.build().toString() + " " + x + ", " + y);
                         pane = pane.element(ItemStackElement.of(itemBuilder.build()), x++, y);
                         if (x == 6) {
                             x = 1;
@@ -216,10 +283,10 @@ public class Generator implements SkyBlock, Delayed {
             if (block.getType() != this.generatorBlock) block.setType(this.generatorBlock);
             return;
         }
-        this.tickCounter = 0;
-        if (block.getType() == this.generatorBlock) return;
-        block.setType(this.generatorBlock);
         this.isGenerated = true;
+        if (block.getType() == this.generatorBlock) return;
+        this.tickCounter = 0;
+        block.setType(this.generatorBlock);
         this.plugin.getBlockBreakManager().updateTicks(
                 this.mineSpeedFunction,
                 WorldPosition.fromLocation(block.getLocation())
@@ -292,6 +359,11 @@ public class Generator implements SkyBlock, Delayed {
     @Override
     public boolean uniqueInInventory() {
         return false;
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE;
     }
 
     public static Generator.Serializer serializer() {

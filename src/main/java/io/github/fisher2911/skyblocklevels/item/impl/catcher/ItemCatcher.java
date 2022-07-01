@@ -1,10 +1,17 @@
 package io.github.fisher2911.skyblocklevels.item.impl.catcher;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.DirectionUtil;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
@@ -32,6 +39,57 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ItemCatcher implements SkyBlock, Delayed {
+
+    private static final String TABLE = "item_catcher";
+    private static final String ID = "id";
+    private static final String ITEM_ID = "item_id";
+    private static final String TICK_COUNTER = "tick_counter";
+
+    static {
+        final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+        final DataManager dataManager = plugin.getDataManager();
+        dataManager.addTable(CreateTableStatement.builder(TABLE).
+                addField(Long.class, ID, KeyType.PRIMARY).
+                addField(String.class, ITEM_ID).
+                addField(Integer.class, TICK_COUNTER).
+                build());
+
+        dataManager.registerItemSaveConsumer(ItemCatcher.class, (conn, collection) -> {
+            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+            collection.forEach(item -> {
+                builder.newEntry().
+                        addEntry(ID, item.getId()).
+                        addEntry(ITEM_ID, item.getItemId()).
+                        addEntry(TICK_COUNTER, ((ItemCatcher) item).tickCounter).
+                        build().
+                        execute(conn);
+            });
+            builder.build().execute(conn);
+        });
+        
+        dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
+            final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
+                    selectAll().
+                    condition(ID, String.valueOf(id));
+            final List<ItemCatcher> list = builder.build().execute(conn, results -> {
+                final String itemId = results.getString(ITEM_ID);
+                if (!(plugin.getItemManager().getItem(itemId) instanceof final ItemCatcher item)) return null;
+                final int tickCounter = results.getInt(TICK_COUNTER);
+                final ItemCatcher itemCatcher = new ItemCatcher(plugin, id, itemId, item.itemSupplier, item.tickDelay, item.items);
+                itemCatcher.tickCounter = tickCounter;
+                return itemCatcher;
+            });
+            if (list.isEmpty()) return SpecialSkyItem.EMPTY;
+            return list.get(0);
+        });
+
+        dataManager.registerItemDeleteConsumer(ItemCatcher.class, (conn, item) -> {
+            DeleteStatement.builder(TABLE).
+                    condition(ID, String.valueOf(item.getId())).
+                    build().
+                    execute(conn);
+        });
+    }
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -135,6 +193,11 @@ public class ItemCatcher implements SkyBlock, Delayed {
     @Override
     public boolean uniqueInInventory() {
         return false;
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE;
     }
 
     public static Serializer serializer() {

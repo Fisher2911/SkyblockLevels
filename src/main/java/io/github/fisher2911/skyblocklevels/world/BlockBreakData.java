@@ -71,4 +71,12 @@ public class BlockBreakData {
     public Player getPlayer() {
         return player;
     }
+
+    public int getTotalTicks() {
+        return totalTicks;
+    }
+
+    public int getCurrentTicks() {
+        return currentTicks;
+    }
 }

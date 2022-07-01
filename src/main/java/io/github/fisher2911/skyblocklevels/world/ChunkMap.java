@@ -32,8 +32,8 @@ public class ChunkMap {
         this.blocks.put(position, block);
     }
 
-    public void removeBlock(Position position) {
-        this.blocks.remove(position);
+    public SkyBlock removeBlock(Position position) {
+        return this.blocks.remove(position);
     }
 
     public SkyBlock getBlockAt(Position position) {

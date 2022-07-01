@@ -53,7 +53,6 @@ public class BlockBreakManager implements Listener {
                         this.blockBreakData.entrySet().removeIf(entry -> {
                             final WorldPosition position = entry.getKey();
                             final BlockBreakData data = entry.getValue();
-//                            data.getPlayer().sendMessage("Updating");
 //                            Bukkit.getScheduler().runTask(
 //                                    this.plugin,
 //                                    () -> data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5, -1, false, false)));

@@ -5,17 +5,16 @@ import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class WorldManager implements Listener {
+public class WorldManager {
 
     private final SkyblockLevels plugin;
     private final World world;
@@ -28,17 +27,16 @@ public class WorldManager implements Listener {
         this.chunks = chunks;
     }
 
-    @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         final Chunk chunk = event.getChunk();
         final Position2D position = new Position2D(chunk.getX(), chunk.getZ());
         this.chunks.put(position, new ChunkMap(chunk.getX(), chunk.getZ(), new ConcurrentHashMap<>()));
     }
 
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
+    @Nullable
+    public ChunkMap onChunkUnload(ChunkUnloadEvent event) {
         final Chunk chunk = event.getChunk();
-        this.chunks.remove(new Position2D(chunk.getX(), chunk.getZ()));
+        return this.chunks.remove(new Position2D(chunk.getX(), chunk.getZ()));
     }
 
     public World getWorld() {
@@ -75,11 +73,11 @@ public class WorldManager implements Listener {
         chunk.addBlock(position, block);
     }
 
-    public void removeBlock(WorldPosition worldPosition) {
+    public SkyBlock removeBlock(WorldPosition worldPosition) {
         final Position position = worldPosition.getPosition();
         final ChunkMap chunk = this.getChunkAt((int) position.getX() >> 4, (int) position.getZ() >> 4);
-        if (chunk == null) return;
-        chunk.removeBlock(position);
+        if (chunk == null) return SkyBlock.EMPTY;
+        return chunk.removeBlock(position);
     }
 
     public void startTicking() {

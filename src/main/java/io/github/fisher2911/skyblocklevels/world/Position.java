@@ -28,6 +28,14 @@ public class Position {
         return z;
     }
 
+    public int getChunkX() {
+        return (int) Math.floor(x / 16);
+    }
+
+    public int getChunkZ() {
+        return (int) Math.floor(z / 16);
+    }
+
     public WorldPosition toWorldPosition(World world) {
         return new WorldPosition(world, this);
     }
