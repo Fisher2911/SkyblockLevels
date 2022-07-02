@@ -3,4 +3,4 @@ version: '${version}'
 main: io.github.fisher2911.skyblocklevels.SkyblockLevels
 api-version: 1.18
 load: STARTUP
-depend: [ Lands ]
+depend: [ Lands, packetevents ]

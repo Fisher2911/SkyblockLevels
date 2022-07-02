@@ -11,18 +11,19 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: COBBLESTONE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
+        value: "*1.5"
+    sky-items:
+      special-stone-pickaxe:
         value: "*0.5"
   items:
     1:
       weight: 100
       item:
         material: "COBBLESTONE"
-  collection-requirements:
-    COBBLESTONE: 64
 7:
   class: generator
   item-id: "stone-generator"
@@ -46,6 +47,8 @@
       weight: 100
       item:
         material: "STONE"
+  collection-requirements:
+    cobblestone-generator: 10
 8:
   class: generator
   item-id: "diorite-generator"

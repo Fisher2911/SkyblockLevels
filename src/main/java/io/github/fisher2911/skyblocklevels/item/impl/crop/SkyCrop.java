@@ -1,6 +1,9 @@
-package io.github.fisher2911.skyblocklevels.item;
+package io.github.fisher2911.skyblocklevels.item.impl.crop;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
+import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
+import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
@@ -9,6 +12,7 @@ import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -21,6 +25,8 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -36,10 +42,11 @@ public class SkyCrop implements SkyBlock {
     private final int tickDelay;
     private final WeightedList<Supplier<ItemStack>> items;
     private final CollectionCondition collectionCondition;
+    private final Set<Material> placeableOn;
 
     private int currentTickCounter;
 
-    public SkyCrop(SkyblockLevels plugin, long id, String itemId, Material material, ItemSupplier itemSupplier, int tickDelay, WeightedList<Supplier<ItemStack>> items, CollectionCondition collectionCondition) {
+    public SkyCrop(SkyblockLevels plugin, long id, String itemId, Material material, ItemSupplier itemSupplier, int tickDelay, WeightedList<Supplier<ItemStack>> items, CollectionCondition collectionCondition, Set<Material> placeableOn) {
         this.plugin = plugin;
         this.id = id;
         this.itemId = itemId;
@@ -48,6 +55,7 @@ public class SkyCrop implements SkyBlock {
         this.tickDelay = tickDelay;
         this.items = items;
         this.collectionCondition = collectionCondition;
+        this.placeableOn = placeableOn;
     }
 
     @Override
@@ -55,8 +63,8 @@ public class SkyCrop implements SkyBlock {
         final Block block = event.getBlock();
         final Location location = block.getLocation();
         final WorldPosition position = WorldPosition.fromLocation(location);
-        this.plugin.getWorlds().removeBlock(position);
-        block.setType(Material.AIR);
+        if (!this.isMelonOrPumpkin(block)) this.plugin.getWorlds().removeBlock(position);
+        block.setType(this.fromBlock(block));
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) return;
         final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
         if (itemStackSupplier == null) return;
@@ -77,11 +85,12 @@ public class SkyCrop implements SkyBlock {
 
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
+        final Block block = event.getBlock();
+        if (!this.placeableOn.contains(block.getRelative(BlockFace.DOWN).getType())) return;
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) {
             user.sendMessage("<red>You do not meet the collection requirements for this crop.");
             return;
         }
-        final Block block = event.getBlock();
         block.setType(this.material);
         final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
         this.plugin.getWorlds().addBlock(this, position);
@@ -97,11 +106,34 @@ public class SkyCrop implements SkyBlock {
         final Block block = worldPosition.toLocation().getBlock();
         if (!(block.getBlockData() instanceof Ageable ageable)) return;
         final int age = ageable.getAge();
-        if (age == ageable.getMaximumAge()) return;
         if (this.currentTickCounter++ < this.calculateTicksPerGrowth(ageable)) return;
+        if (age == ageable.getMaximumAge()) {
+            if (this.isMelonOrPumpkin(block)) block.setType(this.fromSeeds(block.getType()));
+            return;
+        }
         ageable.setAge(age + 1);
         block.setBlockData(ageable);
         this.currentTickCounter = 0;
+    }
+
+    private boolean isMelonOrPumpkin(Block block) {
+        return block.getType() == Material.MELON_SEEDS || block.getType() == Material.PUMPKIN_SEEDS;
+    }
+
+    private Material fromSeeds(Material material) {
+        return switch (material) {
+            case MELON_SEEDS -> Material.MELON;
+            case PUMPKIN_SEEDS -> Material.PUMPKIN;
+            default -> material;
+        };
+    }
+
+    private Material fromBlock(Block block) {
+        return switch (block.getType()) {
+            case MELON -> Material.MELON_SEEDS;
+            case PUMPKIN -> Material.PUMPKIN_SEEDS;
+            default -> Material.AIR;
+        };
     }
 
     private int calculateTicksPerGrowth(Ageable ageable) {
@@ -151,6 +183,7 @@ public class SkyCrop implements SkyBlock {
         private static final String TICK_DELAY = "tick-delay";
         private static final String ITEMS = "items";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
+        private static final String PLACEABLE_ON = "placeable-on";
 
         private static final Serializer INSTANCE = new Serializer();
 
@@ -173,6 +206,10 @@ public class SkyCrop implements SkyBlock {
                                         collect(Collectors.toList()));
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
                 final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
+                final Set<Material> placeableOn = node.node(PLACEABLE_ON).getList(String.class, new ArrayList<>()).
+                        stream().
+                        map(Material::matchMaterial).
+                        collect(Collectors.toSet());
                 return () -> new SkyCrop(
                         plugin,
                         plugin.getItemManager().generateNextId(),
@@ -181,7 +218,8 @@ public class SkyCrop implements SkyBlock {
                         itemSupplier,
                         tickDelay,
                         items,
-                        requirements
+                        requirements,
+                        placeableOn
                 );
             } catch (SerializationException e) {
                 throw new RuntimeException(e);

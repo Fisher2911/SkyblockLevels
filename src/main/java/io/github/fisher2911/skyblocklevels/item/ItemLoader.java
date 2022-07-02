@@ -4,6 +4,7 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
 import io.github.fisher2911.skyblocklevels.item.impl.builder.Builder;
 import io.github.fisher2911.skyblocklevels.item.impl.catcher.ItemCatcher;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.SkyCrop;
 import io.github.fisher2911.skyblocklevels.item.impl.generator.Generator;
 import io.github.fisher2911.skyblocklevels.item.impl.grower.Grower;
 import io.github.fisher2911.skyblocklevels.item.impl.platformer.MaterialPlatformer;

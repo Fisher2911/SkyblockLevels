@@ -1,2 +1,13 @@
 should-store:
   - cobblestone-generator
+  - andesite-generator
+  -
+collection-categories:
+  mining:
+    item:
+      material: COBBLESTONE
+      amount: 1
+      name: "<green>Mining Collection"
+    collections:
+      - cobblestone-generator
+      - andesite-generator

@@ -1,11 +1,17 @@
 package io.github.fisher2911.skyblocklevels.world;
 
+import org.bukkit.Chunk;
+
 import java.util.Objects;
 
 public class Position2D {
 
     private final int x;
     private final int y;
+
+    public static Position2D fromChunk(Chunk chunk) {
+        return new Position2D(chunk.getX(), chunk.getZ());
+    }
 
     public Position2D(int x, int y) {
         this.x = x;

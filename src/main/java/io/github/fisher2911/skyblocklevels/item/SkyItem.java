@@ -54,7 +54,7 @@ public class SkyItem implements SpecialSkyItem {
 
         private Serializer() {}
 
-        private static final String ITEM_ID = "item_id";
+        private static final String ITEM_ID = "item-id";
         private static final String ITEM = "item";
         private static final String UNIQUE = "unique";
 

@@ -1,5 +1,7 @@
 package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
+import dev.triumphteam.gui.guis.Gui;
+import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -14,13 +16,13 @@ import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.MineSpeeds;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
+import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,11 +36,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.incendo.interfaces.core.click.ClickHandler;
-import org.incendo.interfaces.paper.PlayerViewer;
-import org.incendo.interfaces.paper.element.ItemStackElement;
-import org.incendo.interfaces.paper.transform.PaperTransform;
-import org.incendo.interfaces.paper.type.ChestInterface;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
@@ -238,40 +235,27 @@ public class Generator implements SkyBlock, Delayed {
 
     private void showCollectionRequirements(BukkitUser user) {
         final int rows = (int) Math.ceil(this.collectionCondition.getRequiredItems().size() / 5.0) + 2;
-        final ChestInterface inventory = ChestInterface.builder().
+        final Gui gui = Gui.gui().title(Adventure.parse("<blue>Collection Requirements")).
                 rows(rows).
-                clickHandler(ClickHandler.cancel()).
-                addTransform(PaperTransform.chestFill(ItemStackElement.of(
-                        ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).
-                                name(" ").
-                                build()
-                ))).
-                addTransform((pane, view) -> {
-                    int x = 1;
-                    int y = 1;
-                    for (final var entry : this.collectionCondition.getRequiredItems().entrySet()) {
-                        final String itemType = entry.getKey();
-                        final SpecialSkyItem item = this.plugin.getItemManager().getItem(itemType);
-                        ItemBuilder itemBuilder = ItemBuilder.from(item.getItemStack());
-                        if (SpecialSkyItem.EMPTY == item) {
-                            itemBuilder = ItemBuilder.from(Material.valueOf(itemType));
-                        }
-                        itemBuilder.name("<!i>" + itemType);
-                        itemBuilder.amount(1);
-                        itemBuilder.lore("").
-                                lore(user.getCollection().getAmount(itemType) + "/" + entry.getValue());
-                        pane = pane.element(ItemStackElement.of(itemBuilder.build()), x++, y);
-                        if (x == 6) {
-                            x = 1;
-                            y++;
-                        }
-                    }
-
-                    return pane;
-                })
-                .title(Component.text(this.itemId))
-                .build();
-        inventory.open(PlayerViewer.of(user.getPlayer()));
+                disableAllInteractions().
+                create();
+        gui.getFiller().fillBorder(new GuiItem(ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).amount(1).name(" ").build()));
+        for (final var entry : this.collectionCondition.getRequiredItems().entrySet()) {
+            final String itemType = entry.getKey();
+            final SpecialSkyItem item = this.plugin.getItemManager().getItem(itemType);
+            ItemBuilder itemBuilder = ItemBuilder.from(item.getItemStack());
+            if (SpecialSkyItem.EMPTY == item) {
+                itemBuilder = ItemBuilder.from(Material.valueOf(itemType));
+            }
+            itemBuilder.name("<!i>" + itemType);
+            itemBuilder.amount(1);
+            itemBuilder.lore("").
+                    lore(user.getCollection().getAmount(itemType) + "/" + entry.getValue());
+            gui.addItem(new GuiItem(itemBuilder.build()));
+        }
+        final Player player = user.getPlayer();
+        if (player == null) return;
+        gui.open(player);
     }
 
     @Override
@@ -311,6 +295,19 @@ public class Generator implements SkyBlock, Delayed {
             return;
         }
         if (player == null) return;
+        if (!this.collectionCondition.isAllowed(user.getCollection())) {
+            player.sendActionBar(Adventure.parse("<red>You have not collected the required materials to be able to collect from this generator."));
+            this.plugin.getBlockBreakManager().startMining(
+                    p -> Integer.MAX_VALUE,
+                    player,
+                    WorldPosition.fromLocation(block.getLocation()),
+                    p -> Bukkit.getScheduler().runTask(
+                            this.plugin,
+                            () -> this.onBreak(user, new BlockBreakEvent(block, player))
+                    )
+            );
+            return;
+        }
         this.plugin.getBlockBreakManager().startMining(
                 this.mineSpeedFunction,
                 player,

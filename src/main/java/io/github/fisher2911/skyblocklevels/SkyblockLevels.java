@@ -13,6 +13,7 @@ import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
+import io.github.fisher2911.skyblocklevels.command.CollectionCommand;
 import io.github.fisher2911.skyblocklevels.command.GiveItemCommand;
 import io.github.fisher2911.skyblocklevels.command.RTPCommand;
 import io.github.fisher2911.skyblocklevels.command.ReloadCommand;
@@ -85,7 +86,7 @@ public final class SkyblockLevels extends JavaPlugin {
         this.entityManager = new EntityManager(this, new ConcurrentHashMap<>(), new HashMap<>());
         this.itemManager.registerAll();
         this.entityManager.loadTypes();
-        this.userManager = new UserManager(new HashMap<>(), new HashSet<>());
+        this.userManager = new UserManager(this, new HashMap<>(), new HashSet<>());
         this.userManager.load(this);
         this.registerListeners();
         this.initCommands();
@@ -148,8 +149,11 @@ public final class SkyblockLevels extends JavaPlugin {
 
     private void registerCommands() {
         new GiveItemCommand(this).register();
-        new RTPCommand(this).register();
+        final RTPCommand rtpCommand = new RTPCommand(this);
+        rtpCommand.register();
         new ReloadCommand(this).register();
+        new CollectionCommand(this).register();
+        this.registerListener(rtpCommand);
         try {
             this.annotationParser.parseContainers();
         } catch (Exception e) {
