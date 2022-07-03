@@ -135,6 +135,10 @@ public class Worlds implements Listener {
         return worldManager.getBlockAt(worldPosition.getPosition());
     }
 
+    public boolean isSkyBlock(WorldPosition worldPosition) {
+        return !SkyBlock.isEmpty(this.getBlockAt(worldPosition));
+    }
+
     private void loadChunk(UUID world, int chunkX, int chunkY) {
         final SelectStatement statement = SelectStatement.builder(TABLE).
                 selectAll().
