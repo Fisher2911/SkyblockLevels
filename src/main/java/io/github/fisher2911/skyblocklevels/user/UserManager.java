@@ -7,6 +7,7 @@ import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
@@ -105,6 +106,27 @@ public class UserManager {
                         addEntry(AMOUNT, user.getCollection().getAmount(collectionType)).
                         batchSize(collectionTypes.length);
             }
+            builder.build().execute(this.plugin.getDataManager().getConnection());
+        });
+    }
+
+    public void loadUser(UUID uuid) {
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+            final SelectStatement statement = SelectStatement.
+                    builder(TABLE).
+                    condition(UUID, uuid.toString()).
+                    selectAll().
+                    build();
+            final BukkitUser user = statement.execute(this.plugin.getDataManager().getConnection(), resultSet -> {
+                final Map<String, Integer> collection = new HashMap<>();
+                while (resultSet.next()) {
+                    final String itemId = resultSet.getString(ITEM_ID);
+                    final int amount = resultSet.getInt(AMOUNT);
+                    collection.put(itemId, amount);
+                }
+                return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()));
+            }).get(0);
+            this.addUser(user);
         });
     }
 

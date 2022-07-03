@@ -217,7 +217,6 @@ public class Generator implements SkyBlock, Delayed {
         final Block block = event.getBlock();
         this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(this.resetBlock);
-        event.getPlayer().sendMessage("§aGenerator placed: " + this.resetBlock + " " + event.isCancelled());
     }
 
     @Override

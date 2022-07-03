@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        this.userManager.addUser(new BukkitUser(player.getUniqueId(), new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())));
+        this.userManager.loadUser(player.getUniqueId());
         PacketHelper.sendMiningFatiguePacket(player);
     }
 }

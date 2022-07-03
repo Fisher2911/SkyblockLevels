@@ -6,14 +6,18 @@ import io.github.fisher2911.skyblocklevels.util.Random;
 import io.github.fisher2911.skyblocklevels.world.Position;
 import io.github.fisher2911.skyblocklevels.world.Position2D;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -56,9 +60,8 @@ public class RTPCommand extends SkyCommand implements Listener {
                                     this.teleportUser(data);
                                     return;
                                 }
-                                final Location location = position.toLocation();
-                                this.toTeleport.put(new Position2D(pos.getChunkX(), pos.getChunkZ()), data);
-                                position.getWorld().loadChunk(location.getChunk());
+                                world.loadChunk(pos.getChunkX(), pos.getChunkZ());
+                                Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.teleportUser(data), 40);
                             }).execute();
                         })
         );
@@ -78,13 +81,16 @@ public class RTPCommand extends SkyCommand implements Listener {
         position.toLocation().getBlock().getRelative(BlockFace.DOWN).setType(Material.DIRT);
         user.teleport(position);
         user.sendMessage("<green>You have been randomly teleported to " + position.getPosition().getX() + " " + position.getPosition().getY() + " " + position.getPosition().getZ());
+        final Player player = user.getPlayer();
+        if (player == null) return;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 10));
     }
 
     private Location getRandLocation() {
         final int x = Random.nextInt(-10_000, 10_000);
         final int y = 64;
         final int z = Random.nextInt(-10_000, 10_000);
-        return new Location(this.plugin.getWorld().getWorld(), x, y, z);
+        return new Location(this.plugin.getWorld().getWorld(), x + 0.5, y, z + 0.5);
     }
 
     private static class TeleportData {

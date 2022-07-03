@@ -11,7 +11,6 @@ import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -83,19 +82,19 @@ public class EntityManager implements Listener {
         return this.entityMap.get(entity.getUniqueId());
     }
 
-    @EventHandler
+    // @EventHandler
     public void onEntitySpawn(EntitySpawnEvent event) {
         final UUID uuid = event.getEntity().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.loadEntity(uuid));
     }
 
-    @EventHandler
+    // @EventHandler
     public void onEntitySpawn(EntityAddToWorldEvent event) {
         final UUID uuid = event.getEntity().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.loadEntity(uuid));
     }
 
-    @EventHandler
+    // @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {
         final Collection<Entity> entities = event.getWorld().getEntities();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -106,7 +105,7 @@ public class EntityManager implements Listener {
         });
     }
 
-    @EventHandler
+    // @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         final Collection<Entity> entities = event.getWorld().getEntities();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -117,19 +116,19 @@ public class EntityManager implements Listener {
         });
     }
 
-    @EventHandler
+    // @EventHandler
     public void onEntityRemove(EntityDeathEvent event) {
         final UUID uuid = event.getEntity().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
     }
 
-    @EventHandler
+    // @EventHandler
     public void onEntityRemove(EntityRemoveFromWorldEvent event) {
         final UUID uuid = event.getEntity().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
     }
 
-    @EventHandler
+    // @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (Entity entity : event.getWorld().getEntities()) {
@@ -141,7 +140,7 @@ public class EntityManager implements Listener {
         });
     }
 
-    @EventHandler
+    // @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (Entity entity : event.getChunk().getEntities()) {
