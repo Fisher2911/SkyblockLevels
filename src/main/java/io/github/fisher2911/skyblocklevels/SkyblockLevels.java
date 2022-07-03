@@ -93,7 +93,15 @@ public final class SkyblockLevels extends JavaPlugin {
         this.initCommands();
         PacketHelper.registerListeners(this);
         this.dataManager.createTables();
+        this.userManager.startSaveTask();
     }
+
+    @Override
+    public void onDisable() {
+        this.userManager.endSaveTask();
+        this.userManager.saveAll();
+    }
+
 
     private void initCommands() {
         final Function<CommandTree<User>, CommandExecutionCoordinator<User>> executionCoordinatorFunction =
@@ -160,10 +168,6 @@ public final class SkyblockLevels extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDisable() {
     }
 
     private void registerListeners() {

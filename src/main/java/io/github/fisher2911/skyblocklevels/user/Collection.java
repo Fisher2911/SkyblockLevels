@@ -1,10 +1,15 @@
 package io.github.fisher2911.skyblocklevels.user;
 
-import java.util.Map;
+import io.github.fisher2911.skyblocklevels.database.Changeable;
 
-public class Collection {
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class Collection implements Changeable<Set<String>> {
 
     private final Map<String, Integer> itemsCollected;
+    private Set<String> changed = new HashSet<>();
 
     public Collection(Map<String, Integer> itemsCollected) {
         this.itemsCollected = itemsCollected;
@@ -16,6 +21,7 @@ public class Collection {
 
     public void addAmount(String id, int amount) {
         this.itemsCollected.put(id, this.itemsCollected.getOrDefault(id, 0) + amount);
+        this.changed.add(id);
     }
 
     public int getAmount(String id) {
@@ -26,4 +32,13 @@ public class Collection {
         return new Collection(Map.of());
     }
 
+    @Override
+    public Set<String> getChanged() {
+        return this.changed;
+    }
+
+    @Override
+    public void setChanged(Set<String> changed) {
+        this.changed = changed;
+    }
 }

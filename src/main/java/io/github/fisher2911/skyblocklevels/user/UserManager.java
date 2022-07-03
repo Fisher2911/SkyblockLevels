@@ -15,6 +15,7 @@ import io.github.fisher2911.skyblocklevels.message.Adventure;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -52,6 +53,7 @@ public class UserManager {
     private static final Path FILE_PATH = SkyblockLevels.getPlugin(SkyblockLevels.class).getDataFolder().toPath().resolve(FILE_NAME);
 
     private final SkyblockLevels plugin;
+    private BukkitTask saveTask;
     private final Map<UUID, BukkitUser> users;
     private final Set<String> shouldStore;
     private final Map<String, CollectionCategory> collectionCategories;
@@ -81,6 +83,15 @@ public class UserManager {
         this.users.remove(uuid);
     }
 
+    public void startSaveTask() {
+        this.saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, this::saveAll, 20 * 60, 20 * 60);
+    }
+
+    public void endSaveTask() {
+        if (this.saveTask == null) return;
+        this.saveTask.cancel();
+    }
+
     public void showMenu(BukkitUser user) {
         final Player player = user.getPlayer();
         if (player == null) return;
@@ -95,19 +106,25 @@ public class UserManager {
         gui.open(player);
     }
 
-    public void saveUser(User user, String... collectionTypes) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            final InsertStatement.Builder builder = InsertStatement.
-                    builder(TABLE);
-            for (String collectionType : collectionTypes) {
-                builder.newEntry().
-                        addEntry(UUID, user.getId().toString()).
-                        addEntry(ITEM_ID, collectionType).
-                        addEntry(AMOUNT, user.getCollection().getAmount(collectionType)).
-                        batchSize(collectionTypes.length);
-            }
-            builder.build().execute(this.plugin.getDataManager().getConnection());
-        });
+    public void saveUser(User user) {
+        final InsertStatement.Builder builder = InsertStatement.
+                builder(TABLE);
+        final Collection collection = user.getCollection();
+        final Set<String> changed = collection.getChanged();
+        for (String collectionType : changed) {
+            builder.newEntry().
+                    addEntry(UUID, user.getId().toString()).
+                    addEntry(ITEM_ID, collectionType).
+                    addEntry(AMOUNT, collection.getAmount(collectionType)).
+                    batchSize(changed.size());
+        }
+        builder.build().execute(this.plugin.getDataManager().getConnection());
+    }
+
+    public void saveAll() {
+        for (User user : this.users.values()) {
+            this.saveUser(user);
+        }
     }
 
     public void loadUser(UUID uuid) {
