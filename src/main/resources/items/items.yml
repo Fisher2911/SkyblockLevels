@@ -76,23 +76,6 @@
       weight: 60
       item:
         material: "STICK"
-6:
-  class: skyitem
-  item-id: "special-stone-pickaxe"
-  item:
-    material: "STONE_PICKAXE"
-    name: "<!i><green>Special Stone Pickaxe"
-    lore:
-      - "<!i>"
-      - "<!i><green>Mines cobblestone generators faster!"
-    glow: true
-7:
-  class: skyitem
-  item-id: "cobblestone-generator-core"
-  item:
-    material: "BEACON"
-    name: "<!i><green>Cobblestone Generator Core"
-    glow: true
 #8:
 #  class: skyitem
 #  item-id: "cobblestone-generator-fragment"
