@@ -134,7 +134,7 @@ public class UserManager {
                     condition(UUID, uuid.toString()).
                     selectAll().
                     build();
-            final BukkitUser user = statement.execute(this.plugin.getDataManager().getConnection(), resultSet -> {
+            final List<BukkitUser> users = statement.execute(this.plugin.getDataManager().getConnection(), resultSet -> {
                 final Map<String, Integer> collection = new HashMap<>();
                 while (resultSet.next()) {
                     final String itemId = resultSet.getString(ITEM_ID);
@@ -142,7 +142,8 @@ public class UserManager {
                     collection.put(itemId, amount);
                 }
                 return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()));
-            }).get(0);
+            });
+            BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())): users.get(0);
             this.addUser(user);
         });
     }
