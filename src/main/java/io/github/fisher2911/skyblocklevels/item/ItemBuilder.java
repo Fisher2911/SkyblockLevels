@@ -26,6 +26,7 @@ public class ItemBuilder implements ItemSupplier {
 
     private final ItemStack itemStack;
     private final ItemMeta itemMeta;
+    private boolean glow;
 
     private ItemBuilder(Material material) {
         this(new ItemStack(material));
@@ -133,9 +134,10 @@ public class ItemBuilder implements ItemSupplier {
     }
 
     public ItemBuilder glow(boolean glow) {
+        this.glow = glow;
         if (glow) {
-            this.itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.itemMeta.addEnchant(Enchantment.LUCK, 1, true);
+            if (this.itemMeta.getEnchants().size() <= 1) this.itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             return this;
         }
         this.itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -169,6 +171,7 @@ public class ItemBuilder implements ItemSupplier {
     }
 
     public ItemBuilder enchant(Enchantment enchantment, int level) {
+        if (this.glow) this.itemMeta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
         this.itemMeta.addEnchant(enchantment, level, true);
         return this;
     }

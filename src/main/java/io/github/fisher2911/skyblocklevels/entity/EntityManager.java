@@ -75,11 +75,11 @@ public class EntityManager implements Listener {
     }
 
     public SkyEntity getEntity(UUID uuid) {
-        return this.entityMap.get(uuid);
+        return this.entityMap.getOrDefault(uuid, SkyEntity.EMPTY);
     }
 
     public SkyEntity getEntity(Entity entity) {
-        return this.entityMap.get(entity.getUniqueId());
+        return this.getEntity(entity.getUniqueId());
     }
 
     // @EventHandler

@@ -1,4 +1,4 @@
-6:
+1:
   class: generator
   item-id: "cobblestone-generator"
   item:
@@ -6,25 +6,37 @@
     name: "<!i><green>Cobblestone Generator"
     lore:
       - "<!i>"
-      - "<!i><green>Speed: 1 item / %delay% seconds"
+      - "<!i><blue>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: COBBLESTONE
   ticks-to-break: 40
   speed-modifiers:
     materials:
+      WOODEN_PICKAXE:
+        value: "*1"
       STONE_PICKAXE:
-        value: "*1.5"
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.90"
+      GOLDEN_PICKAXE:
+        value: "*0.85"
+      DIAMOND_PICKAXE:
+        value: "*0.80"
     sky-items:
-      special-stone-pickaxe:
-        value: "*0.5"
+      generator-cobblestone-pickaxe:
+        value: "*0.90"
+      generator-stone-pickaxe:
+        value: "*0.85"
+      generator-iron-pickaxe:
+        value: "*0.80"
   items:
     1:
       weight: 100
       item:
         material: "COBBLESTONE"
-7:
+2:
   class: generator
   item-id: "stone-generator"
   item:
@@ -37,7 +49,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: STONE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -48,8 +60,8 @@
       item:
         material: "STONE"
   collection-requirements:
-    cobblestone-generator: 10
-8:
+    cobblestone-generator: 64
+3:
   class: generator
   item-id: "diorite-generator"
   item:
@@ -62,7 +74,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: DIORITE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -72,7 +84,9 @@
       weight: 100
       item:
         material: "DIORITE"
-9:
+  collection-requirements:
+    cobblestone-generator: 64
+4:
   class: generator
   item-id: "andesite-generator"
   item:
@@ -85,7 +99,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: ANDESITE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -95,7 +109,9 @@
       weight: 100
       item:
         material: "ANDESITE"
-10:
+  collection-requirements:
+    cobblestone-generator: 64
+5:
   class: generator
   item-id: "granite-generator"
   item:
@@ -108,7 +124,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: GRANITE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -118,7 +134,9 @@
       weight: 100
       item:
         material: "GRANITE"
-11:
+  collection-requirements:
+    cobblestone-generator: 64
+6:
   class: generator
   item-id: "coal-ore-generator"
   item:
@@ -131,7 +149,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: COAL_ORE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -141,7 +159,34 @@
       weight: 100
       item:
         material: "COAL_ORE"
-12:
+  collection-requirements:
+    cobblestone-generator: 64
+7:
+  class: generator
+  item-id: "copper-ore-generator"
+  item:
+    material: "COPPER_ORE"
+    name: "<!i><green>Copper Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: COPPER_ORE
+  ticks-to-break: 40
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "COPPER_ORE"
+  collection-requirements:
+    cobblestone-generator: 64
+8:
   class: generator
   item-id: "iron-ore-generator"
   item:
@@ -154,7 +199,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: IRON_ORE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -163,21 +208,48 @@
     1:
       weight: 100
       item:
-        material: "IRON_ORE"
-13:
+        material: "RAW_IRON"
+  collection-requirements:
+    cobblestone-generator: 64
+9:
   class: generator
-  item-id: "lapis-ore-generator"
+  item-id: "redstone-ore-generator"
   item:
-    material: "LAPIS_ORE"
-    name: "<!i><green>Lapis Ore Generator"
+    material: "REDSTONE_ORE"
+    name: "<!i><green> Generator"
     lore:
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
   tick-delay: 40
   reset-block: BEDROCK
-  generator-block: LAPIS_ORE
-  ticks-to-break: 80
+  generator-block: REDSTONE_ORE
+  ticks-to-break: 40
+  speed-modifiers:
+    materials:
+      STONE_PICKAXE:
+        value: "*0.5"
+  items:
+    1:
+      weight: 100
+      item:
+        material: "REDSTONE"
+  collection-requirements:
+    cobblestone-generator: 64
+10:
+  class: generator
+  item-id: "lapis-lazuli-ore-generator"
+  item:
+    material: "LAPIS_LAZULI_ORE"
+    name: "<!i><green>Lapis Lazuli Ore Generator"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 item / %delay% seconds"
+    glow: true
+  tick-delay: 40
+  reset-block: BEDROCK
+  generator-block: LAPIS_LAZULI_ORE
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -187,30 +259,9 @@
       weight: 100
       item:
         material: "LAPIS_LAZULI"
-14:
-  class: generator
-  item-id: "redstone-ore-generator"
-  item:
-    material: "REDSTONE_ORE"
-    name: "<!i><green>Redstone Ore Generator"
-    lore:
-      - "<!i>"
-      - "<!i><green>Speed: 1 item / %delay% seconds"
-    glow: true
-  tick-delay: 40
-  reset-block: BEDROCK
-  generator-block: REDSTONE_ORE
-  ticks-to-break: 80
-  speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
-  items:
-    1:
-      weight: 100
-      item:
-        material: "REDSTONE_ORE"
-15:
+  collection-requirements:
+    cobblestone-generator: 64
+11:
   class: generator
   item-id: "gold-ore-generator"
   item:
@@ -223,7 +274,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: GOLD_ORE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -232,8 +283,10 @@
     1:
       weight: 100
       item:
-        material: "GOLD_ORE"
-16:
+        material: "RAW_GOLD"
+  collection-requirements:
+    cobblestone-generator: 64
+12:
   class: generator
   item-id: "emerald-ore-generator"
   item:
@@ -246,7 +299,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: EMERALD_ORE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -255,13 +308,15 @@
     1:
       weight: 100
       item:
-        material: "EMERALD_ORE"
-17:
+        material: "EMERALD"
+  collection-requirements:
+    cobblestone-generator: 64
+13:
   class: generator
   item-id: "diamond-ore-generator"
   item:
     material: "DIAMOND_ORE"
-    name: "<!i><green>Diamond Ore Generator"
+    name: "<!i><green>Diamond Generator"
     lore:
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
@@ -269,7 +324,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: DIAMOND_ORE
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -278,8 +333,10 @@
     1:
       weight: 100
       item:
-        material: "DIAMOND_ORE"
-18:
+        material: "DIAMOND"
+  collection-requirements:
+    cobblestone-generator: 64
+14:
   class: generator
   item-id: "ancient-debris-generator"
   item:
@@ -292,7 +349,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: ANCIENT_DEBRIS
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -301,8 +358,10 @@
     1:
       weight: 100
       item:
-        material: "ANCIENT_DEBRIS"
-19:
+        material: "NETHERITE_SCRAP"
+  collection-requirements:
+    cobblestone-generator: 64
+15:
   class: generator
   item-id: "obsidian-generator"
   item:
@@ -315,7 +374,7 @@
   tick-delay: 40
   reset-block: BEDROCK
   generator-block: OBSIDIAN
-  ticks-to-break: 80
+  ticks-to-break: 40
   speed-modifiers:
     materials:
       STONE_PICKAXE:
@@ -325,3 +384,5 @@
       weight: 100
       item:
         material: "OBSIDIAN"
+  collection-requirements:
+    cobblestone-generator: 64
