@@ -81,10 +81,8 @@ public class BlockBreakManager implements Listener {
                         final int lastTick = data.lastTick;
                         if (lastTick + 1 < currentTick) {
                             this.cancel(data.position);
-                            Bukkit.broadcastMessage("Cancelled: " + lastTick + " - " + currentTick);
                             return true;
                         }
-                        Bukkit.broadcastMessage("Not cancelled");
                         return false;
                     });
                 }
