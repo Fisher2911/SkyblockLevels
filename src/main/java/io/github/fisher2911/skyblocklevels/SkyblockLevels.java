@@ -172,7 +172,7 @@ public final class SkyblockLevels extends JavaPlugin {
 
     private void registerListeners() {
         List.of(
-                new PlayerJoinListener(this.userManager),
+                new PlayerJoinListener(this),
                 new PlayerInteractListener(this),
                 new BlockBreakListener(this),
                 new BlockPlaceListener(this),

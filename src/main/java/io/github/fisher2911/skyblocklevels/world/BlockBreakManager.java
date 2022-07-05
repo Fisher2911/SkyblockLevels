@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -17,10 +18,12 @@ public class BlockBreakManager implements Listener {
 
     private final SkyblockLevels plugin;
     private final Map<WorldPosition, BlockBreakData> blockBreakData;
+    private final Map<UUID, BlockTickData> playerLastMineTick;
 
     public BlockBreakManager(SkyblockLevels plugin) {
         this.plugin = plugin;
         this.blockBreakData = new ConcurrentHashMap<>();
+        this.playerLastMineTick = new ConcurrentHashMap<>();
     }
 
     public void startMining(Function<Player, Integer> tickFunction, Player player, WorldPosition position, Consumer<WorldPosition> onBreak) {
@@ -47,24 +50,69 @@ public class BlockBreakManager implements Listener {
         data.reset(position);
     }
 
+    public BlockTickData tick(UUID uuid, WorldPosition position) {
+        final int currentTick = Bukkit.getCurrentTick();
+        final BlockTickData data = this.playerLastMineTick.computeIfAbsent(uuid, k -> new BlockTickData(currentTick, position, 0));
+        data.lastTick = currentTick;
+        return data;
+    }
+
     @EventHandler
     private void onTickEnd(ServerTickEndEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () ->
-                        this.blockBreakData.entrySet().removeIf(entry -> {
-                            final WorldPosition position = entry.getKey();
-                            final BlockBreakData data = entry.getValue();
+        final int currentTick = event.getTickNumber();
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                    this.blockBreakData.entrySet().removeIf(entry -> {
+                        final WorldPosition position = entry.getKey();
+                        final BlockBreakData data = entry.getValue();
 //                            Bukkit.getScheduler().runTask(
 //                                    this.plugin,
 //                                    () -> data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5, -1, false, false)));
-                            data.send(position);
-                            data.tick(position);
-                            if (data.isBroken()) {
-                                data.reset(position);
-                                data.getOnBreak().accept(position);
-                                return false;
-                            }
+                        data.send(position);
+                        data.tick(position);
+                        if (data.isBroken()) {
+                            data.reset(position);
+                            data.getOnBreak().accept(position);
                             return false;
-                        })
+                        }
+                        return false;
+                    });
+                    this.playerLastMineTick.entrySet().removeIf(entry -> {
+                        final BlockTickData data = entry.getValue();
+                        final int lastTick = data.lastTick;
+                        if (lastTick + 1 < currentTick) {
+                            this.cancel(data.position);
+                            Bukkit.broadcastMessage("Cancelled: " + lastTick + " - " + currentTick);
+                            return true;
+                        }
+                        Bukkit.broadcastMessage("Not cancelled");
+                        return false;
+                    });
+                }
         );
+    }
+
+    public static class BlockTickData {
+
+        private final int firstTick;
+        private int lastTick;
+        private final WorldPosition position;
+
+        public BlockTickData(int firstTick, WorldPosition position, int lastTick) {
+            this.firstTick = firstTick;
+            this.position = position;
+            this.lastTick = lastTick;
+        }
+
+        public int getFirstTick() {
+            return firstTick;
+        }
+
+        public int getLastTick() {
+            return lastTick;
+        }
+
+        public WorldPosition getPosition() {
+            return position;
+        }
     }
 }

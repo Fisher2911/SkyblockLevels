@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,8 +80,8 @@ public class UserManager {
         this.users.put(user.getId(), user);
     }
 
-    public void removeUser(UUID uuid) {
-        this.users.remove(uuid);
+    public BukkitUser removeUser(UUID uuid) {
+        return this.users.remove(uuid);
     }
 
     public void startSaveTask() {
@@ -107,16 +108,19 @@ public class UserManager {
     }
 
     public void saveUser(User user) {
-        final InsertStatement.Builder builder = InsertStatement.
-                builder(TABLE);
         final Collection collection = user.getCollection();
         final Set<String> changed = collection.getChanged();
+        collection.setChanged(new HashSet<>());
+        if (changed.isEmpty()) return;
+        final InsertStatement.Builder builder = InsertStatement.
+                builder(TABLE);
         for (String collectionType : changed) {
             builder.newEntry().
                     addEntry(UUID, user.getId().toString()).
                     addEntry(ITEM_ID, collectionType).
                     addEntry(AMOUNT, collection.getAmount(collectionType)).
                     batchSize(changed.size());
+            this.plugin.getLogger().severe("Saving: " + collectionType + " : " + collection.getAmount(collectionType));
         }
         builder.build().execute(this.plugin.getDataManager().getConnection());
     }

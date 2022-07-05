@@ -54,6 +54,7 @@ public class InsertStatement {
             statement.executeBatch();
         } catch (SQLException e) {
             System.out.println("Error with statement: " + this.getStatement());
+            e.printStackTrace();
         }
     }
 

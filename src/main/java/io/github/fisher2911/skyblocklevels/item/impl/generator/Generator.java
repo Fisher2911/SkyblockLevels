@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.skyblocklevels.DurableItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -209,6 +210,10 @@ public class Generator implements SkyBlock, Delayed {
         this.tickCounter = 0;
         block.setType(this.resetBlock);
         user.getCollection().addAmount(this.itemId, 1);
+        final ItemStack brokeWith = event.getPlayer().getInventory().getItemInMainHand();
+        if (brokeWith == null) return;
+        if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;
+        durableItem.takeDamage(brokeWith, 1);
     }
 
     @Override
