@@ -60,7 +60,7 @@
       item:
         material: "STONE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 3:
   class: generator
   item-id: "diorite-generator"
@@ -85,7 +85,7 @@
       item:
         material: "DIORITE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 4:
   class: generator
   item-id: "andesite-generator"
@@ -110,7 +110,7 @@
       item:
         material: "ANDESITE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 5:
   class: generator
   item-id: "granite-generator"
@@ -135,7 +135,7 @@
       item:
         material: "GRANITE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 6:
   class: generator
   item-id: "coal-ore-generator"
@@ -160,7 +160,7 @@
       item:
         material: "COAL_ORE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 7:
   class: generator
   item-id: "copper-ore-generator"
@@ -185,7 +185,7 @@
       item:
         material: "COPPER_ORE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 8:
   class: generator
   item-id: "iron-ore-generator"
@@ -210,7 +210,7 @@
       item:
         material: "RAW_IRON"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 9:
   class: generator
   item-id: "redstone-ore-generator"
@@ -235,12 +235,12 @@
       item:
         material: "REDSTONE"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 10:
   class: generator
-  item-id: "lapis-lazuli-ore-generator"
+  item-id: "lapis-ore-generator"
   item:
-    material: "LAPIS_LAZULI_ORE"
+    material: "LAPIS_ORE"
     name: "<!i><green>Lapis Lazuli Ore Generator"
     lore:
       - "<!i>"
@@ -248,7 +248,7 @@
     glow: true
   tick-delay: 40
   reset-block: BEDROCK
-  generator-block: LAPIS_LAZULI_ORE
+  generator-block: LAPIS_ORE
   ticks-to-break: 40
   speed-modifiers:
     materials:
@@ -260,7 +260,7 @@
       item:
         material: "LAPIS_LAZULI"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 11:
   class: generator
   item-id: "gold-ore-generator"
@@ -285,7 +285,7 @@
       item:
         material: "RAW_GOLD"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 12:
   class: generator
   item-id: "emerald-ore-generator"
@@ -310,7 +310,7 @@
       item:
         material: "EMERALD"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 13:
   class: generator
   item-id: "diamond-ore-generator"
@@ -335,7 +335,7 @@
       item:
         material: "DIAMOND"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 14:
   class: generator
   item-id: "ancient-debris-generator"
@@ -360,7 +360,7 @@
       item:
         material: "NETHERITE_SCRAP"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1
 15:
   class: generator
   item-id: "obsidian-generator"
@@ -385,4 +385,4 @@
       item:
         material: "OBSIDIAN"
   collection-requirements:
-    cobblestone-generator: 64
+    cobblestone-generator: 1

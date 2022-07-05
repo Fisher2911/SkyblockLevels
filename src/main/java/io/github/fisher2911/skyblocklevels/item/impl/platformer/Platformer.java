@@ -83,6 +83,11 @@ public abstract class Platformer implements SkyTool {
         return placed;
     }
 
+    @Override
+    public void takeDamage(ItemStack itemStack, int damage) {
+
+    }
+
     protected abstract String getUsesLeft();
 
 }

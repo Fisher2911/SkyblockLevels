@@ -13,6 +13,7 @@ public class Keys {
     private static final SkyblockLevels PLUGIN = SkyblockLevels.getPlugin(SkyblockLevels.class);
     private static final NamespacedKey ITEM_KEY = new NamespacedKey(PLUGIN, "item_id");
     private static final NamespacedKey ID_KEY = new NamespacedKey(PLUGIN, "item_unique_id");
+    private static final NamespacedKey DURABILITY_KEY = new NamespacedKey(PLUGIN, "item_durability");
 
     public static NamespacedKey create(String id) {
         return new NamespacedKey(PLUGIN, id);
@@ -47,5 +48,18 @@ public class Keys {
         if (itemMeta == null) return;
         itemMeta.getPersistentDataContainer().set(ITEM_KEY, PersistentDataType.STRING, id);
         itemStack.setItemMeta(itemMeta);
+    }
+
+    public static void setDurability(ItemStack itemStack, int durability) {
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return;
+        itemMeta.getPersistentDataContainer().set(DURABILITY_KEY, PersistentDataType.INTEGER, durability);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public static int getDurability(ItemStack itemStack, int def) {
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return 0;
+        return Objects.requireNonNullElse(itemMeta.getPersistentDataContainer().get(DURABILITY_KEY, PersistentDataType.INTEGER), def);
     }
 }

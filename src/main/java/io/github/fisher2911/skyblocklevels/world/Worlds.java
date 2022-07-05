@@ -200,10 +200,8 @@ public class Worlds implements Listener {
                                 batchSize(batchSize).
                                 build().
                                 execute(this.plugin.getDataManager().getConnection());
-                        System.out.println("Saved block");
                     }
                     if (clazz == null) return;
-                    System.out.println("Saving class: " + clazz);
                     this.plugin.getDataManager().saveItems(blocks.values(), clazz);
                 });
     }

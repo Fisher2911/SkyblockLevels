@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
@@ -38,7 +39,8 @@ public class ItemManager {
             EntityDamageEvent.class, List.of(SkyWeapon.class),
             PlayerInteractEvent.class, List.of(Usable.class, SkyBlock.class),
             BlockRedstoneEvent.class, List.of(RedstoneBlock.class),
-            BlockDamageEvent.class, List.of(SkyBlock.class)
+            BlockDamageEvent.class, List.of(SkyBlock.class),
+            PlayerItemDamageEvent.class, List.of(Usable.class)
     );
     private final Map<Class<?>, TriConsumer<Object, Object, Object>> itemActions = Map.of(
             SkyTool.class, (u, s, e) -> {
@@ -71,7 +73,13 @@ public class ItemManager {
             },
             Usable.class, (u, s, e) -> {
                 if (!(s instanceof Usable usable)) return;
-                usable.onUse((User) u, (PlayerInteractEvent) e);
+                if (e instanceof final PlayerItemDamageEvent event) {
+                    usable.onItemDamage((User) u, event);
+                    return;
+                }
+                if (e instanceof final PlayerInteractEvent event) {
+                    usable.onUse((User) u, event);
+                }
             },
             RedstoneBlock.class, (u, s, e) -> {
                 if (!(s instanceof RedstoneBlock redstoneBlock)) return;

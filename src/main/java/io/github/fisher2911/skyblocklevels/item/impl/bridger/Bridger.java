@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -81,6 +82,21 @@ public abstract class Bridger implements SkyTool {
             block = newBlock;
         }
         return placed;
+    }
+
+    @Override
+    public void onItemDamage(User user, PlayerItemDamageEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public int getDurability() {
+        return 1;
+    }
+
+    @Override
+    public void takeDamage(ItemStack itemStack, int damage) {
+
     }
 
     protected abstract String getUsesLeft();

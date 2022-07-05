@@ -102,7 +102,7 @@
   class: skyitem
   item-id: "gold-ore-generator-pickaxe"
   item:
-    material: "GOLD_PICKAXE"
+    material: "GOLDEN_PICKAXE"
     name: "<!i><blue>Gold Ore Generator Pickaxe"
     lore:
       - "<!i>"
@@ -112,7 +112,7 @@
   class: skyitem
   item-id: "emerald-ore-generator-pickaxe"
   item:
-    material: "IRON_PICKAXE"
+    material: "GOLDEN_PICKAXE"
     name: "<!i><blue>Emerald Ore Generator Pickaxe"
     lore:
       - "<!i>"

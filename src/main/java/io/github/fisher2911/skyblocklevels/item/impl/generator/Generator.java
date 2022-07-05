@@ -191,7 +191,7 @@ public class Generator implements SkyBlock, Delayed {
         if (!this.collectionCondition.isAllowed(user.getCollection())) {
             user.sendMessage("<red>You have not collected the required materials to be able to collect from this generator.");
             this.plugin.getBlockBreakManager().startMining(
-                    this.mineSpeedFunction,
+                    p -> Integer.MAX_VALUE,
                     player,
                     position,
                     p -> Bukkit.getScheduler().runTask(

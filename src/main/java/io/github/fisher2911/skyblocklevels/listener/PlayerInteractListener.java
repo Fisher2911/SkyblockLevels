@@ -18,7 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
@@ -33,6 +35,16 @@ public class PlayerInteractListener implements Listener {
         this.userManager = plugin.getUserManager();
         this.worlds = plugin.getWorlds();
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onItemDamage(PlayerItemDamageEvent event) {
+        Player player = event.getPlayer();
+        BukkitUser user = this.userManager.getUser(player);
+        if (user == null) return;
+        final ItemStack damaged = event.getItem();
+        this.itemManager.handle(user, damaged, event);
+    }
+
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {

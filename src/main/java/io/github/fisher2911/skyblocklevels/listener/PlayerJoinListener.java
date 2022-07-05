@@ -2,11 +2,13 @@ package io.github.fisher2911.skyblocklevels.listener;
 
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class PlayerJoinListener implements Listener {
 
@@ -21,5 +23,6 @@ public class PlayerJoinListener implements Listener {
         final Player player = event.getPlayer();
         this.userManager.loadUser(player.getUniqueId());
         PacketHelper.sendMiningFatiguePacket(player);
+        player.getInventory().addItem(new ItemStack(Material.OAK_SAPLING));
     }
 }

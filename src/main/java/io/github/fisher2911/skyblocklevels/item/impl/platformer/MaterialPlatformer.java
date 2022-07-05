@@ -13,6 +13,7 @@ import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -102,17 +103,27 @@ public class MaterialPlatformer extends Platformer {
     }
 
     @Override
-    protected String getUsesLeft() {
-        return String.valueOf(this.stored);
+    public void onItemDamage(User user, PlayerItemDamageEvent event) {
+        event.setCancelled(true);
     }
 
-    public static Serializer serializer() {
-        return Serializer.INSTANCE;
+    @Override
+    public int getDurability() {
+        return 1;
+    }
+
+    @Override
+    protected String getUsesLeft() {
+        return String.valueOf(this.stored);
     }
 
     @Override
     public boolean uniqueInInventory() {
         return true;
+    }
+
+    public static Serializer serializer() {
+        return Serializer.INSTANCE;
     }
 
     public static final class Serializer implements TypeSerializer<Supplier<MaterialPlatformer>> {
