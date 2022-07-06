@@ -9,6 +9,12 @@ import java.lang.reflect.Type;
 
 public class Range {
 
+    public static final Range ONE = new Range(1, 1);
+
+    public static Range constant(int value) {
+        return new Range(value, value);
+    }
+
     private final int min;
     private final int max;
 
@@ -26,6 +32,7 @@ public class Range {
     }
 
     public int getRandom() {
+        if (this.min == this.max) return this.min;
         return Random.nextInt(this.min, this.max);
     }
 

@@ -1,6 +1,7 @@
 package io.github.fisher2911.skyblocklevels.item;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.util.Range;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -15,6 +16,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ public class ItemSerializer implements TypeSerializer<ItemSupplier> {
     private static final String ID = "id";
     private static final String MATERIAL = "material";
     private static final String AMOUNT = "amount";
+    private static final String AMOUNT_RANGE = "amount-range";
     private static final String NAME = "name";
     private static final String LORE = "lore";
     private static final String ENCHANTMENTS = "enchantments";
@@ -47,6 +50,7 @@ public class ItemSerializer implements TypeSerializer<ItemSupplier> {
         }
         final Material material = Material.valueOf(node.node(MATERIAL).getString("").toUpperCase());
         final int amount = node.node(AMOUNT).getInt(1);
+        final Range range = Objects.requireNonNullElse(Range.serializer().deserialize(Range.class, node.node(AMOUNT_RANGE)), Range.constant(amount));
         final String name = node.node(NAME).getString();
         final List<String> lore = node.node(LORE).getList(String.class);
         final boolean glow = node.node(GLOW).getBoolean();
@@ -67,7 +71,7 @@ public class ItemSerializer implements TypeSerializer<ItemSupplier> {
                 map(ItemFlag::valueOf).
                 collect(Collectors.toSet());
         final boolean unbreakable = node.node(UNBREAKABLE).getBoolean();
-        final ItemBuilder itemBuilder = ItemBuilder.from(material).amount(amount);
+        final ItemBuilder itemBuilder = ItemBuilder.from(material).amount(range);
         if (name != null && !name.isEmpty()) itemBuilder.name(name);
         if (lore != null && !lore.isEmpty()) itemBuilder.loreStr(lore);
         if (glow) itemBuilder.glow();

@@ -170,6 +170,7 @@ public class ItemManager {
     }
 
     public ItemStack getItem(SpecialSkyItem item) {
+        Bukkit.broadcastMessage("Got item with id: " + item.getItemId() + " " + item.getClass());
         final ItemStack itemStack = item.getItemStack();
         if (item.uniqueInInventory()) {
             Keys.setSkyItem(itemStack, item.getItemId(), item.getId());
