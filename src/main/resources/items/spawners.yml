@@ -1,0 +1,31 @@
+#private static final String ITEM_ID = "item-id";
+#private static final String ENTITY_TYPE = "entity-type";
+#private static final String NAME = "name";
+#private static final String ITEM = "item";
+#private static final String TICK_DELAY = "tick-delay";
+#private static final String ENTITIES = "entities";
+#private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
+1:
+  class: mob-spawner
+  item-id: "cow-spawner"
+  entity-type: COW
+  name: "<green>Cow Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Cow Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-cow
+      weight: 100
+  items:
+    1:
+      weight: 100
+      item:
+        material: "STONE"
+  collection-requirements:
+    cobblestone-generator: 1

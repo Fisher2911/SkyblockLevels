@@ -1,6 +1,7 @@
 package io.github.fisher2911.skyblocklevels.item.impl.spawner;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.Spawner;
@@ -30,7 +31,7 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-public class MobSpawner implements Spawner {
+public class MobSpawner implements Spawner, Delayed {
 
     private static final String TABLE = "mob_spawner";
 
@@ -59,6 +60,8 @@ public class MobSpawner implements Spawner {
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
         if (!(user instanceof final BukkitUser bukkitUser)) return;
+        event.setExpToDrop(0);
+        user.sendMessage("Broke spawner");
         final WorldPosition position = WorldPosition.fromLocation(event.getBlock().getLocation());
         this.plugin.getWorlds().removeBlock(position);
         this.plugin.getItemManager().giveItem(bukkitUser, this);
@@ -78,11 +81,11 @@ public class MobSpawner implements Spawner {
     public void onPlace(User user, BlockPlaceEvent event) {
         if (!this.collectionCondition.isAllowed(user.getCollection())) {
             user.sendMessage("<red>You do not meet the requirements to place this spawner.");
+            event.setCancelled(true);
             return;
         }
         final Block block = event.getBlock();
         final WorldPosition worldPosition = WorldPosition.fromLocation(block.getLocation());
-        event.setCancelled(true);
         event.getItemInHand().setAmount(event.getItemInHand().getAmount() - 1);
         block.setType(Material.SPAWNER);
         if (block.getState() instanceof final CreatureSpawner spawner) {
@@ -90,6 +93,7 @@ public class MobSpawner implements Spawner {
             spawner.setDelay(this.tickDelay);
             spawner.setMinSpawnDelay(this.tickDelay);
             spawner.setMaxSpawnDelay(this.tickDelay + 1);
+            spawner.setSpawnCount(1);
             spawner.update(true, false);
         }
         this.plugin.getWorlds().addBlock(this, worldPosition);
@@ -115,7 +119,7 @@ public class MobSpawner implements Spawner {
     public void onSpawn(Entity entity) {
         final String type = this.entityTypes.getRandom();
         if (type == null) return;
-        this.plugin.getEntityManager().create(type, entity.getUniqueId());
+        this.plugin.getEntityManager().create(type, entity);
     }
 
     @Override
@@ -131,8 +135,13 @@ public class MobSpawner implements Spawner {
     }
 
     @Override
+    public int getTickDelay() {
+        return this.tickDelay;
+    }
+
+    @Override
     public ItemStack getItemStack() {
-        return this.itemSupplier.get();
+        return this.itemSupplier.get(PLACEHOLDERS);
     }
 
     @Override

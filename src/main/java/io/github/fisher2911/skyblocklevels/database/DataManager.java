@@ -91,9 +91,9 @@ public class DataManager {
         if (consumer != null) consumer.accept(this.getConnection(), items);
     }
 
-    public SpecialSkyItem loadItem(String tableName, long id) {
+    public SpecialSkyItem loadItem(String tableName, String itemId, long id) {
         final BiFunction<Connection, Long, ? extends SpecialSkyItem> function = itemLoadFunctions.get(tableName);
-        if (function == null) return SpecialSkyItem.EMPTY;
+        if (function == null) return this.plugin.getItemManager().createItem(itemId);
         return function.apply(this.getConnection(), id);
     }
 

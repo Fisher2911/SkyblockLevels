@@ -138,16 +138,17 @@ public class UserManager {
                     condition(UUID, uuid.toString()).
                     selectAll().
                     build();
+            this.plugin.getLogger().severe("Player load statement: " + statement.getStatement());
+            final Map<String, Integer> collection = new HashMap<>();
             final List<BukkitUser> users = statement.execute(this.plugin.getDataManager().getConnection(), resultSet -> {
-                final Map<String, Integer> collection = new HashMap<>();
-                while (resultSet.next()) {
-                    final String itemId = resultSet.getString(ITEM_ID);
-                    final int amount = resultSet.getInt(AMOUNT);
-                    collection.put(itemId, amount);
-                }
+                final String itemId = resultSet.getString(ITEM_ID);
+                final int amount = resultSet.getInt(AMOUNT);
+                collection.put(itemId, amount);
+                this.plugin.getLogger().info("Added item: " + itemId);
                 return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()));
             });
-            BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())): users.get(0);
+            this.plugin.getLogger().info("Finished loading user: " + uuid);
+            BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())) : users.get(0);
             this.addUser(user);
         });
     }

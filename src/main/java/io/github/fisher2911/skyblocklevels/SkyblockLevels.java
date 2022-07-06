@@ -27,6 +27,7 @@ import io.github.fisher2911.skyblocklevels.listener.EntityListener;
 import io.github.fisher2911.skyblocklevels.listener.PlayerInteractListener;
 import io.github.fisher2911.skyblocklevels.listener.PlayerJoinListener;
 import io.github.fisher2911.skyblocklevels.listener.SkyblockMoveListener;
+import io.github.fisher2911.skyblocklevels.listener.VoidDamageListener;
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -179,6 +180,7 @@ public final class SkyblockLevels extends JavaPlugin {
                 new BlockPowerListener(this),
                 new EntityListener(this.entityManager),
                 new SkyblockMoveListener(this),
+                new VoidDamageListener(this),
                 this.worlds,
                 this.blockBreakManager,
                 this.entityManager

@@ -34,7 +34,7 @@ public class CustomEntity implements SkyEntity {
     private static final String ID = "id";
     private static final String ENTITY_TYPE = "entity_type";
     private static final String UUID = "uuid";
-    
+
     static {
         final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
         final DataManager dataManager = plugin.getDataManager();
@@ -54,13 +54,19 @@ public class CustomEntity implements SkyEntity {
     private final String type;
     private final EntityType entityType;
     private final UUID entityUUID;
+    @Nullable
+    private Entity entity;
+    @Nullable
+    private final String displayName;
     private final WeightedList<ItemSupplier> drops;
     private final Range dropsOnDeath;
 
-    public CustomEntity(String type, EntityType entityType, UUID entityUUID, WeightedList<ItemSupplier> drops, Range dropsOnDeath) {
+    public CustomEntity(String type, EntityType entityType, UUID uuid, @Nullable Entity entity, @Nullable String displayName, WeightedList<ItemSupplier> drops, Range dropsOnDeath) {
         this.type = type;
         this.entityType = entityType;
-        this.entityUUID = entityUUID;
+        this.entityUUID = uuid;
+        this.entity = entity;
+        this.displayName = displayName;
         this.drops = drops;
         this.dropsOnDeath = dropsOnDeath;
     }
@@ -82,8 +88,16 @@ public class CustomEntity implements SkyEntity {
 
     @Override
     @Nullable
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    @Nullable
     public Entity getEntity() {
-        return Bukkit.getEntity(this.entityUUID);
+        if (this.entity != null) return this.entity;
+        this.entity = Bukkit.getEntity(this.entityUUID);
+        return this.entity;
     }
 
     @Override
@@ -133,27 +147,29 @@ public class CustomEntity implements SkyEntity {
         return Serializer.INSTANCE;
     }
 
-    public static class Serializer implements TypeSerializer<Function<UUID, CustomEntity>> {
+    public static class Serializer implements TypeSerializer<Function<Entity, CustomEntity>> {
 
         private static final Serializer INSTANCE = new Serializer();
 
         private static final String ID = "id";
         private static final String TYPE = "type";
+        private static final String DISPLAY_NAME = "display-name";
         private static final String DROPS = "drops";
         private static final String DROP_RANGE = "drop-range";
 
         @Override
-        public Function<UUID, CustomEntity> deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        public Function<Entity, CustomEntity> deserialize(Type type, ConfigurationNode node) throws SerializationException {
             final String entityId = node.node(ID).getString("");
             final EntityType entityType = EntityType.valueOf(node.node(TYPE).getString(""));
+            final String displayName = node.node(DISPLAY_NAME).getString("");
             final TypeSerializer<WeightedList<ItemSupplier>> serializer = WeightedList.serializer(ItemSupplier.class, ItemSerializer.INSTANCE);
             final WeightedList<ItemSupplier> drops = serializer.deserialize(WeightedList.class, node.node(DROPS));
             final Range dropsOnDeath = Range.serializer().deserialize(Range.class, node.node(DROP_RANGE));
-            return (uuid) -> new CustomEntity(entityId, entityType, uuid, drops, dropsOnDeath);
+            return (entity) -> new CustomEntity(entityId, entityType, entity.getUniqueId(), entity, displayName, drops, dropsOnDeath);
         }
 
         @Override
-        public void serialize(Type type, @org.checkerframework.checker.nullness.qual.Nullable Function<UUID, CustomEntity> obj, ConfigurationNode node) throws SerializationException {
+        public void serialize(Type type, @org.checkerframework.checker.nullness.qual.Nullable Function<Entity, CustomEntity> obj, ConfigurationNode node) throws SerializationException {
 
         }
     }

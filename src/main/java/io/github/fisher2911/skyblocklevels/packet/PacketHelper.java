@@ -16,6 +16,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBl
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityEffect;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerRemoveEntityEffect;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.Durable;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -117,7 +118,7 @@ public class PacketHelper {
                     if (target == null || !target.getType().isSolid()) return;
                     final WorldPosition position = WorldPosition.fromLocation(target.getLocation());
                     final SkyBlock skyBlock = plugin.getWorlds().getBlockAt(position);
-                    if (skyBlock == SkyBlock.EMPTY) return;
+                    if (skyBlock == SkyBlock.EMPTY || !(skyBlock instanceof Durable)) return;
                     final BlockBreakManager.BlockTickData tickData = plugin.getBlockBreakManager().tick(player.getUniqueId(), position);
                     if (tickData.getFirstTick() != tickData.getLastTick()) return;
                     final User user = plugin.getUserManager().getUser(player);
@@ -136,7 +137,7 @@ public class PacketHelper {
                 if (packet.getAction() == DiggingAction.CANCELLED_DIGGING || packet.getAction() == DiggingAction.FINISHED_DIGGING) {
                     final SkyBlock block = plugin.getWorlds().getBlockAt(worldPosition);
                     removeMiningFatiguePacket(player);
-                    if (SkyBlock.isEmpty(block)) {
+                    if (SkyBlock.isEmpty(block) || !(block instanceof Durable)) {
 //                        sendMiningFatiguePacket(player);
                         return;
                     }
@@ -146,7 +147,7 @@ public class PacketHelper {
                 if (packet.getAction() == DiggingAction.START_DIGGING) {
                     if (currentTick == lastAnimationTick) return;
                     final SkyBlock block = plugin.getWorlds().getBlockAt(worldPosition);
-                    if (SkyBlock.isEmpty(block)) {
+                    if (SkyBlock.isEmpty(block) || !(block instanceof Durable)) {
 //                        removeMiningFatiguePacket(player);
                         return;
                     }

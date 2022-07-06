@@ -65,6 +65,10 @@ public class Keys {
         return persistentDataContainer.get(ENTITY_KEY, PersistentDataType.STRING);
     }
 
+    public static boolean isSkyEntity(Entity entity) {
+        return getEntity(entity) != null;
+    }
+
     public static void setDurability(ItemStack itemStack, int durability) {
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) return;

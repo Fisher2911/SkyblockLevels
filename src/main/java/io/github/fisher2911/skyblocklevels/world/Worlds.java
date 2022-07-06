@@ -69,8 +69,8 @@ public class Worlds implements Listener {
             for (Chunk chunk : world.getLoadedChunks()) {
                 this.loadChunk(world.getUID(), chunk.getX(), chunk.getZ());
             }
+            worldManager.startTicking();
         });
-        worldManager.startTicking();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -148,12 +148,13 @@ public class Worlds implements Listener {
                 build();
         statement.execute(this.plugin.getDataManager().getConnection(), result -> {
             final String tableName = result.getString(TABLE_NAME);
+            final String itemId = result.getString(BLOCK_TYPE);
             final long id = result.getLong(BLOCK_ID);
             final int x = result.getInt(X);
             final int y = result.getInt(Y);
             final int z = result.getInt(Z);
             final WorldPosition position = new WorldPosition(Bukkit.getWorld(world), new Position(x, y, z));
-            final SpecialSkyItem item = this.plugin.getDataManager().loadItem(tableName, id);
+            final SpecialSkyItem item = this.plugin.getDataManager().loadItem(tableName, itemId, id);
             if (!(item instanceof final SkyBlock block)) return null;
             this.addBlock(block, position);
             return block;

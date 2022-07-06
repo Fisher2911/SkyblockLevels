@@ -1,5 +1,7 @@
-package io.github.fisher2911.skyblocklevels;
+package io.github.fisher2911.skyblocklevels.item.impl;
 
+import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.Usable;
@@ -10,6 +12,13 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
+
+import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 public class DurableItem implements Usable, SpecialSkyItem {
 
@@ -83,5 +92,40 @@ public class DurableItem implements Usable, SpecialSkyItem {
         return true;
     }
 
+    public static Serializer serializer() {
+        return Serializer.INSTANCE;
+    }
+
+    public static class Serializer implements TypeSerializer<Supplier<DurableItem>> {
+
+
+        private static final Serializer INSTANCE = new Serializer();
+
+        private Serializer() {}
+
+        private static final String ITEM_ID = "item-id";
+        private static final String ITEM = "item";
+        private static final String UNIQUE = "unique";
+        private static final String DURABILITY = "durability";
+
+        @Override
+        public Supplier<DurableItem> deserialize(Type type, ConfigurationNode node) {
+            try {
+                final String itemId = node.node(ITEM_ID).getString();
+                final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
+                final boolean unique = node.node(UNIQUE).getBoolean();
+                final int maxDurability = node.node(DURABILITY).getInt();
+                final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
+                return () -> new DurableItem(plugin, unique ? plugin.getItemManager().generateNextId() : -1, itemId, itemSupplier, maxDurability);
+            } catch (SerializationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void serialize(Type type, @Nullable Supplier<DurableItem> obj, ConfigurationNode node) throws SerializationException {
+
+        }
+    }
 
 }

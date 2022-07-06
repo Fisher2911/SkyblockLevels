@@ -2,7 +2,7 @@ package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
-import io.github.fisher2911.skyblocklevels.DurableItem;
+import io.github.fisher2911.skyblocklevels.item.impl.DurableItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -11,6 +11,7 @@ import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
+import io.github.fisher2911.skyblocklevels.item.Durable;
 import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
@@ -47,7 +48,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class Generator implements SkyBlock, Delayed {
+public class Generator implements SkyBlock, Delayed, Durable {
 
     private static final String TABLE = "generator";
     private static final String ID = "id";
@@ -321,6 +322,11 @@ public class Generator implements SkyBlock, Delayed {
                         () -> this.onBreak(user, new BlockBreakEvent(block, player))
                 )
         );
+    }
+
+    @Override
+    public int getTickToMine() {
+        return this.ticksToBreak;
     }
 
     @Override

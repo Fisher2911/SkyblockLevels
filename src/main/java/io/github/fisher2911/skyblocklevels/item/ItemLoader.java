@@ -1,6 +1,8 @@
 package io.github.fisher2911.skyblocklevels.item;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.impl.DurableItem;
+import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
 import io.github.fisher2911.skyblocklevels.item.impl.builder.Builder;
 import io.github.fisher2911.skyblocklevels.item.impl.catcher.ItemCatcher;
@@ -38,6 +40,7 @@ public class ItemLoader {
         register(Grower.class.getSimpleName().toLowerCase(), node -> Grower.serializer().deserialize(Grower.class, node));
         register(MaterialPlatformer.class.getSimpleName().toLowerCase(), node -> MaterialPlatformer.serializer().deserialize(MaterialPlatformer.class, node));
         register(SkyItem.class.getSimpleName().toLowerCase(), node -> SkyItem.serializer().deserialize(SkyItem.class, node));
+        register(DurableItem.class.getSimpleName().toLowerCase(), node -> DurableItem.serializer().deserialize(DurableItem.class, node));
         register(MobSpawner.class.getSimpleName().toLowerCase(), node -> MobSpawner.serializer().deserialize(MobSpawner.class, node));
         register(SkyCrop.class.getSimpleName().toLowerCase(), node -> SkyCrop.serializer().deserialize(SkyCrop.class, node));
     }

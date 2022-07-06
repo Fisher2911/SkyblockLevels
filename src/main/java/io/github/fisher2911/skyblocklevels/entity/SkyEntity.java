@@ -20,6 +20,9 @@ public interface SkyEntity {
         public UUID getUUID() { return null; }
         @Override
         @Nullable
+        public String getDisplayName() { return null; }
+        @Override
+        @Nullable
         public Entity getEntity() { return null; }
         @Override
         @Nullable
@@ -37,6 +40,7 @@ public interface SkyEntity {
     String getType();
     EntityType getEntityType();
     UUID getUUID();
+    @Nullable String getDisplayName();
     @Nullable Entity getEntity();
     @Nullable WorldPosition getWorldPosition();
     boolean isAlive();

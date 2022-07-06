@@ -1,6 +1,10 @@
-package io.github.fisher2911.skyblocklevels.item;
+package io.github.fisher2911.skyblocklevels.item.impl;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
+import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
+import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;

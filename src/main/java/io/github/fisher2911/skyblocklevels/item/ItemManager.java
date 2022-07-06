@@ -1,6 +1,7 @@
 package io.github.fisher2911.skyblocklevels.item;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
@@ -14,6 +15,8 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,11 +39,13 @@ public class ItemManager {
     private final Map<Class<? extends Event>, Collection<Class<?>>> classMap = Map.of(
             BlockBreakEvent.class, List.of(SkyTool.class, SkyBlock.class),
             BlockPlaceEvent.class, List.of(SkyBlock.class, SkyItem.class),
-            EntityDamageEvent.class, List.of(SkyWeapon.class),
+            EntityDamageEvent.class, List.of(SkyWeapon.class, Spawner.class),
             PlayerInteractEvent.class, List.of(Usable.class, SkyBlock.class),
             BlockRedstoneEvent.class, List.of(RedstoneBlock.class),
             BlockDamageEvent.class, List.of(SkyBlock.class),
-            PlayerItemDamageEvent.class, List.of(Usable.class)
+            PlayerItemDamageEvent.class, List.of(Usable.class),
+            EntitySpawnEvent.class, List.of(Spawner.class),
+            SpawnerSpawnEvent.class, List.of(Spawner.class)
     );
     private final Map<Class<?>, TriConsumer<Object, Object, Object>> itemActions = Map.of(
             SkyTool.class, (u, s, e) -> {
@@ -84,6 +89,16 @@ public class ItemManager {
             RedstoneBlock.class, (u, s, e) -> {
                 if (!(s instanceof RedstoneBlock redstoneBlock)) return;
                 redstoneBlock.onActivate((User) u, (BlockRedstoneEvent) e);
+            },
+            Spawner.class, (u, s, e) -> {
+                if (!(s instanceof Spawner spawner)) return;
+                if (e instanceof final EntitySpawnEvent event) {
+                    spawner.onSpawn(event.getEntity());
+                    return;
+                }
+                if (e instanceof final EntityDamageEvent event) {
+                    spawner.onDamage(event);
+                }
             },
             SkyItem.class, (u, s, e) -> {
                 if (!(s instanceof SkyItem)) return;
