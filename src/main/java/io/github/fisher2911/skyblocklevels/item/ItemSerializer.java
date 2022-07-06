@@ -50,7 +50,8 @@ public class ItemSerializer implements TypeSerializer<ItemSupplier> {
         }
         final Material material = Material.valueOf(node.node(MATERIAL).getString("").toUpperCase());
         final int amount = node.node(AMOUNT).getInt(1);
-        final Range range = Objects.requireNonNullElse(Range.serializer().deserialize(Range.class, node.node(AMOUNT_RANGE)), Range.constant(amount));
+        Range range = Objects.requireNonNullElse(Range.serializer().deserialize(Range.class, node.node(AMOUNT_RANGE)), Range.constant(amount));
+        if (range.getMax() == 0) range = Range.constant(amount);
         final String name = node.node(NAME).getString();
         final List<String> lore = node.node(LORE).getList(String.class);
         final boolean glow = node.node(GLOW).getBoolean();

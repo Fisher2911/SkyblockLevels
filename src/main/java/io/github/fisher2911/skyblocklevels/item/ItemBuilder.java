@@ -36,7 +36,7 @@ public class ItemBuilder implements ItemSupplier {
 
     private ItemBuilder(ItemStack itemStack) {
         this.itemStack = itemStack;
-        this.itemRange = Range.ONE;
+        this.itemRange = Range.constant(itemStack.getAmount());
         this.itemMeta = this.itemStack.getItemMeta();
     }
 

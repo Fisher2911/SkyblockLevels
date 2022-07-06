@@ -77,13 +77,13 @@ public class SkyCrop implements SkyBlock {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
             if (itemStackSupplier == null) return;
             final ItemStack itemStack = itemStackSupplier.get();
-            if (itemStack == null || itemStack.getType() == Material.AIR) return;
+            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) return;
             location.getWorld().dropItem(location, itemStack);
             i--;
         }
         for (ItemSupplier guaranteed : this.guaranteedItems) {
             final ItemStack itemStack = guaranteed.get();
-            if (itemStack == null || itemStack.getType() == Material.AIR) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
             location.getWorld().dropItem(location, itemStack);
         }
     }
