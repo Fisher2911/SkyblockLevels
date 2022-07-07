@@ -144,7 +144,6 @@ public class EntityManager implements Listener {
     public void onEntityRemove(EntityDeathEvent event) {
         final Entity entity = event.getEntity();
          if (!Keys.isSkyEntity(entity)) return;
-         Bukkit.broadcastMessage("Killed sky entity: " + Keys.getEntity(entity));
          final UUID uuid = entity.getUniqueId();
          Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
     }

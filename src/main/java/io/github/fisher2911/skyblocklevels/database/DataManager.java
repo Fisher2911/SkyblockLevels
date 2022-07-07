@@ -160,7 +160,6 @@ public class DataManager {
 
     public long generateNextId() {
         final long id = this.IDS.incrementAndGet();
-        this.plugin.getLogger().info("Generating next ID: " + id);
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> saveId(this.getConnection(), id));
         return id;
     }

@@ -45,7 +45,6 @@ public class MaterialPlatformer extends Platformer {
 
         dataManager.registerItemSaveConsumer(MaterialPlatformer.class, (conn, collection) -> {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
-            Bukkit.broadcastMessage("Saved material platformer");
             collection.forEach(item ->
                     builder.newEntry().
                     addEntry(ID, item.getId()).

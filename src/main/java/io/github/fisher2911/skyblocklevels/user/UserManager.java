@@ -121,7 +121,6 @@ public class UserManager {
                     addEntry(ITEM_ID, collectionType).
                     addEntry(AMOUNT, collection.getAmount(collectionType)).
                     batchSize(changed.size());
-            this.plugin.getLogger().severe("Saving: " + collectionType + " : " + collection.getAmount(collectionType));
         }
         builder.build().execute(this.plugin.getDataManager().getConnection());
     }
@@ -139,16 +138,13 @@ public class UserManager {
                     condition(UUID, uuid.toString()).
                     selectAll().
                     build();
-            this.plugin.getLogger().severe("Player load statement: " + statement.getStatement());
             final Map<String, Integer> collection = new HashMap<>();
             final List<BukkitUser> users = statement.execute(this.plugin.getDataManager().getConnection(), resultSet -> {
                 final String itemId = resultSet.getString(ITEM_ID);
                 final int amount = resultSet.getInt(AMOUNT);
                 collection.put(itemId, amount);
-                this.plugin.getLogger().info("Added item: " + itemId);
                 return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()));
             });
-            this.plugin.getLogger().info("Finished loading user: " + uuid);
             BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())) : users.get(0);
             this.addUser(user);
         });

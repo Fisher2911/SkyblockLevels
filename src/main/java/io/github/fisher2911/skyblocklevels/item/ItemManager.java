@@ -7,7 +7,6 @@ import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import io.github.fisher2911.skyblocklevels.util.TriConsumer;
 import io.github.fisher2911.skyblocklevels.util.WorldUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -101,7 +100,6 @@ public class ItemManager {
             },
             SkyItem.class, (u, s, e) -> {
                 if (!(s instanceof SkyItem)) return;
-                Bukkit.broadcastMessage("Is Sky Item");
                 if (e instanceof Cancellable cancellable) cancellable.setCancelled(true);
             }
     );

@@ -41,11 +41,8 @@ public class PlayerJoinListener implements Listener {
                 final String type = Keys.getSkyItemId(itemStack);
                 if (type.isBlank()) continue;
                 final String clazz = Keys.getSkyItemClass(itemStack);
-                this.plugin.getLogger().info("class: " + clazz);
-                this.plugin.getLogger().info("type: " + type);
                 if (clazz == null) continue;
                 final long id = Keys.getSkyItem(itemStack);
-                this.plugin.getLogger().info("Id is: " + id);
                 if (id == -1) continue;
                 final SpecialSkyItem item = this.plugin.getDataManager().loadItem(clazz, type, id);
                 if (item == SpecialSkyItem.EMPTY) continue;
