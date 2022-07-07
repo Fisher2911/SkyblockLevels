@@ -1,5 +1,5 @@
 1:
-  class: skyitem
+  class: durable-item
   item-id: "cobblestone-generator-pickaxe"
   item:
     material: "WOODEN_PICKAXE"
@@ -8,8 +8,9 @@
       - "<!i>"
       - "<!i><blue>Mines cobblestone generators faster!"
     glow: true
+  durability: 10
 2:
-  class: skyitem
+  class: durable-item
   item-id: "stone-generator-pickaxe"
   item:
     material: "WOODEN_PICKAXE"
@@ -19,7 +20,7 @@
       - "<!i><blue>Mines stone generators faster!"
     glow: true
 3:
-  class: skyitem
+  class: durable-item
   item-id: "diorite-generator-pickaxe"
   item:
     material: "WOODEN_PICKAXE"
@@ -29,7 +30,7 @@
       - "<!i><blue>Mines diorite generators faster!"
     glow: true
 4:
-  class: skyitem
+  class: durable-item
   item-id: "andesite-generator-pickaxe"
   item:
     material: "STONE_PICKAXE"
@@ -39,7 +40,7 @@
       - "<!i><blue>Mines andesite generators faster!"
     glow: true
 5:
-  class: skyitem
+  class: durable-item
   item-id: "granite-generator-pickaxe"
   item:
     material: "STONE_PICKAXE"
@@ -49,7 +50,7 @@
       - "<!i><blue>Mines granite generators faster!"
     glow: true
 6:
-  class: skyitem
+  class: durable-item
   item-id: "coal-ore-generator-pickaxe"
   item:
     material: "STONE_PICKAXE"
@@ -59,7 +60,7 @@
       - "<!i><blue>Mines coal ore generators faster!"
     glow: true
 7:
-  class: skyitem
+  class: durable-item
   item-id: "copper-ore-generator-pickaxe"
   item:
     material: "STONE_PICKAXE"
@@ -69,7 +70,7 @@
       - "<!i><blue>Mines andesite generators faster!"
     glow: true
 8:
-  class: skyitem
+  class: durable-item
   item-id: "iron-ore-generator-pickaxe"
   item:
     material: "IRON_PICKAXE"
@@ -79,7 +80,7 @@
       - "<!i><blue>Mines iron ore generators faster!"
     glow: true
 9:
-  class: skyitem
+  class: durable-item
   item-id: "redstone-ore-generator-pickaxe"
   item:
     material: "IRON_PICKAXE"
@@ -89,7 +90,7 @@
       - "<!i><blue>Mines redstone ore generators faster!"
     glow: true
 10:
-  class: skyitem
+  class: durable-item
   item-id: "lapis-ore-generator-pickaxe"
   item:
     material: "IRON_PICKAXE"
@@ -99,7 +100,7 @@
       - "<!i><blue>Mines lapis ore generators faster!"
     glow: true
 11:
-  class: skyitem
+  class: durable-item
   item-id: "gold-ore-generator-pickaxe"
   item:
     material: "GOLDEN_PICKAXE"
@@ -109,7 +110,7 @@
       - "<!i><blue>Mines gold ore generators faster!"
     glow: true
 12:
-  class: skyitem
+  class: durable-item
   item-id: "emerald-ore-generator-pickaxe"
   item:
     material: "GOLDEN_PICKAXE"
@@ -119,7 +120,7 @@
       - "<!i><blue>Mines emerald ore generators faster!"
     glow: true
 13:
-  class: skyitem
+  class: durable-item
   item-id: "diamond-ore-generator-pickaxe"
   item:
     material: "DIAMOND_PICKAXE"
@@ -129,7 +130,7 @@
       - "<!i><blue>Mines diamond ore generators faster!"
     glow: true
 14:
-  class: skyitem
+  class: durable-item
   item-id: "ancient-debris-generator-pickaxe"
   item:
     material: "NETHERITE_PICKAXE"
@@ -139,7 +140,7 @@
       - "<!i><blue>Mines ancient debris generators faster!"
     glow: true
 15:
-  class: skyitem
+  class: durable-item
   item-id: "obsidian-generator-pickaxe"
   item:
     material: "NETHERITE_PICKAXE"

@@ -17,6 +17,8 @@ import io.github.fisher2911.skyblocklevels.command.CollectionCommand;
 import io.github.fisher2911.skyblocklevels.command.GiveItemCommand;
 import io.github.fisher2911.skyblocklevels.command.RTPCommand;
 import io.github.fisher2911.skyblocklevels.command.ReloadCommand;
+import io.github.fisher2911.skyblocklevels.command.SpawnCommand;
+import io.github.fisher2911.skyblocklevels.config.Config;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
 import io.github.fisher2911.skyblocklevels.entity.EntityManager;
 import io.github.fisher2911.skyblocklevels.item.ItemManager;
@@ -29,6 +31,7 @@ import io.github.fisher2911.skyblocklevels.listener.PlayerJoinListener;
 import io.github.fisher2911.skyblocklevels.listener.SkyblockMoveListener;
 import io.github.fisher2911.skyblocklevels.listener.VoidDamageListener;
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
+import io.github.fisher2911.skyblocklevels.teleport.TeleportManager;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
@@ -55,6 +58,7 @@ import java.util.function.Function;
 
 public final class SkyblockLevels extends JavaPlugin {
 
+    private Config config;
     private DataManager dataManager;
     private SkyWorld world;
     private Worlds worlds;
@@ -67,6 +71,7 @@ public final class SkyblockLevels extends JavaPlugin {
     private MinecraftHelp<User> minecraftHelp;
     private AnnotationParser<User> annotationParser;
     private LandsIntegration lands;
+    private TeleportManager teleportManager;
 
     @Override
     public void onLoad() {
@@ -78,6 +83,8 @@ public final class SkyblockLevels extends JavaPlugin {
     @Override
     public void onEnable() {
         PacketEvents.getAPI().init();
+        this.config = new Config(this);
+        this.config.load();
         this.dataManager = new DataManager(this);
         this.lands = new LandsIntegration(this);
         this.world = new SkyWorld();
@@ -95,6 +102,7 @@ public final class SkyblockLevels extends JavaPlugin {
         PacketHelper.registerListeners(this);
         this.dataManager.createTables();
         this.userManager.startSaveTask();
+        this.teleportManager = new TeleportManager(this, new HashSet<>());
     }
 
     @Override
@@ -163,6 +171,7 @@ public final class SkyblockLevels extends JavaPlugin {
         rtpCommand.register();
         new ReloadCommand(this).register();
         new CollectionCommand(this).register();
+        new SpawnCommand(this).register();
         this.registerListener(rtpCommand);
         try {
             this.annotationParser.parseContainers();
@@ -189,6 +198,10 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         this.getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public Config config() {
+        return this.config;
     }
 
     public DataManager getDataManager() {
@@ -241,5 +254,9 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public RegistryRecipes getRecipes() {
         return CustomCrafting.inst().getRegistries().getRecipes();
+    }
+
+    public TeleportManager getTeleportManager() {
+        return teleportManager;
     }
 }

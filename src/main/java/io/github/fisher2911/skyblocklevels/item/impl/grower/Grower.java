@@ -7,6 +7,7 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
@@ -17,6 +18,7 @@ import io.github.fisher2911.skyblocklevels.util.Random;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import io.github.fisher2911.skyblocklevels.world.Worlds;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -42,7 +44,7 @@ import java.util.stream.Collectors;
 
 public class Grower implements SkyBlock {
 
-    private static final String TABLE = "grower";
+    private static final String TABLE = Grower.class.getSimpleName().toLowerCase();
     private static final String ID = "id";
     private static final String ITEM_ID = "item_id";
     private static final String TICK_COUNTER = "tick_counter";
@@ -53,8 +55,9 @@ public class Grower implements SkyBlock {
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, TICK_COUNTER).
+                foreignKey(ID, Worlds.DATABASE_TABLE_COLUMN, Worlds.DATABASE_BLOCK_ID_COLUMN).
                 build());
 
         dataManager.registerItemSaveConsumer(Grower.class, (conn, collection) -> {
@@ -239,7 +242,7 @@ public class Grower implements SkyBlock {
                                         collect(Collectors.toList()));
 
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Grower(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, block, tickDelay, items);
+                return () -> new Grower(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, block, tickDelay, items);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

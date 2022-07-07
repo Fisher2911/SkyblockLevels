@@ -7,10 +7,12 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
@@ -26,7 +28,7 @@ import java.util.function.Supplier;
 
 public class MaterialPlatformer extends Platformer {
 
-    private static final String TABLE = "material_platformer";
+    private static final String TABLE = MaterialPlatformer.class.getSimpleName().toLowerCase();
     private static final String ID = "id";
     private static final String ITEM_ID = "item_id";
     private static final String STORED = "stored";
@@ -37,18 +39,20 @@ public class MaterialPlatformer extends Platformer {
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, STORED).
                 build());
 
         dataManager.registerItemSaveConsumer(MaterialPlatformer.class, (conn, collection) -> {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
-            collection.forEach(item -> {
-                builder.newEntry();
-                builder.addEntry(ID, item.getId());
-                builder.addEntry(ITEM_ID, item.getItemId());
-                builder.addEntry(STORED, ((MaterialPlatformer) item).stored);
-            });
+            Bukkit.broadcastMessage("Saved material platformer");
+            collection.forEach(item ->
+                    builder.newEntry().
+                    addEntry(ID, item.getId()).
+                    addEntry(ITEM_ID, item.getItemId()).
+                    addEntry(STORED, ((MaterialPlatformer) item).stored).
+                    build().
+                    execute(conn));
         });
 
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
@@ -97,9 +101,19 @@ public class MaterialPlatformer extends Platformer {
         if (this.stored == 0) {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
             this.plugin.getItemManager().delete(this);
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                user.sendMessage("Deleted: " + this.id);
+                DeleteStatement.builder(TABLE).
+                        condition(ID, String.valueOf(this.id)).
+                        build().
+                        execute(this.plugin.getDataManager().getConnection());
+            });
             return;
         }
         event.getPlayer().getInventory().setItemInMainHand(this.plugin.getItemManager().getItem(this));
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () ->
+                this.plugin.getDataManager().saveItems(List.of(this), this.getClass())
+        );
     }
 
     @Override
@@ -148,7 +162,7 @@ public class MaterialPlatformer extends Platformer {
                 final Material material = Material.valueOf(node.node(TYPE).getString());
                 final int stored = node.node(STORED).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new MaterialPlatformer(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, radius, material, stored);
+                return () -> new MaterialPlatformer(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, radius, material, stored);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

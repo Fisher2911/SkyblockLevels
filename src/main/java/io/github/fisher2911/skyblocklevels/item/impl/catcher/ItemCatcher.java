@@ -7,6 +7,7 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
@@ -17,6 +18,7 @@ import io.github.fisher2911.skyblocklevels.util.DirectionUtil;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import io.github.fisher2911.skyblocklevels.world.Worlds;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
@@ -40,7 +42,7 @@ import java.util.stream.Collectors;
 
 public class ItemCatcher implements SkyBlock, Delayed {
 
-    private static final String TABLE = "item_catcher";
+    private static final String TABLE = ItemCatcher.class.getSimpleName().toLowerCase();
     private static final String ID = "id";
     private static final String ITEM_ID = "item_id";
     private static final String TICK_COUNTER = "tick_counter";
@@ -50,8 +52,9 @@ public class ItemCatcher implements SkyBlock, Delayed {
         final DataManager dataManager = plugin.getDataManager();
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.UUID, ITEM_ID).
                 addField(Integer.class, TICK_COUNTER).
+                foreignKey(ID, Worlds.DATABASE_TABLE_COLUMN, Worlds.DATABASE_BLOCK_ID_COLUMN).
                 build());
 
         dataManager.registerItemSaveConsumer(ItemCatcher.class, (conn, collection) -> {
@@ -232,7 +235,7 @@ public class ItemCatcher implements SkyBlock, Delayed {
                                         collect(Collectors.toList()));
 
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new ItemCatcher(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, tickDelay, items);
+                return () -> new ItemCatcher(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, tickDelay, items);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

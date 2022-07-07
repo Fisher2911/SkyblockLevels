@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 public class ItemManager {
@@ -34,7 +33,7 @@ public class ItemManager {
     //    private final Map<String, SpecialSkyItem> items;
     private final Map<Long, SpecialSkyItem> items;
     private final Map<String, Supplier<? extends SpecialSkyItem>> itemSuppliers;
-    private final AtomicLong IDS = new AtomicLong();
+
 
     private final Map<Class<? extends Event>, Collection<Class<?>>> classMap = Map.of(
             BlockBreakEvent.class, List.of(SkyTool.class, SkyBlock.class),
@@ -107,6 +106,10 @@ public class ItemManager {
             }
     );
 
+    public void registerItem(SpecialSkyItem item) {
+        items.put(item.getId(), item);
+    }
+
     public ItemManager(SkyblockLevels plugin, Map<Long, SpecialSkyItem> items, Map<String, Supplier<? extends SpecialSkyItem>> itemSuppliers) {
         this.plugin = plugin;
         this.items = items;
@@ -142,6 +145,10 @@ public class ItemManager {
         return this.getItem(Keys.getSkyItem(itemStack));
     }
 
+    public void removeItem(long id) {
+        this.items.remove(id);
+    }
+
     public void handle(User user, SpecialSkyItem item, Event event) {
         final var classes = this.classMap.get(event.getClass());
         if (classes == null) return;
@@ -170,19 +177,14 @@ public class ItemManager {
     }
 
     public ItemStack getItem(SpecialSkyItem item) {
-        Bukkit.broadcastMessage("Got item with id: " + item.getItemId() + " " + item.getClass());
         final ItemStack itemStack = item.getItemStack();
         if (item.uniqueInInventory()) {
-            Keys.setSkyItem(itemStack, item.getItemId(), item.getId());
+            Keys.setSkyItem(item.getClass(), itemStack, item.getItemId(), item.getId());
             this.items.put(item.getId(), item);
         } else {
-            Keys.setSkyItem(itemStack, item.getItemId());
+            Keys.setSkyItem(item.getClass(), itemStack, item.getItemId());
         }
         return itemStack;
-    }
-
-    public long generateNextId() {
-        return this.IDS.getAndAdd(1);
     }
 
     public Set<String> getAllIds() {

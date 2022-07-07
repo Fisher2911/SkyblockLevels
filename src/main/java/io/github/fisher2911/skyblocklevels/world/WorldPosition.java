@@ -31,6 +31,10 @@ public class WorldPosition {
         return new WorldPosition(location.getWorld(), new Position(location.getX(), location.getY(), location.getZ()));
     }
 
+    public boolean blocksEqual(WorldPosition other) {
+        return Objects.equals(world, other.world) && position.blocksEqual(other.position);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,6 +3,7 @@ package io.github.fisher2911.skyblocklevels.database;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.entity.SkyEntity;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,11 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.logging.Level;
 
 public class DataManager {
+
+    private final AtomicLong IDS = new AtomicLong();
 
     private final Path FILE_PATH = SkyblockLevels.getPlugin(SkyblockLevels.class).getDataFolder().toPath().resolve("data.db");
     private final SkyblockLevels plugin;
@@ -93,6 +97,8 @@ public class DataManager {
 
     public SpecialSkyItem loadItem(String tableName, String itemId, long id) {
         final BiFunction<Connection, Long, ? extends SpecialSkyItem> function = itemLoadFunctions.get(tableName);
+        final SpecialSkyItem item = this.plugin.getItemManager().getItem(id);
+        if (item != SpecialSkyItem.EMPTY) return item;
         if (function == null) return this.plugin.getItemManager().createItem(itemId);
         return function.apply(this.getConnection(), id);
     }
@@ -118,10 +124,44 @@ public class DataManager {
         if (consumer != null) consumer.accept(this.getConnection(), entity);
     }
 
+    private static final String ID_TABLE = "id_table";
+    private static final String ID_COLUMN = "id";
+    private static final int ROW_ID = 0;
+    private static final String LATEST_ID = "latest_id";
+
+    private static final CreateTableStatement ID_TABLE_STATEMENT = CreateTableStatement.builder(ID_TABLE).
+            addField(Integer.class, ID_COLUMN, KeyType.PRIMARY).
+            addField(Long.class, LATEST_ID).
+            build();
+
+    private static final SelectStatement SELECT_LATEST_ID_STATEMENT = SelectStatement.builder(ID_TABLE).
+            selectAll().
+            build();
+
     public void createTables() {
+        addTable(ID_TABLE_STATEMENT);
         for (CreateTableStatement statement : createTableStatements) {
             statement.execute(this.getConnection());
         }
+        SELECT_LATEST_ID_STATEMENT.execute(this.getConnection(), result -> {
+            if (result.next()) {
+                IDS.set(result.getLong(LATEST_ID));
+            }
+            return null;
+        });
     }
 
+    private static void saveId(Connection connection, long id) {
+        InsertStatement.builder(ID_TABLE).
+                addEntry(ID_COLUMN, ROW_ID).
+                addEntry(LATEST_ID, id).
+                build().execute(connection);
+    }
+
+    public long generateNextId() {
+        final long id = this.IDS.incrementAndGet();
+        this.plugin.getLogger().info("Generating next ID: " + id);
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> saveId(this.getConnection(), id));
+        return id;
+    }
 }

@@ -16,6 +16,7 @@ public class Keys {
     private static final SkyblockLevels PLUGIN = SkyblockLevels.getPlugin(SkyblockLevels.class);
     private static final NamespacedKey ITEM_KEY = new NamespacedKey(PLUGIN, "item_id");
     private static final NamespacedKey ID_KEY = new NamespacedKey(PLUGIN, "item_unique_id");
+    private static final NamespacedKey CLASS_KEY = new NamespacedKey(PLUGIN, "item_class");
     private static final NamespacedKey ENTITY_KEY = new NamespacedKey(PLUGIN, "entity_id");
     private static final NamespacedKey DURABILITY_KEY = new NamespacedKey(PLUGIN, "item_durability");
 
@@ -35,21 +36,30 @@ public class Keys {
         return Objects.requireNonNullElse(itemMeta.getPersistentDataContainer().get(ITEM_KEY, PersistentDataType.STRING), "");
     }
 
+    @Nullable
+    public static String getSkyItemClass(ItemStack itemStack) {
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return "";
+        return itemMeta.getPersistentDataContainer().get(CLASS_KEY, PersistentDataType.STRING);
+    }
+
     public static boolean isSkyItem(ItemStack itemStack) {
         return getSkyItem(itemStack) != -1;
     }
 
-    public static void setSkyItem(ItemStack itemStack, String id, long uniqueId) {
+    public static void setSkyItem(Class<?> clazz, ItemStack itemStack, String id, long uniqueId) {
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) return;
+        itemMeta.getPersistentDataContainer().set(CLASS_KEY, PersistentDataType.STRING, clazz.getSimpleName().toLowerCase());
         itemMeta.getPersistentDataContainer().set(ITEM_KEY, PersistentDataType.STRING, id);
         itemMeta.getPersistentDataContainer().set(ID_KEY, PersistentDataType.LONG, uniqueId);
         itemStack.setItemMeta(itemMeta);
     }
 
-    public static void setSkyItem(ItemStack itemStack, String id) {
+    public static void setSkyItem(Class<?> clazz, ItemStack itemStack, String id) {
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) return;
+        itemMeta.getPersistentDataContainer().set(CLASS_KEY, PersistentDataType.STRING, clazz.getSimpleName().toLowerCase());
         itemMeta.getPersistentDataContainer().set(ITEM_KEY, PersistentDataType.STRING, id);
         itemStack.setItemMeta(itemMeta);
     }

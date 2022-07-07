@@ -5,6 +5,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
@@ -43,8 +44,8 @@ public class UserManager {
         final DataManager dataManager = plugin.getDataManager();
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
-                addField(String.class, UUID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.UUID, UUID, KeyType.PRIMARY).
+                addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, AMOUNT).
                 groupKeys(KeyType.UNIQUE, UUID, ITEM_ID).
                 build());

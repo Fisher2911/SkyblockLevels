@@ -57,8 +57,13 @@ public class DurableItem implements Usable, SpecialSkyItem {
         if (!(itemMeta instanceof final Damageable damageable)) return;
         final int durability = Keys.getDurability(itemStack, this.maxDurability) - damage;
         final int maxDamage = itemStack.getType().getMaxDurability();
-        final int calculateDurability = this.calculateDurability(maxDamage);
+        final int calculateDurability = this.calculateDurability(durability, maxDamage);
         damageable.setDamage(maxDamage - calculateDurability);
+        itemStack.setItemMeta(itemMeta);
+        if (durability < 0) {
+            this.plugin.getItemManager().delete(this);
+            itemStack.setAmount(0);
+        }
         Keys.setDurability(itemStack, durability);
     }
 
@@ -67,8 +72,8 @@ public class DurableItem implements Usable, SpecialSkyItem {
         return 0;
     }
 
-    private int calculateDurability(int itemMaxDurability) {
-        final float damagePercent = (float) itemMaxDurability / (float) this.maxDurability;
+    private int calculateDurability(int durability, int itemMaxDurability) {
+        final float damagePercent = (float) durability / (float) this.maxDurability;
         return (int) (damagePercent * itemMaxDurability);
     }
 
@@ -101,7 +106,8 @@ public class DurableItem implements Usable, SpecialSkyItem {
 
         private static final Serializer INSTANCE = new Serializer();
 
-        private Serializer() {}
+        private Serializer() {
+        }
 
         private static final String ITEM_ID = "item-id";
         private static final String ITEM = "item";
@@ -116,7 +122,7 @@ public class DurableItem implements Usable, SpecialSkyItem {
                 final boolean unique = node.node(UNIQUE).getBoolean();
                 final int maxDurability = node.node(DURABILITY).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new DurableItem(plugin, unique ? plugin.getItemManager().generateNextId() : -1, itemId, itemSupplier, maxDurability);
+                return () -> new DurableItem(plugin, unique ? plugin.getDataManager().generateNextId() : -1, itemId, itemSupplier, maxDurability);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

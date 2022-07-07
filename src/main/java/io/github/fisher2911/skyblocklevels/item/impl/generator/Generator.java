@@ -2,7 +2,6 @@ package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
-import io.github.fisher2911.skyblocklevels.item.impl.DurableItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -10,6 +9,7 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.Durable;
 import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
@@ -18,6 +18,7 @@ import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.MineSpeeds;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
+import io.github.fisher2911.skyblocklevels.item.impl.DurableItem;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
 
 public class Generator implements SkyBlock, Delayed, Durable {
 
-    private static final String TABLE = "generator";
+    private static final String TABLE = Generator.class.getSimpleName().toLowerCase();
     private static final String ID = "id";
     private static final String ITEM_ID = "item_id";
     private static final String TICK_COUNTER = "tick_counter";
@@ -61,7 +62,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, TICK_COUNTER).
                 build());
 
@@ -416,7 +417,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
                 final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
                 return () -> new Generator(
                         plugin,
-                        plugin.getItemManager().generateNextId(),
+                        plugin.getDataManager().generateNextId(),
                         itemId,
                         itemSupplier,
                         tickDelay,

@@ -6,7 +6,6 @@ import io.github.fisher2911.skyblocklevels.util.Random;
 import io.github.fisher2911.skyblocklevels.world.Position;
 import io.github.fisher2911.skyblocklevels.world.Position2D;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -46,6 +45,13 @@ public class RTPCommand extends SkyCommand implements Listener {
                                 user.sendMessage("<red>You must wait " + user.getCooldowns().getTimePassed(COOLDOWN_ID).toSeconds() + " before using this command again.");
                                 return;
                             }
+                            final Player player = user.getPlayer();
+                            if (player == null) return;
+                            final World playerWorld = player.getWorld();
+                            if (!playerWorld.getName().contains("SpawnWorld")) {
+                                user.sendMessage("<red>You must be in the spawn world to use this command.");
+                                return;
+                            }
                             Location teleportTo = this.getRandLocation();
                             while (this.plugin.getLands().isClaimed(teleportTo)) {
                                 teleportTo = this.getRandLocation();
@@ -57,11 +63,18 @@ public class RTPCommand extends SkyCommand implements Listener {
                                 final Position pos = position.getPosition();
                                 final TeleportData data = new TeleportData(user, position);
                                 if (world.isChunkLoaded(pos.getChunkX(), pos.getChunkZ())) {
+                                    user.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 5));
                                     this.teleportUser(data);
                                     return;
                                 }
                                 world.loadChunk(pos.getChunkX(), pos.getChunkZ());
-                                Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.teleportUser(data), 40);
+                                position.toLocation().getBlock().getRelative(BlockFace.DOWN).setType(Material.DIRT);
+                                this.plugin.getTeleportManager().startTask(
+                                        user,
+                                        position,
+                                        3,
+                                        t -> user.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 8, 5))
+                                );
                             }).execute();
                         })
         );
@@ -80,10 +93,7 @@ public class RTPCommand extends SkyCommand implements Listener {
         final WorldPosition position = data.getPosition();
         position.toLocation().getBlock().getRelative(BlockFace.DOWN).setType(Material.DIRT);
         user.teleport(position);
-        user.sendMessage("<green>You have been randomly teleported to " + position.getPosition().getX() + " " + position.getPosition().getY() + " " + position.getPosition().getZ());
-        final Player player = user.getPlayer();
-        if (player == null) return;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 10));
+        user.sendMessage("<green>Teleported successfully!");
     }
 
     private Location getRandLocation() {
@@ -97,6 +107,7 @@ public class RTPCommand extends SkyCommand implements Listener {
 
         private final BukkitUser user;
         private final WorldPosition position;
+        private boolean cancelled;
 
         public TeleportData(BukkitUser user, WorldPosition position) {
             this.user = user;
@@ -109,6 +120,14 @@ public class RTPCommand extends SkyCommand implements Listener {
 
         public WorldPosition getPosition() {
             return position;
+        }
+
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        public void setCancelled(boolean cancelled) {
+            this.cancelled = cancelled;
         }
     }
 }

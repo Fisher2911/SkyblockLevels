@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 
 public class Builder implements SkyBlock, RedstoneBlock, Delayed {
 
-    private static final String TABLE = "builder";
+    private static final String TABLE = Builder.class.getSimpleName().toLowerCase();
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -170,7 +170,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
                 final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
                 final int tickDelay = node.node(TICK_DELAY).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Builder(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, tickDelay);
+                return () -> new Builder(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, tickDelay);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

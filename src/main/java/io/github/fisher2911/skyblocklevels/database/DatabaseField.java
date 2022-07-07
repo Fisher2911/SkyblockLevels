@@ -2,18 +2,18 @@ package io.github.fisher2911.skyblocklevels.database;
 
 public class DatabaseField {
 
-    private final Class<?> clazz;
+    private final Object databaseType;
     private final String name;
     private final KeyType keyType;
 
-    public DatabaseField(Class<?> clazz, String name, KeyType keyType) {
-        this.clazz = clazz;
+    public DatabaseField(Object databaseType, String name, KeyType keyType) {
+        this.databaseType = databaseType;
         this.name = name;
         this.keyType = keyType;
     }
 
-    public Class<?> getClazz() {
-        return clazz;
+    public Object getDatabaseType() {
+        return databaseType;
     }
 
     public String getName() {

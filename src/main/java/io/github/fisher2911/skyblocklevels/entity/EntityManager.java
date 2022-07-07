@@ -9,6 +9,7 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -47,8 +48,8 @@ public class EntityManager implements Listener {
         final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
         final DataManager dataManager = plugin.getDataManager();
         dataManager.addTable(CreateTableStatement.builder(TABLE).
-                addField(String.class, UUID, KeyType.PRIMARY).
-                addField(String.class, ENTITY_TYPE).
+                addField(VarChar.UUID, UUID, KeyType.PRIMARY).
+                addField(VarChar.ITEM_ID, ENTITY_TYPE).
                 build());
     }
 

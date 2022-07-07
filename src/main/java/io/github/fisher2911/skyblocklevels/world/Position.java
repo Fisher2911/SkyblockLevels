@@ -40,6 +40,10 @@ public class Position {
         return new WorldPosition(world, this);
     }
 
+    public boolean blocksEqual(Position other) {
+        return (int) x == (int) other.x && (int) y == (int) other.y && (int) z == (int) other.z;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

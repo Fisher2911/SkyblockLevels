@@ -26,9 +26,10 @@ public class DeleteStatement {
 
     public void execute(Connection connection) {
         try (final PreparedStatement statement = connection.prepareStatement(this.getStatement())) {
-            statement.executeBatch();
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error with statement: " + this.getStatement());
+            e.printStackTrace();
         }
     }
 

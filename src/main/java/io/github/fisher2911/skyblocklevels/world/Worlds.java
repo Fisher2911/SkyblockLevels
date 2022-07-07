@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.world;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
@@ -26,29 +27,29 @@ import java.util.stream.Collectors;
 
 public class Worlds implements Listener {
 
-    private static final String TABLE = "worlds";
-    private static final String WORLD = "world";
-    private static final String CHUNK_X = "chunk_x";
-    private static final String CHUNK_Z = "chunk_z";
-    private static final String BLOCK_ID = "block_id";
-    private static final String BLOCK_TYPE = "block_type";
-    private static final String TABLE_NAME = "table_name";
-    private static final String X = "x";
-    private static final String Y = "y";
-    private static final String Z = "z";
+    public static final String DATABASE_TABLE_COLUMN = "worlds";
+    public static final String DATABASE_WORLD_COLUMN = "world";
+    public static final String DATABASE_CHUNK_X_COLUMN = "chunk_x";
+    public static final String DATABASE_CHUNK_Z_COLUMN = "chunk_z";
+    public static final String DATABASE_BLOCK_ID_COLUMN = "block_id";
+    public static final String DATABASE_BLOCK_TYPE_COLUMN = "block_type";
+    public static final String DATABASE_TABLE_NAME_COLUMN = "table_name";
+    public static final String DATABASE_X_COLUMN = "x";
+    public static final String DATABASE_Y_COLUMN = "y";
+    public static final String DATABASE_Z_COLUMN = "z";
 
     static {
-        SkyblockLevels.getPlugin(SkyblockLevels.class).getDataManager().addTable(CreateTableStatement.builder(TABLE).
-                addField(String.class, WORLD).
-                addField(Long.class, BLOCK_ID).
-                addField(String.class, BLOCK_TYPE).
-                addField(String.class, TABLE_NAME).
-                addField(Integer.class, CHUNK_X).
-                addField(Integer.class, CHUNK_Z).
-                addField(Integer.class, X).
-                addField(Integer.class, Y).
-                addField(Integer.class, Z).
-                groupKeys(KeyType.UNIQUE, WORLD, CHUNK_X, CHUNK_Z, BLOCK_ID, BLOCK_TYPE, TABLE_NAME, X, Y, Z).
+        SkyblockLevels.getPlugin(SkyblockLevels.class).getDataManager().addTable(CreateTableStatement.builder(DATABASE_TABLE_COLUMN).
+                addField(VarChar.UUID, DATABASE_WORLD_COLUMN).
+                addField(Long.class, DATABASE_BLOCK_ID_COLUMN).
+                addField(VarChar.ITEM_ID, DATABASE_BLOCK_TYPE_COLUMN).
+                addField(VarChar.of(50), DATABASE_TABLE_NAME_COLUMN).
+                addField(Integer.class, DATABASE_CHUNK_X_COLUMN).
+                addField(Integer.class, DATABASE_CHUNK_Z_COLUMN).
+                addField(Integer.class, DATABASE_X_COLUMN).
+                addField(Integer.class, DATABASE_Y_COLUMN).
+                addField(Integer.class, DATABASE_Z_COLUMN).
+                groupKeys(KeyType.UNIQUE, DATABASE_WORLD_COLUMN, DATABASE_CHUNK_X_COLUMN, DATABASE_CHUNK_Z_COLUMN, DATABASE_BLOCK_ID_COLUMN, DATABASE_BLOCK_TYPE_COLUMN, DATABASE_TABLE_NAME_COLUMN, DATABASE_X_COLUMN, DATABASE_Y_COLUMN, DATABASE_Z_COLUMN).
                 build());
     }
 
@@ -140,19 +141,19 @@ public class Worlds implements Listener {
     }
 
     private void loadChunk(UUID world, int chunkX, int chunkY) {
-        final SelectStatement statement = SelectStatement.builder(TABLE).
+        final SelectStatement statement = SelectStatement.builder(DATABASE_TABLE_COLUMN).
                 selectAll().
-                condition(CHUNK_X, chunkX).
-                condition(CHUNK_Z, chunkY).
-                condition(WORLD, world.toString()).
+                condition(DATABASE_CHUNK_X_COLUMN, chunkX).
+                condition(DATABASE_CHUNK_Z_COLUMN, chunkY).
+                condition(DATABASE_WORLD_COLUMN, world.toString()).
                 build();
         statement.execute(this.plugin.getDataManager().getConnection(), result -> {
-            final String tableName = result.getString(TABLE_NAME);
-            final String itemId = result.getString(BLOCK_TYPE);
-            final long id = result.getLong(BLOCK_ID);
-            final int x = result.getInt(X);
-            final int y = result.getInt(Y);
-            final int z = result.getInt(Z);
+            final String tableName = result.getString(DATABASE_TABLE_NAME_COLUMN);
+            final String itemId = result.getString(DATABASE_BLOCK_TYPE_COLUMN);
+            final long id = result.getLong(DATABASE_BLOCK_ID_COLUMN);
+            final int x = result.getInt(DATABASE_X_COLUMN);
+            final int y = result.getInt(DATABASE_Y_COLUMN);
+            final int z = result.getInt(DATABASE_Z_COLUMN);
             final WorldPosition position = new WorldPosition(Bukkit.getWorld(world), new Position(x, y, z));
             final SpecialSkyItem item = this.plugin.getDataManager().loadItem(tableName, itemId, id);
             if (!(item instanceof final SkyBlock block)) return null;
@@ -164,23 +165,25 @@ public class Worlds implements Listener {
     public void deleteBlock(SkyBlock block, WorldPosition worldPosition) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             final Position position = worldPosition.getPosition();
-            DeleteStatement.builder(TABLE_NAME).
-                    condition(WORLD, worldPosition.getWorld().getUID().toString()).
-                    condition(CHUNK_X, position.getChunkX()).
-                    condition(CHUNK_Z, position.getChunkZ()).
-                    condition(BLOCK_ID, block.getId()).
-                    condition(BLOCK_TYPE, block.getItemId()).
-                    condition(X, position.getX()).
-                    condition(Y, position.getY()).
-                    condition(Z, position.getZ()).
-                    build().execute(this.plugin.getDataManager().getConnection());
+            DeleteStatement.builder(DATABASE_TABLE_COLUMN).
+                    condition(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
+                    condition(DATABASE_CHUNK_X_COLUMN, position.getChunkX()).
+                    condition(DATABASE_CHUNK_Z_COLUMN, position.getChunkZ()).
+                    condition(DATABASE_BLOCK_ID_COLUMN, block.getId()).
+                    condition(DATABASE_BLOCK_TYPE_COLUMN, block.getItemId()).
+                    condition(DATABASE_X_COLUMN, position.getX()).
+                    condition(DATABASE_Y_COLUMN, position.getY()).
+                    condition(DATABASE_Z_COLUMN, position.getZ()).
+                    build().
+                    execute(this.plugin.getDataManager().getConnection());
+            this.plugin.getDataManager().deleteItem(block, block.getClass());
         });
     }
 
     private void saveBlocks(Map<WorldPosition, SkyBlock> blocks) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin,
                 () -> {
-                    final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
+                    final InsertStatement.Builder builder = InsertStatement.builder(DATABASE_TABLE_COLUMN);
                     final int batchSize = 50;
                     Class<?> clazz = null;
                     for (var entry : blocks.entrySet()) {
@@ -189,15 +192,15 @@ public class Worlds implements Listener {
                         final SkyBlock block = entry.getValue();
                         if (clazz == null) clazz = block.getClass();
                         builder.newEntry().
-                                addEntry(WORLD, worldPosition.getWorld().getUID().toString()).
-                                addEntry(BLOCK_ID, block.getId()).
-                                addEntry(BLOCK_TYPE, block.getItemId()).
-                                addEntry(TABLE_NAME, block.getTableName()).
-                                addEntry(CHUNK_X, position.getChunkX()).
-                                addEntry(CHUNK_Z, position.getChunkZ()).
-                                addEntry(X, position.getX()).
-                                addEntry(Y, position.getY()).
-                                addEntry(Z, position.getZ()).
+                                addEntry(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
+                                addEntry(DATABASE_BLOCK_ID_COLUMN, block.getId()).
+                                addEntry(DATABASE_BLOCK_TYPE_COLUMN, block.getItemId()).
+                                addEntry(DATABASE_TABLE_NAME_COLUMN, block.getTableName()).
+                                addEntry(DATABASE_CHUNK_X_COLUMN, position.getChunkX()).
+                                addEntry(DATABASE_CHUNK_Z_COLUMN, position.getChunkZ()).
+                                addEntry(DATABASE_X_COLUMN, (int) position.getX()).
+                                addEntry(DATABASE_Y_COLUMN, (int) position.getY()).
+                                addEntry(DATABASE_Z_COLUMN, (int) position.getZ()).
                                 batchSize(batchSize).
                                 build().
                                 execute(this.plugin.getDataManager().getConnection());

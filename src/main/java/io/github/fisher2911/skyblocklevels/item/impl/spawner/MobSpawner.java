@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 
 public class MobSpawner implements Spawner, Delayed {
 
-    private static final String TABLE = "mob_spawner";
+    private static final String TABLE = MobSpawner.class.getSimpleName().toLowerCase();
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -196,7 +196,7 @@ public class MobSpawner implements Spawner, Delayed {
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
                 return () -> new MobSpawner(
                         plugin,
-                        plugin.getItemManager().generateNextId(),
+                        -1,
                         itemId,
                         entityType,
                         name,

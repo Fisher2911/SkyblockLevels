@@ -69,7 +69,7 @@ public class SkyItem implements SpecialSkyItem {
                 final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
                 final boolean unique = node.node(UNIQUE).getBoolean();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new SkyItem(unique ? plugin.getItemManager().generateNextId() : -1, itemId, itemSupplier);
+                return () -> new SkyItem(unique ? plugin.getDataManager().generateNextId() : -1, itemId, itemSupplier);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

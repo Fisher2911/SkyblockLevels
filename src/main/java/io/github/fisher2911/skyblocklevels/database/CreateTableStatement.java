@@ -1,5 +1,7 @@
 package io.github.fisher2911.skyblocklevels.database;
 
+import io.github.fisher2911.skyblocklevels.util.Pair;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,12 +14,14 @@ public class CreateTableStatement {
 
     private final String tableName;
     private final List<DatabaseField> fields;
+    private final Map<String, Pair<String, String>> foreignKeys;
     private final Map<KeyType, List<String>> groupKeys;
 
-    public CreateTableStatement(String tableName, List<DatabaseField> fields, Map<KeyType, List<String>> groupKeys) {
+    public CreateTableStatement(String tableName, List<DatabaseField> fields, Map<String, Pair<String, String>> foreignKeys, Map<KeyType, List<String>> groupKeys) {
         this.tableName = tableName;
         this.fields = fields;
         this.groupKeys = groupKeys;
+        this.foreignKeys = foreignKeys;
     }
 
     public String getTableName() {
@@ -33,7 +37,7 @@ public class CreateTableStatement {
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error with statement: " + this.getStatement());
-//            e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -43,7 +47,7 @@ public class CreateTableStatement {
                 append("(");
         for (DatabaseField field : this.fields) {
             final String name = field.getName();
-            final String fieldType = DatabaseClasses.getFieldName(field.getClazz());
+            final String fieldType = DatabaseClasses.getFieldName(field.getDatabaseType());
             final String keyString = field.getKeyType().getString();
             builder.append(name).
                     append(" ").
@@ -69,6 +73,24 @@ public class CreateTableStatement {
             builder.delete(builder.length() - 1, builder.length());
             builder.append(")");
         }
+
+        if (!this.foreignKeys.isEmpty()) {
+            for (var entry : this.foreignKeys.entrySet()) {
+                final String key = entry.getKey();
+                final Pair<String, String> value = entry.getValue();
+                final String tableName = value.getFirst();
+                final String columnName = value.getSecond();
+                builder.append(", FOREIGN KEY (").
+                        append(key).
+                        append(") REFERENCES ").
+                        append(tableName).
+                        append("(").
+                        append(columnName).
+                        append(")").
+                        append(" ON DELETE CASCADE");
+            }
+        }
+
         builder.append(")");
 
         return builder.toString();
@@ -82,19 +104,25 @@ public class CreateTableStatement {
 
         private final String tableName;
         private final List<DatabaseField> fields = new ArrayList<>();
+        private final Map<String, Pair<String, String>> foreignKeys = new HashMap<>();
         private final Map<KeyType, List<String>> groupKeys = new HashMap<>();
 
         private Builder(String tableName) {
             this.tableName = tableName;
         }
 
-        public Builder addField(Class<?> clazz, String name, KeyType keyType) {
-            this.fields.add(new DatabaseField(clazz, name, keyType));
+        public Builder addField(Object databaseType, String name, KeyType keyType) {
+            this.fields.add(new DatabaseField(databaseType, name, keyType));
             return this;
         }
 
-        public Builder addField(Class<?> clazz, String name) {
-            return addField(clazz, name, KeyType.NONE);
+        public Builder addField(Object databaseType, String name) {
+            return addField(databaseType, name, KeyType.NONE);
+        }
+
+        public Builder foreignKey(String name, String tableName, String columnName) {
+            this.foreignKeys.put(name, new Pair<>(tableName, columnName));
+            return this;
         }
 
         public Builder groupKeys(KeyType key, String... fields) {
@@ -103,7 +131,7 @@ public class CreateTableStatement {
         }
 
         public CreateTableStatement build() {
-            return new CreateTableStatement(this.tableName, this.fields, this.groupKeys);
+            return new CreateTableStatement(this.tableName, this.fields, this.foreignKeys, this.groupKeys);
         }
     }
 }

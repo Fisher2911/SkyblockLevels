@@ -5,6 +5,7 @@ import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
 import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
@@ -40,8 +41,8 @@ public class CustomEntity implements SkyEntity {
         final DataManager dataManager = plugin.getDataManager();
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ENTITY_TYPE).
-                addField(String.class, UUID, KeyType.UNIQUE).
+                addField(VarChar.ITEM_ID, ENTITY_TYPE).
+                addField(VarChar.UUID, UUID, KeyType.UNIQUE).
                 build());
         dataManager.registerItemDeleteConsumer(LimitedBridger.class, (conn, item) -> {
             DeleteStatement.builder(TABLE).

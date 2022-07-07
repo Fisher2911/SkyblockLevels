@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 public class SkyCrop implements SkyBlock {
 
-    private static final String TABLE = "sky_crop";
+    private static final String TABLE = SkyCrop.class.getSimpleName().toLowerCase();
 
     private final SkyblockLevels plugin;
     private final long id;
@@ -241,7 +241,7 @@ public class SkyCrop implements SkyBlock {
                         collect(Collectors.toSet());
                 return () -> new SkyCrop(
                         plugin,
-                        plugin.getItemManager().generateNextId(),
+                        plugin.getDataManager().generateNextId(),
                         itemId,
                         material,
                         itemSupplier,

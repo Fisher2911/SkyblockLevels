@@ -7,10 +7,12 @@ import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -24,7 +26,7 @@ import java.util.function.Supplier;
 
 public class LimitedBridger extends Bridger {
 
-    private static final String TABLE = "limited_bridger";
+    private static final String TABLE = LimitedBridger.class.getSimpleName().toLowerCase();
     private static final String ID = "id";
     private static final String ITEM_ID = "item_id";
     private static final String STORED_BLOCKS = "stored_blocks";
@@ -35,7 +37,7 @@ public class LimitedBridger extends Bridger {
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
                 addField(Long.class, ID, KeyType.PRIMARY).
-                addField(String.class, ITEM_ID).
+                addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, STORED_BLOCKS).
                 build());
 
@@ -90,10 +92,24 @@ public class LimitedBridger extends Bridger {
         event.setCancelled(true);
         final int placed = this.place(event, this.type, Math.min(this.storedBlocks, this.size));
         if (placed <= 0) return;
-        user.sendMessage("Placed " + placed + " blocks");
+        user.sendMessage("<blue>Placed " + placed + " blocks");
         this.storedBlocks -= placed;
         this.storedBlocks = Math.max(0, this.storedBlocks);
+        if (this.storedBlocks <= 0) {
+            event.getItem().setAmount(event.getItem().getAmount() - 1);
+            this.plugin.getItemManager().delete(this);
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                DeleteStatement.builder(TABLE).
+                        condition(ID, String.valueOf(this.id)).
+                        build().
+                        execute(this.plugin.getDataManager().getConnection());
+            });
+            return;
+        }
         event.getPlayer().getInventory().setItemInMainHand(this.plugin.getItemManager().getItem(this));
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () ->
+                this.plugin.getDataManager().saveItems(List.of(this), this.getClass())
+        );
     }
 
     @Override
@@ -132,7 +148,7 @@ public class LimitedBridger extends Bridger {
                 final int size = node.node(SIZE).getInt();
                 final int storedBlocks = node.node(STORED_BLOCKS).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new LimitedBridger(plugin, plugin.getItemManager().generateNextId(), itemId, itemSupplier, material, size, storedBlocks);
+                return () -> new LimitedBridger(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, material, size, storedBlocks);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }
