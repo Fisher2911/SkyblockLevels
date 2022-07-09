@@ -158,7 +158,7 @@ public class EntityManager implements Listener {
 
      @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
-         if (!Bukkit.isStopping()) {
+         if (!this.plugin.isShuttingDown()) {
              Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(event.getWorld().getEntities()));
              return;
          }
@@ -167,7 +167,7 @@ public class EntityManager implements Listener {
 
      @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event) {
-        if (!Bukkit.isStopping()) {
+        if (!this.plugin.isShuttingDown()) {
             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(event.getChunk().getEntities()));
             return;
         }

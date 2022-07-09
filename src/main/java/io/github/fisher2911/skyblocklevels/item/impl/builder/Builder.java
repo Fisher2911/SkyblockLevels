@@ -46,6 +46,9 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
         this.itemId = itemId;
         this.itemSupplier = itemSupplier;;
         this.tickDelay = tickDelay;
+        if (this.id > 100) {
+            throw new RuntimeException("New Builder: " + this.id);
+        }
     }
 
     @Override
@@ -94,7 +97,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
         if (inventory.isEmpty()) return;
         if (!(block.getBlockData() instanceof final Directional directional)) return;
         final Block toPlace = block.getRelative(directional.getFacing());
-        if (toPlace.getType().isSolid()) return;
+        if (!toPlace.getType().isAir()) return;
         ItemStack place = new ItemStack(Material.AIR);
         for (ItemStack itemStack : inventory) {
             if (itemStack == null) continue;
@@ -130,6 +133,9 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
 
     @Override
     public long getId() {
+        if (this.id > 100) {
+            throw new RuntimeException("Builder id: " + this.id);
+        }
         return this.id;
     }
 
@@ -170,7 +176,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
                 final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
                 final int tickDelay = node.node(TICK_DELAY).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Builder(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, tickDelay);
+                return () -> new Builder(plugin, -1, itemId, itemSupplier, tickDelay);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

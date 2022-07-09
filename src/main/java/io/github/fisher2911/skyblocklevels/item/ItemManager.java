@@ -7,6 +7,7 @@ import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import io.github.fisher2911.skyblocklevels.util.TriConsumer;
 import io.github.fisher2911.skyblocklevels.util.WorldUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -130,6 +131,7 @@ public class ItemManager {
     }
 
     public SpecialSkyItem getItem(long id) {
+        if (id == -1) return SpecialSkyItem.EMPTY;
         return this.items.getOrDefault(id, SpecialSkyItem.EMPTY);
     }
 
@@ -139,8 +141,10 @@ public class ItemManager {
 
     public SpecialSkyItem getItem(ItemStack itemStack) {
         final SpecialSkyItem item = this.getItem(Keys.getSkyItem(itemStack));
-        if (item == SpecialSkyItem.EMPTY) return this.createItem(Keys.getSkyItemId(itemStack));
-        return this.getItem(Keys.getSkyItem(itemStack));
+        if (item == SpecialSkyItem.EMPTY) {
+            return this.createItem(Keys.getSkyItemId(itemStack));
+        }
+        return item;
     }
 
     public void removeItem(long id) {

@@ -58,6 +58,8 @@ import java.util.function.Function;
 
 public final class SkyblockLevels extends JavaPlugin {
 
+    private boolean shuttingDown;
+
     private Config config;
     private DataManager dataManager;
     private SkyWorld world;
@@ -107,10 +109,14 @@ public final class SkyblockLevels extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.shuttingDown = true;
         this.userManager.endSaveTask();
         this.userManager.saveAll();
     }
 
+    public boolean isShuttingDown() {
+        return shuttingDown;
+    }
 
     private void initCommands() {
         final Function<CommandTree<User>, CommandExecutionCoordinator<User>> executionCoordinatorFunction =

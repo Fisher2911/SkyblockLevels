@@ -42,7 +42,7 @@ public class RTPCommand extends SkyCommand implements Listener {
                         handler(context -> {
                             final BukkitUser user = (BukkitUser) context.getSender();
                             if (user.getCooldowns().isOnCooldown(COOLDOWN_ID)) {
-                                user.sendMessage("<red>You must wait " + user.getCooldowns().getTimePassed(COOLDOWN_ID).toSeconds() + " before using this command again.");
+                                user.sendMessage("<red>You must wait " + (30 - user.getCooldowns().getTimePassed(COOLDOWN_ID).toSeconds()) + " before using this command again.");
                                 return;
                             }
                             final Player player = user.getPlayer();
@@ -58,13 +58,13 @@ public class RTPCommand extends SkyCommand implements Listener {
                             }
                             final WorldPosition position = WorldPosition.fromLocation(teleportTo);
                             this.manager.taskRecipe().begin(context).synchronous(c -> {
-                                user.getCooldowns().addCooldown(COOLDOWN_ID, cooldownDuration);
                                 final World world = position.getWorld();
                                 final Position pos = position.getPosition();
                                 final TeleportData data = new TeleportData(user, position);
                                 if (world.isChunkLoaded(pos.getChunkX(), pos.getChunkZ())) {
                                     user.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 5));
                                     this.teleportUser(data);
+                                    user.getCooldowns().addCooldown(COOLDOWN_ID, cooldownDuration);
                                     return;
                                 }
                                 world.loadChunk(pos.getChunkX(), pos.getChunkZ());
@@ -73,7 +73,10 @@ public class RTPCommand extends SkyCommand implements Listener {
                                         user,
                                         position,
                                         3,
-                                        t -> user.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 8, 5))
+                                        t -> {
+                                            user.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 8, 5));
+                                            user.getCooldowns().addCooldown(COOLDOWN_ID, cooldownDuration);
+                                        }
                                 );
                             }).execute();
                         })
