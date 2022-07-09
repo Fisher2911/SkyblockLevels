@@ -1,6 +1,7 @@
 package io.github.fisher2911.skyblocklevels.world;
 
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 
 import java.util.Objects;
 
@@ -26,6 +27,10 @@ public class Position {
 
     public double getZ() {
         return z;
+    }
+
+    public Position getRelative(BlockFace face) {
+        return new Position(x + face.getModX(), y + face.getModY(), z + face.getModZ());
     }
 
     public int getChunkX() {

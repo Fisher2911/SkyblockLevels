@@ -6,7 +6,8 @@ import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
 import io.github.fisher2911.skyblocklevels.item.impl.builder.Builder;
 import io.github.fisher2911.skyblocklevels.item.impl.catcher.ItemCatcher;
-import io.github.fisher2911.skyblocklevels.item.impl.crop.SkyCrop;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.MultiSkyCrop;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.SingleSkyCrop;
 import io.github.fisher2911.skyblocklevels.item.impl.generator.Generator;
 import io.github.fisher2911.skyblocklevels.item.impl.grower.Grower;
 import io.github.fisher2911.skyblocklevels.item.impl.platformer.MaterialPlatformer;
@@ -42,7 +43,8 @@ public class ItemLoader {
         register(SkyItem.class.getSimpleName().toLowerCase(), node -> SkyItem.serializer().deserialize(SkyItem.class, node));
         register(DurableItem.class.getSimpleName().toLowerCase(), node -> DurableItem.serializer().deserialize(DurableItem.class, node));
         register(MobSpawner.class.getSimpleName().toLowerCase(), node -> MobSpawner.serializer().deserialize(MobSpawner.class, node));
-        register(SkyCrop.class.getSimpleName().toLowerCase(), node -> SkyCrop.serializer().deserialize(SkyCrop.class, node));
+        register(SingleSkyCrop.class.getSimpleName().toLowerCase(), node -> SingleSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
+        register(MultiSkyCrop.class.getSimpleName().toLowerCase(), node -> MultiSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
     }
 
     private static final String CLASS = "class";

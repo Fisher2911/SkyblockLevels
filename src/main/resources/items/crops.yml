@@ -6,7 +6,7 @@
 #private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
 #private static final String PLACEABLE_ON = "placeable-on";
 1:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "wheat-sky-crop"
   tick-delay: 20
   item:
@@ -29,7 +29,7 @@
       id: wheat-sky-crop
   placeable-on: FARMLAND
 2:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "carrot-sky-crop"
   tick-delay: 20
   item:
@@ -52,7 +52,7 @@
       id: carrot-sky-crop
   placeable-on: FARMLAND
 3:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "beetroot-sky-crop"
   tick-delay: 20
   item:
@@ -75,7 +75,7 @@
       id: beetroot-sky-crop
   placeable-on: FARMLAND
 4:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "potato-sky-crop"
   tick-delay: 20
   item:
@@ -98,7 +98,7 @@
       id: potato-sky-crop
   placeable-on: FARMLAND
 5:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "pumpkin-sky-crop"
   tick-delay: 20
   item:
@@ -121,7 +121,7 @@
       id: pumpkin-sky-crop
   placeable-on: FARMLAND
 6:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "melon-sky-crop"
   tick-delay: 20
   item:
@@ -144,7 +144,7 @@
       id: melon-sky-crop
   placeable-on: FARMLAND
 7:
-  class: "sky-crop"
+  class: "multi-sky-crop"
   item-id: "sugarcane-sky-crop"
   tick-delay: 20
   item:
@@ -167,7 +167,7 @@
       id: sugarcane-sky-crop
   placeable-on: DIRT, SAND, RED_SAND
 8:
-  class: "sky-crop"
+  class: "multi-sky-crop"
   item-id: "cactus-sky-crop"
   tick-delay: 20
   item:
@@ -190,7 +190,7 @@
       id: cactus-sky-crop
   placeable-on: SAND
 9:
-  class: "sky-crop"
+  class: "multi-sky-crop"
   item-id: "bamboo-sky-crop"
   tick-delay: 20
   item:
@@ -213,7 +213,7 @@
       id: bamboo-sky-crop
   placeable-on: DIRT, SAND, RED_SAND
 10:
-  class: "sky-crop"
+  class: "single-sky-crop"
   item-id: "nether-wart-sky-crop"
   tick-delay: 20
   item:

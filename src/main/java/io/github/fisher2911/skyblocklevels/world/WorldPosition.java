@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.world;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 
 import java.util.Objects;
 
@@ -25,6 +26,10 @@ public class WorldPosition {
 
     public Location toLocation() {
         return new Location(world, position.getX(), position.getY(), position.getZ());
+    }
+
+    public WorldPosition getRelative(BlockFace face) {
+        return new WorldPosition(world, position.getRelative(face));
     }
 
     public static WorldPosition fromLocation(Location location) {
