@@ -12,10 +12,6 @@
   item:
     material: "WHEAT_SEEDS"
     name: "<!i><aqua>Wheat"
-    lore:
-      - "<!i>"
-      - "<!i><green>Amount: %amount%"
-    glow: false
   material: "WHEAT"
   items:
     1:
@@ -32,3 +28,210 @@
     1:
       id: wheat-sky-crop
   placeable-on: FARMLAND
+2:
+  class: "sky-crop"
+  item-id: "carrot-sky-crop"
+  tick-delay: 20
+  item:
+    material: "CARROT"
+    name: "<!i><aqua>Carrot"
+  material: "CARROTS"
+  items:
+    1:
+      item:
+        id: carrot-sky-crop
+        amount-range:
+          min: 0
+          max: 3
+      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: carrot-sky-crop
+  placeable-on: FARMLAND
+3:
+  class: "sky-crop"
+  item-id: "beetroot-sky-crop"
+  tick-delay: 20
+  item:
+    material: "BEETROOT_SEEDS"
+    name: "<!i><aqua>Beetroot Seeds"
+  material: "BEETROOTS"
+  items:
+    1:
+      item:
+        material: BEETROOT
+        amount-range:
+          min: 0
+          max: 3
+      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: beetroot-sky-crop
+  placeable-on: FARMLAND
+4:
+  class: "sky-crop"
+  item-id: "potato-sky-crop"
+  tick-delay: 20
+  item:
+    material: "POTATO"
+    name: "<!i><aqua>Potato"
+  material: "POTATOES"
+  items:
+    1:
+      item:
+        id: potato-sky-crop
+        amount-range:
+          min: 0
+          max: 3
+      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: potato-sky-crop
+  placeable-on: FARMLAND
+5:
+  class: "sky-crop"
+  item-id: "pumpkin-sky-crop"
+  tick-delay: 20
+  item:
+    material: "PUMPKIN_SEEDS"
+    name: "<!i><aqua>Pumpkin Seeds"
+  material: "PUMPKIN_STEM"
+  items:
+    1:
+      item:
+        material: PUMPKIN
+        amount-range:
+          min: 1
+          max: 1
+      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: pumpkin-sky-crop
+  placeable-on: FARMLAND
+6:
+  class: "sky-crop"
+  item-id: "melon-sky-crop"
+  tick-delay: 20
+  item:
+    material: "MELON_SEEDS"
+    name: "<!i><aqua>Melon Seeds"
+  material: "MELON_STEM"
+  items:
+    1:
+      item:
+        material: MELON_SLICE
+        amount-range:
+          min: 1
+          max: 4
+      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: melon-sky-crop
+  placeable-on: FARMLAND
+7:
+  class: "sky-crop"
+  item-id: "sugarcane-sky-crop"
+  tick-delay: 20
+  item:
+    material: "SUGAR_CANE"
+    name: "<!i><aqua>Sugar Cane"
+  material: "SUGAR_CANE"
+#  items:
+#    1:
+#      item:
+#        id: sugarcane-sky-crop
+#        amount-range:
+#          min: 1
+#          max: 1
+#      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: sugarcane-sky-crop
+  placeable-on: DIRT, SAND, RED_SAND
+8:
+  class: "sky-crop"
+  item-id: "cactus-sky-crop"
+  tick-delay: 20
+  item:
+    material: "CACTUS"
+    name: "<!i><aqua>Cactus"
+  material: "CACTUS"
+#  items:
+#    1:
+#      item:
+#        id: cactus-sky-crop
+#        amount-range:
+#          min: 1
+#          max: 1
+#      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: cactus-sky-crop
+  placeable-on: SAND
+9:
+  class: "sky-crop"
+  item-id: "bamboo-sky-crop"
+  tick-delay: 20
+  item:
+    material: "BAMBOO"
+    name: "<!i><aqua>Bamboo"
+  material: "BAMBOO_SAPLING"
+#  items:
+#    1:
+#      item:
+#        id: bamboo-sky-crop
+#        amount-range:
+#          min: 1
+#          max: 1
+#      weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: bamboo-sky-crop
+  placeable-on: DIRT, SAND, RED_SAND
+10:
+  class: "sky-crop"
+  item-id: "nether-wart-sky-crop"
+  tick-delay: 20
+  item:
+    material: "NETHER_WART"
+    name: "<!i><aqua>Nether Wart"
+  material: "NETHER_WART"
+    items:
+      1:
+        item:
+          id: nether-wart-sky-crop
+          amount-range:
+            min: 1
+            max: 4
+        weight: 100
+  item-count:
+    min: 1
+    max: 1
+  guaranteed-items:
+    1:
+      id: nether-wart-sky-crop
+  placeable-on: SOUL_SAND

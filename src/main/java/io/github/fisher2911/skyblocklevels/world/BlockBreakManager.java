@@ -57,6 +57,8 @@ public class BlockBreakManager implements Listener {
         return data;
     }
 
+    private static final int PING_DELAY_COMPENSATION = 20;
+
     @EventHandler
     private void onTickEnd(ServerTickEndEvent event) {
         final int currentTick = event.getTickNumber();
@@ -64,9 +66,6 @@ public class BlockBreakManager implements Listener {
                     this.blockBreakData.entrySet().removeIf(entry -> {
                         final WorldPosition position = entry.getKey();
                         final BlockBreakData data = entry.getValue();
-//                            Bukkit.getScheduler().runTask(
-//                                    this.plugin,
-//                                    () -> data.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5, -1, false, false)));
                         data.send(position);
                         data.tick(position);
                         if (data.isBroken()) {
@@ -79,7 +78,7 @@ public class BlockBreakManager implements Listener {
                     this.playerLastMineTick.entrySet().removeIf(entry -> {
                         final BlockTickData data = entry.getValue();
                         final int lastTick = data.lastTick;
-                        if (lastTick + 1 < currentTick) {
+                        if (lastTick + PING_DELAY_COMPENSATION < currentTick) {
                             this.cancel(data.position);
                             return true;
                         }

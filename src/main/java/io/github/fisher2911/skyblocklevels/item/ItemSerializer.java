@@ -45,13 +45,13 @@ public class ItemSerializer implements TypeSerializer<ItemSupplier> {
     @Override
     public ItemSupplier deserialize(Type type, ConfigurationNode node) throws SerializationException {
         final var idNode = node.node(ID);
-        if (!idNode.virtual()) {
-            return new IdItemSupplier(SkyblockLevels.getPlugin(SkyblockLevels.class).getItemManager(), idNode.getString(""));
-        }
-        final Material material = Material.valueOf(node.node(MATERIAL).getString("").toUpperCase());
         final int amount = node.node(AMOUNT).getInt(1);
         Range range = Objects.requireNonNullElse(Range.serializer().deserialize(Range.class, node.node(AMOUNT_RANGE)), Range.constant(amount));
         if (range.getMax() == 0) range = Range.constant(amount);
+        if (!idNode.virtual()) {
+            return new IdItemSupplier(SkyblockLevels.getPlugin(SkyblockLevels.class).getItemManager(), idNode.getString(""), range);
+        }
+        final Material material = Material.valueOf(node.node(MATERIAL).getString("").toUpperCase());
         final String name = node.node(NAME).getString();
         final List<String> lore = node.node(LORE).getList(String.class);
         final boolean glow = node.node(GLOW).getBoolean();
