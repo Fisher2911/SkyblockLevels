@@ -108,6 +108,7 @@ public class MultiSkyCrop extends SkyCrop {
                 final int baseZ = results.getInt(BASE_Z);
                 final Position cropUnder = new Position(cropUnderX, cropUnderY, cropUnderZ);
                 final Position base = new Position(baseX, baseY, baseZ);
+                plugin.getLogger().info("Loaded base: " + base);
                 final MultiSkyCrop skyCrop = new MultiSkyCrop(
                         plugin,
                         id,
@@ -235,7 +236,7 @@ public class MultiSkyCrop extends SkyCrop {
         }
         WorldPosition above = WorldPosition.fromLocation(location);
         event.setCancelled(true);
-        this.plugin.getWorlds().removeBlock(above);
+        if (this.base.equals(this.directlyUnder)) this.plugin.getWorlds().removeBlock(above);
         SkyBlock crop;
         block.setType(Material.AIR, false);
         this.dropItems(location);
@@ -341,7 +342,7 @@ public class MultiSkyCrop extends SkyCrop {
     private MultiSkyCrop copy(Position blockUnder) {
         return new MultiSkyCrop(
                 this.plugin,
-                this.id,
+                this.plugin.getDataManager().generateNextId(),
                 this.itemId,
                 this.material,
                 this.itemSupplier,
