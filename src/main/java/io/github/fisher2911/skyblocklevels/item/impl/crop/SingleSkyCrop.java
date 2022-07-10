@@ -9,10 +9,13 @@ import io.github.fisher2911.skyblocklevels.util.Range;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockGrowEvent;
@@ -54,7 +57,7 @@ public class SingleSkyCrop extends SkyCrop {
 
     @Override
     public void onGrow(BlockGrowEvent event) {
-        if (this.currentTickCounter < this.tickDelay) event.setCancelled(true);
+        event.setCancelled(true);
     }
 
     @Override
@@ -62,9 +65,25 @@ public class SingleSkyCrop extends SkyCrop {
         final Block block = event.getBlock();
         final Location location = block.getLocation();
         final WorldPosition position = WorldPosition.fromLocation(location);
-        if (!this.isMelonOrPumpkin(block)) this.plugin.getWorlds().removeBlock(position);
-        block.setType(this.fromBlock(block));
+        final Player player = event.getPlayer();
+        final boolean shifting = player.isSneaking();;
+        if (!this.isMelonOrPumpkin(block) || shifting) this.plugin.getWorlds().removeBlock(position);
+        final Material setType = this.fromBlock(block);
+        if (setType != Material.AIR && !shifting) {
+            block.getRelative(BlockFace.DOWN).setType(Material.FARMLAND);
+        }
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> block.setType(setType), 1L);
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) return;
+        for (ItemSupplier guaranteed : this.guaranteedItems) {
+            final ItemStack itemStack = guaranteed.get();
+            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
+            location.getWorld().dropItem(location, itemStack);
+        }
+
+        if (block.getBlockData() instanceof Ageable ageable && ageable.getAge() < ageable.getMaximumAge()) {
+            player.sendMessage("Returned");
+            return;
+        }
         int i = this.itemCount.getRandom();
         while (i > 0) {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
@@ -73,11 +92,6 @@ public class SingleSkyCrop extends SkyCrop {
             if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) return;
             location.getWorld().dropItem(location, itemStack);
             i--;
-        }
-        for (ItemSupplier guaranteed : this.guaranteedItems) {
-            final ItemStack itemStack = guaranteed.get();
-            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
-            location.getWorld().dropItem(location, itemStack);
         }
     }
 
@@ -101,9 +115,9 @@ public class SingleSkyCrop extends SkyCrop {
         final Block block = worldPosition.toLocation().getBlock();
         if (!(block.getBlockData() instanceof Ageable ageable)) return;
         final int age = ageable.getAge();
-        if (this.currentTickCounter++ < this.calculateTicksPerGrowth(ageable)) return;
+        if (this.currentTickCounter++ < this.tickDelay) return;
         if (age == ageable.getMaximumAge()) {
-            if (this.isMelonOrPumpkin(block)) block.setType(this.fromSeeds(block.getType()));
+            if (this.isMelonOrPumpkin(block)) block.setType(this.fromStem(block.getType()));
             return;
         }
         ageable.setAge(age + 1);
@@ -112,21 +126,24 @@ public class SingleSkyCrop extends SkyCrop {
     }
 
     private boolean isMelonOrPumpkin(Block block) {
-        return block.getType() == Material.MELON_SEEDS || block.getType() == Material.PUMPKIN_SEEDS;
+        return block.getType() == Material.MELON ||
+                block.getType() == Material.PUMPKIN ||
+                block.getType() == Material.PUMPKIN_STEM ||
+                block.getType() == Material.MELON_STEM;
     }
 
-    private Material fromSeeds(Material material) {
+    private Material fromStem(Material material) {
         return switch (material) {
-            case MELON_SEEDS -> Material.MELON;
-            case PUMPKIN_SEEDS -> Material.PUMPKIN;
+            case MELON_STEM -> Material.MELON;
+            case PUMPKIN_STEM -> Material.PUMPKIN;
             default -> material;
         };
     }
 
     private Material fromBlock(Block block) {
         return switch (block.getType()) {
-            case MELON -> Material.MELON_SEEDS;
-            case PUMPKIN -> Material.PUMPKIN_SEEDS;
+            case MELON -> Material.MELON_STEM;
+            case PUMPKIN -> Material.PUMPKIN_STEM;
             default -> Material.AIR;
         };
     }

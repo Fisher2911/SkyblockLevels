@@ -164,8 +164,15 @@ public class Generator implements SkyBlock, Delayed, Durable {
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
+        if (event instanceof GeneratorBreakEvent) {
+            event.setCancelled(true);
+            return;
+        }
         final Block block = event.getBlock();
         final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
+        final GeneratorBreakEvent generatorBreakEvent = new GeneratorBreakEvent(block, event.getPlayer());
+        Bukkit.getPluginManager().callEvent(generatorBreakEvent);
+        if (generatorBreakEvent.isCancelled()) return;
         if (event.getPlayer().isSneaking()) {
             this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
             this.plugin.getItemManager().giveItem(user, this);

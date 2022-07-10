@@ -23,6 +23,7 @@ public class WeightedList<T> {
     @Nullable
     public T getRandom() {
         final double totalWeight = this.weightList.stream().mapToDouble(Weight::getWeight).sum();
+        if (totalWeight == 0) return null;
         final double random = Random.nextDouble(totalWeight);
         double currentWeight = 0;
         for (Weight<T> weight : this.weightList) {

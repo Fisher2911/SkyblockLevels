@@ -36,6 +36,10 @@ public class WorldPosition {
         return new WorldPosition(location.getWorld(), new Position(location.getX(), location.getY(), location.getZ()));
     }
 
+    public double distanceSquared(WorldPosition other) {
+        return position.distanceSquared(other.position);
+    }
+
     public boolean blocksEqual(WorldPosition other) {
         return Objects.equals(world, other.world) && position.blocksEqual(other.position);
     }

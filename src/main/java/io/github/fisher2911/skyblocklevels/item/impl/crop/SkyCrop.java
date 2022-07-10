@@ -11,7 +11,6 @@ import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -65,19 +64,18 @@ public abstract class SkyCrop implements SkyBlock {
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         final Block block = event.getBlock();
-        if (!this.placeableOn.contains(block.getRelative(BlockFace.DOWN).getType())) return;
+        if (!this.placeableOn.contains(block.getRelative(BlockFace.DOWN).getType())) {
+            event.setCancelled(true);
+            return;
+        }
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) {
             user.sendMessage("<red>You do not meet the collection requirements for this crop.");
+            event.setCancelled(true);
             return;
         }
         block.setType(this.material);
         final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
         this.plugin.getWorlds().addBlock(this, position);
-    }
-
-    protected int calculateTicksPerGrowth(Ageable ageable) {
-        final int maxAge = ageable.getMaximumAge();
-        return this.tickDelay / maxAge;
     }
 
 }

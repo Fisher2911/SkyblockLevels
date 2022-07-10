@@ -19,6 +19,7 @@ import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.Position;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,6 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -74,18 +76,19 @@ public class MultiSkyCrop extends SkyCrop {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item -> {
                 if (!(item instanceof MultiSkyCrop crop)) return;
-                    builder.newEntry().
-                            addEntry(ID, item.getId()).
-                            addEntry(ITEM_ID, item.getItemId()).
-                            addEntry(TICK_COUNTER, crop.currentTickCounter).
-                            addEntry(CROP_UNDER_X, crop.directlyUnder.getX()).
-                            addEntry(CROP_UNDER_Y, crop.directlyUnder.getY()).
-                            addEntry(CROP_UNDER_Z, crop.directlyUnder.getZ()).
-                            addEntry(BASE_X, (int) crop.base.getX()).
-                            addEntry(BASE_Y, (int) crop.base.getY()).
-                            addEntry(BASE_Z, (int) crop.base.getZ()).
-                            build().
-                            execute(conn);
+                plugin.getLogger().info("Saving crop: " + crop.getId() + " - " + crop.getClass().getName());
+                builder.newEntry().
+                        addEntry(ID, item.getId()).
+                        addEntry(ITEM_ID, item.getItemId()).
+                        addEntry(TICK_COUNTER, crop.currentTickCounter).
+                        addEntry(CROP_UNDER_X, crop.directlyUnder.getX()).
+                        addEntry(CROP_UNDER_Y, crop.directlyUnder.getY()).
+                        addEntry(CROP_UNDER_Z, crop.directlyUnder.getZ()).
+                        addEntry(BASE_X, (int) crop.base.getX()).
+                        addEntry(BASE_Y, (int) crop.base.getY()).
+                        addEntry(BASE_Z, (int) crop.base.getZ()).
+                        build().
+                        execute(conn);
             });
         });
 
@@ -117,6 +120,7 @@ public class MultiSkyCrop extends SkyCrop {
                         item.itemCount,
                         item.collectionCondition,
                         item.placeableOn,
+                        item.maxHeight,
                         base,
                         cropUnder
                 );
@@ -135,9 +139,11 @@ public class MultiSkyCrop extends SkyCrop {
         });
     }
 
+    private final int maxHeight;
     private Position directlyUnder;
     private Position base;
     private int currentTickCounter;
+    private boolean removed;
 
     public MultiSkyCrop(
             SkyblockLevels plugin,
@@ -150,9 +156,11 @@ public class MultiSkyCrop extends SkyCrop {
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
-            Set<Material> placeableOn
+            Set<Material> placeableOn,
+            int maxHeight
     ) {
         super(plugin, id, itemId, material, itemSupplier, tickDelay, items, guaranteedItems, itemCount, collectionCondition, placeableOn);
+        this.maxHeight = maxHeight;
     }
 
     public MultiSkyCrop(
@@ -167,10 +175,11 @@ public class MultiSkyCrop extends SkyCrop {
             Range itemCount,
             CollectionCondition collectionCondition,
             Set<Material> placeableOn,
+            int maxHeight,
             Position base,
             Position directlyUnder
     ) {
-        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, guaranteedItems, itemCount, collectionCondition, placeableOn);
+        this(plugin, id, itemId, material, itemSupplier, tickDelay, items, guaranteedItems, itemCount, collectionCondition, placeableOn, maxHeight);
         this.base = base;
         this.directlyUnder = directlyUnder;
     }
@@ -181,15 +190,23 @@ public class MultiSkyCrop extends SkyCrop {
 
     @Override
     public void onGrow(BlockGrowEvent event) {
-        if (this.currentTickCounter < this.tickDelay) event.setCancelled(true);
+        event.setCancelled(true);
+    }
+
+    public void onGrow(BlockSpreadEvent event) {
+        event.setCancelled(true);
     }
 
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         final Block block = event.getBlock();
-        if (!this.placeableOn.contains(block.getRelative(BlockFace.DOWN).getType())) return;
+        if (!this.placeableOn.contains(block.getRelative(BlockFace.DOWN).getType())) {
+            event.setCancelled(true);
+            return;
+        }
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) {
             user.sendMessage("<red>You do not meet the collection requirements for this crop.");
+            event.setCancelled(true);
             return;
         }
         block.setType(this.material);
@@ -197,23 +214,42 @@ public class MultiSkyCrop extends SkyCrop {
         this.plugin.getWorlds().addBlock(this, position);
         this.base = position.getPosition();
         this.directlyUnder = this.base;
+        final WorldPosition above = position.getRelative(BlockFace.UP);
+        final MultiSkyCrop copy = this.copy(position.getPosition());
+        this.plugin.getWorlds().addBlock(copy, above);
     }
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
         final Block block = event.getBlock();
         final Location location = block.getLocation();
+        if (!(this.collectionCondition.isAllowed(user.getCollection()))) {
+            event.setCancelled(true);
+            return;
+        }
+        final WorldPosition below = WorldPosition.fromLocation(location.getBlock().getRelative(BlockFace.DOWN).getLocation());
+        final SkyBlock belowBlock = this.plugin.getWorlds().getBlockAt(below);
+        if (belowBlock instanceof final MultiSkyCrop multiSkyCrop) {
+            multiSkyCrop.currentTickCounter = 0;
+            Bukkit.broadcastMessage("Is sky crop under");
+        }
         WorldPosition above = WorldPosition.fromLocation(location);
-        if (!(this.collectionCondition.isAllowed(user.getCollection()))) return;
+        event.setCancelled(true);
+        this.plugin.getWorlds().removeBlock(above);
         SkyBlock crop;
-        block.setType(Material.AIR);
+        block.setType(Material.AIR, false);
         this.dropItems(location);
+        this.removed = true;
+        above = above.getRelative(BlockFace.UP);
         while ((crop = this.plugin.getWorlds().getBlockAt(above)) != SkyBlock.EMPTY) {
             if (!(crop instanceof MultiSkyCrop multiSkyCrop)) break;
-            above = above.getRelative(BlockFace.UP);
-            above.toLocation().getBlock().setType(Material.AIR);
+            if (!multiSkyCrop.itemId.equals(this.itemId)) break;
             this.plugin.getWorlds().removeBlock(above);
+            multiSkyCrop.removed = true;
+            if (!multiSkyCrop.isGrown() && above.toLocation().getBlock().getType() != this.material) break;
+            above.toLocation().getBlock().setType(Material.AIR, false);
             multiSkyCrop.dropItems(location);
+            above = above.getRelative(BlockFace.UP);
         }
     }
 
@@ -221,9 +257,9 @@ public class MultiSkyCrop extends SkyCrop {
         int i = this.itemCount.getRandom();
         while (i > 0) {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
-            if (itemStackSupplier == null) return;
+            if (itemStackSupplier == null) break;
             final ItemStack itemStack = itemStackSupplier.get();
-            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) return;
+            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
             location.getWorld().dropItem(location, itemStack);
             i--;
         }
@@ -251,20 +287,25 @@ public class MultiSkyCrop extends SkyCrop {
 
     @Override
     public void tick(WorldPosition worldPosition) {
+        if (this.removed) return;
+        if (worldPosition.getPosition().distanceSquared(this.base) > Math.pow(this.maxHeight - 1, 2)) return;
         final SkyBlock blockUnder = this.plugin.getWorlds().getBlockAt(this.directlyUnder.toWorldPosition(worldPosition.getWorld()));
         if (blockUnder == SkyBlock.EMPTY) return;
         if (!(blockUnder instanceof MultiSkyCrop multiSkyCrop)) return;
-        if (multiSkyCrop.isGrown()) return;
-        if (!this.isGrown() && !this.directlyUnder.equals(this.base)) {
+        if (!multiSkyCrop.isGrown() && !this.directlyUnder.blocksEqual(worldPosition.getPosition())) return;
+        final WorldPosition above = worldPosition.getRelative(BlockFace.UP);
+        SpecialSkyItem cropAbove = this.plugin.getWorlds().getBlockAt(above);
+        if (!(cropAbove instanceof MultiSkyCrop)) {
+            cropAbove = this.copy(worldPosition.getPosition());
+            this.plugin.getWorlds().addBlock((MultiSkyCrop) cropAbove, above);
+        }
+        if (!this.isGrown()) {
             this.currentTickCounter++;
             return;
         }
-        final WorldPosition above = worldPosition.getRelative(BlockFace.UP);
-        final SkyBlock skyBlock = this.plugin.getWorlds().getBlockAt(above);
-        if (skyBlock != SkyBlock.EMPTY) return;
-        final MultiSkyCrop copy = this.copy(worldPosition.getPosition());
-        above.toLocation().getBlock().setType(copy.material);
-        this.plugin.getWorlds().addBlock(copy, above);
+        if (above.getPosition().distanceSquared(this.base) < Math.pow(this.maxHeight, 2)) {
+            above.toLocation().getBlock().setType(this.material);
+        }
     }
 
     @Override
@@ -310,6 +351,7 @@ public class MultiSkyCrop extends SkyCrop {
                 this.itemCount,
                 this.collectionCondition,
                 this.placeableOn,
+                this.maxHeight,
                 this.base,
                 blockUnder
         );
@@ -331,6 +373,7 @@ public class MultiSkyCrop extends SkyCrop {
         private static final String ITEM_COUNT = "item-count";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
         private static final String PLACEABLE_ON = "placeable-on";
+        private static final String MAX_HEIGHT = "max-height";
 
         private static final Serializer INSTANCE = new Serializer();
 
@@ -369,6 +412,7 @@ public class MultiSkyCrop extends SkyCrop {
                         stream().
                         map(Material::matchMaterial).
                         collect(Collectors.toSet());
+                final int maxHeight = node.node(MAX_HEIGHT).getInt(3);
                 return () -> new MultiSkyCrop(
                         plugin,
                         plugin.getDataManager().generateNextId(),
@@ -380,7 +424,8 @@ public class MultiSkyCrop extends SkyCrop {
                         guaranteedItems,
                         itemCount,
                         requirements,
-                        placeableOn
+                        placeableOn,
+                        maxHeight
                 );
             } catch (
                     SerializationException e) {

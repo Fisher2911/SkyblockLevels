@@ -29,6 +29,10 @@ public class Position {
         return z;
     }
 
+    public int distanceSquared(Position other) {
+        return (int) (Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2));
+    }
+
     public Position getRelative(BlockFace face) {
         return new Position(x + face.getModX(), y + face.getModY(), z + face.getModZ());
     }

@@ -112,6 +112,7 @@ public class Worlds implements Listener {
     }
 
     public void addBlock(SkyBlock block, WorldPosition position) {
+        if (block == null) return;
         final WorldManager worldManager = this.worlds.get(position.getWorld().getUID());
         if (worldManager == null) return;
         worldManager.addBlock(block, position);

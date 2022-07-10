@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WorldManager {
@@ -77,7 +78,7 @@ public class WorldManager {
         final Position position = worldPosition.getPosition();
         final ChunkMap chunk = this.getChunkAt((int) position.getX() >> 4, (int) position.getZ() >> 4);
         if (chunk == null) return SkyBlock.EMPTY;
-        return chunk.removeBlock(position);
+        return Objects.requireNonNullElse(chunk.removeBlock(position), SkyBlock.EMPTY);
     }
 
     public void startTicking() {

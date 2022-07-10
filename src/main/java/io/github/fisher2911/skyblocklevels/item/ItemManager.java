@@ -2,6 +2,9 @@ package io.github.fisher2911.skyblocklevels.item;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.MultiSkyCrop;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.SingleSkyCrop;
+import io.github.fisher2911.skyblocklevels.item.impl.crop.SkyCrop;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
@@ -12,8 +15,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
@@ -22,6 +27,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +41,7 @@ public class ItemManager {
     private final Map<String, Supplier<? extends SpecialSkyItem>> itemSuppliers;
 
 
-    private final Map<Class<? extends Event>, Collection<Class<?>>> classMap = Map.of(
+    private final Map<Class<? extends Event>, Collection<Class<?>>> classMap = mapOf(
             BlockBreakEvent.class, List.of(SkyTool.class, SkyBlock.class),
             BlockPlaceEvent.class, List.of(SkyBlock.class, SkyItem.class),
             EntityDamageEvent.class, List.of(SkyWeapon.class, Spawner.class),
@@ -44,8 +50,19 @@ public class ItemManager {
             BlockDamageEvent.class, List.of(SkyBlock.class),
             PlayerItemDamageEvent.class, List.of(Usable.class),
             EntitySpawnEvent.class, List.of(Spawner.class),
-            SpawnerSpawnEvent.class, List.of(Spawner.class)
+            SpawnerSpawnEvent.class, List.of(Spawner.class),
+            BlockGrowEvent.class, List.of(SkyCrop.class, MultiSkyCrop.class, SingleSkyCrop.class),
+            BlockSpreadEvent.class, List.of(MultiSkyCrop.class)
     );
+
+    private static <K, V>  Map<K, V> mapOf(Object... objects) {
+        final Map<K, V> map = new HashMap<>();
+        for (int i = 0; i < objects.length; i += 2) {
+            map.put((K) objects[i], (V) objects[i + 1]);
+        }
+        return map;
+    }
+
     private final Map<Class<?>, TriConsumer<Object, Object, Object>> itemActions = Map.of(
             SkyTool.class, (u, s, e) -> {
                 if (!(s instanceof SkyTool skyTool)) return;
@@ -102,6 +119,18 @@ public class ItemManager {
             SkyItem.class, (u, s, e) -> {
                 if (!(s instanceof SkyItem)) return;
                 if (e instanceof Cancellable cancellable) cancellable.setCancelled(true);
+            },
+            SkyCrop.class, (u, s, e) -> {
+                if (!(s instanceof SkyCrop)) return;
+                if (e instanceof BlockGrowEvent event) {
+                    ((SkyCrop) s).onGrow(event);
+                }
+            },
+            MultiSkyCrop.class, (u, s, e) -> {
+                if (!(s instanceof MultiSkyCrop)) return;
+                if (e instanceof BlockSpreadEvent event) {
+                    ((MultiSkyCrop) s).onGrow(event);
+                }
             }
     );
 

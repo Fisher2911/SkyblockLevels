@@ -146,7 +146,7 @@
 7:
   class: "multi-sky-crop"
   item-id: "sugarcane-sky-crop"
-  tick-delay: 20
+  tick-delay: 100
   item:
     material: "SUGAR_CANE"
     name: "<!i><aqua>Sugar Cane"
@@ -165,7 +165,7 @@
   guaranteed-items:
     1:
       id: sugarcane-sky-crop
-  placeable-on: DIRT, SAND, RED_SAND
+  placeable-on: [ "DIRT", "SAND", "RED_SAND" ]
 8:
   class: "multi-sky-crop"
   item-id: "cactus-sky-crop"
@@ -188,7 +188,7 @@
   guaranteed-items:
     1:
       id: cactus-sky-crop
-  placeable-on: SAND
+  placeable-on: [ "SAND", "RED_SAND" ]
 9:
   class: "multi-sky-crop"
   item-id: "bamboo-sky-crop"
@@ -196,7 +196,7 @@
   item:
     material: "BAMBOO"
     name: "<!i><aqua>Bamboo"
-  material: "BAMBOO_SAPLING"
+  material: "BAMBOO"
 #  items:
 #    1:
 #      item:
@@ -211,7 +211,7 @@
   guaranteed-items:
     1:
       id: bamboo-sky-crop
-  placeable-on: DIRT, SAND, RED_SAND
+  placeable-on: [ "DIRT", "SAND", "RED_SAND" ]
 10:
   class: "single-sky-crop"
   item-id: "nether-wart-sky-crop"
@@ -220,14 +220,14 @@
     material: "NETHER_WART"
     name: "<!i><aqua>Nether Wart"
   material: "NETHER_WART"
-    items:
-      1:
-        item:
-          id: nether-wart-sky-crop
-          amount-range:
-            min: 1
-            max: 4
-        weight: 100
+  items:
+    1:
+      item:
+        id: nether-wart-sky-crop
+        amount-range:
+          min: 1
+          max: 4
+      weight: 100
   item-count:
     min: 1
     max: 1
