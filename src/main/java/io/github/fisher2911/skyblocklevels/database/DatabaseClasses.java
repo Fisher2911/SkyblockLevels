@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.database;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -15,6 +16,7 @@ public class DatabaseClasses {
         FIELD_NAMES.put(Float.class, o -> "float");
         FIELD_NAMES.put(Boolean.class, o -> "boolean");
         FIELD_NAMES.put(String.class, o -> "varchar(255)");
+        FIELD_NAMES.put(Instant.class, o -> "timestamp");
         FIELD_NAMES.put(VarChar.class, o -> {
             if (o == null) return FIELD_NAMES.get(String.class).apply(null);
             return "varchar(" + ((VarChar) o).getLength() + ")";

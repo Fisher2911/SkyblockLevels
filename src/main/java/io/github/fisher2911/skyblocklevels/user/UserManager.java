@@ -3,6 +3,7 @@ package io.github.fisher2911.skyblocklevels.user;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.booster.Boosters;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
 import io.github.fisher2911.skyblocklevels.database.VarChar;
@@ -112,6 +113,9 @@ public class UserManager {
         final Collection collection = user.getCollection();
         final Set<String> changed = collection.getChanged();
         collection.setChanged(new HashSet<>());
+        if (user instanceof BukkitUser bukkitUser) {
+            bukkitUser.getBoosters().save(this.plugin.getDataManager().getConnection());
+        }
         if (changed.isEmpty()) return;
         final InsertStatement.Builder builder = InsertStatement.
                 builder(TABLE);
@@ -132,6 +136,7 @@ public class UserManager {
     }
 
     public void loadUser(UUID uuid) {
+        final Boosters boosters = Boosters.load(this.plugin.getDataManager().getConnection(), uuid);
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             final SelectStatement statement = SelectStatement.
                     builder(TABLE).
@@ -143,9 +148,9 @@ public class UserManager {
                 final String itemId = resultSet.getString(ITEM_ID);
                 final int amount = resultSet.getInt(AMOUNT);
                 collection.put(itemId, amount);
-                return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()));
+                return new BukkitUser(uuid, new Collection(collection), new Cooldowns(new HashMap<>()), boosters);
             });
-            BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>())) : users.get(0);
+            BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>()), boosters) : users.get(0);
             this.addUser(user);
         });
     }

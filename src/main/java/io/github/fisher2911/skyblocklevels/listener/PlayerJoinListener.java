@@ -33,7 +33,6 @@ public class PlayerJoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         this.userManager.loadUser(player.getUniqueId());
-//        PacketHelper.sendMiningFatiguePacket(player);
         player.getInventory().addItem(new ItemStack(Material.OAK_SAPLING));
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (ItemStack itemStack : player.getInventory()) {
@@ -60,7 +59,7 @@ public class PlayerJoinListener implements Listener {
             for (ItemStack itemStack : player.getInventory()) {
                 if (itemStack == null) continue;
                 final SpecialSkyItem skyItem = this.plugin.getItemManager().getItem(itemStack);
-                if (skyItem == SpecialSkyItem.EMPTY) continue;
+                if (skyItem == SpecialSkyItem.EMPTY || !skyItem.uniqueInInventory()) continue;
                 map.put(skyItem.getClass(), skyItem);
             }
             for (var entry : map.asMap().entrySet()) {

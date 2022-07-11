@@ -25,6 +25,7 @@ import java.util.logging.Level;
 public class DataManager {
 
     private final AtomicLong IDS = new AtomicLong();
+    private boolean initialized = false;
 
     private final Path FILE_PATH = SkyblockLevels.getPlugin(SkyblockLevels.class).getDataFolder().toPath().resolve("data.db");
     private final SkyblockLevels plugin;
@@ -68,6 +69,9 @@ public class DataManager {
 
     public void addTable(CreateTableStatement statement) {
         createTableStatements.add(statement);
+        if (this.initialized) {
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> statement.execute(this.getConnection()));
+        }
     }
 
     public void registerItemSaveConsumer(Class<?> clazz, BiConsumer<Connection, Collection<? extends SpecialSkyItem>> consumer) {
@@ -139,6 +143,7 @@ public class DataManager {
             build();
 
     public void createTables() {
+        this.initialized = true;
         addTable(ID_TABLE_STATEMENT);
         for (CreateTableStatement statement : createTableStatements) {
             statement.execute(this.getConnection());

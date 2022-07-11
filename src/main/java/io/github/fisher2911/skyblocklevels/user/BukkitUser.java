@@ -1,5 +1,8 @@
 package io.github.fisher2911.skyblocklevels.user;
 
+import io.github.fisher2911.skyblocklevels.booster.Booster;
+import io.github.fisher2911.skyblocklevels.booster.BoosterType;
+import io.github.fisher2911.skyblocklevels.booster.Boosters;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import net.kyori.adventure.audience.Audience;
@@ -11,7 +14,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class BukkitUser implements User {
@@ -19,24 +21,18 @@ public class BukkitUser implements User {
     private final UUID uuid;
     private final Collection collection;
     private final Cooldowns cooldowns;
-    private WeakReference<Player> playerReference;
+    private final Boosters boosters;
 
-    public BukkitUser(UUID uuid, Collection collection, Cooldowns cooldowns) {
+    public BukkitUser(UUID uuid, Collection collection, Cooldowns cooldowns, Boosters boosters) {
         this.uuid = uuid;
         this.collection = collection;
         this.cooldowns = cooldowns;
-        this.playerReference = new WeakReference<>(Bukkit.getPlayer(this.uuid));
+        this.boosters = boosters;
     }
 
     @Nullable
     public Player getPlayer() {
-        Player player = this.playerReference.get();
-        if (player == null) {
-            player = Bukkit.getPlayer(this.uuid);
-            if (player == null) return null;
-            this.playerReference = new WeakReference<>(player);
-        }
-        return player;
+        return Bukkit.getPlayer(this.uuid);
     }
 
     @Override
@@ -124,6 +120,14 @@ public class BukkitUser implements User {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.removePotionEffect(potionEffectType);
+    }
+
+    public Boosters getBoosters() {
+        return boosters;
+    }
+
+    public java.util.Collection<Booster> getBoosters(BoosterType boosterType) {
+        return boosters.getBoosters(boosterType);
     }
 
     @Override

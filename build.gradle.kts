@@ -13,6 +13,7 @@ repositories {
     maven("https://maven.wolfyscript.com/repository/public/")
     maven("https://jitpack.io")
     maven("https://repo.incendo.org/content/repositories/snapshots/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
 
 dependencies {
@@ -25,6 +26,7 @@ dependencies {
     implementation("com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT")
     implementation("org.spongepowered:configurate-yaml:4.1.2")
     implementation("dev.triumphteam:triumph-gui:3.1.2")
+    compileOnly("me.clip:placeholderapi:2.11.2")
 }
 
 tasks {

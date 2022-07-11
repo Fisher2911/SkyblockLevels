@@ -19,7 +19,6 @@ import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.Position;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -76,7 +75,6 @@ public class MultiSkyCrop extends SkyCrop {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item -> {
                 if (!(item instanceof MultiSkyCrop crop)) return;
-                plugin.getLogger().info("Saving crop: " + crop.getId() + " - " + crop.getClass().getName());
                 builder.newEntry().
                         addEntry(ID, item.getId()).
                         addEntry(ITEM_ID, item.getItemId()).
@@ -108,7 +106,6 @@ public class MultiSkyCrop extends SkyCrop {
                 final int baseZ = results.getInt(BASE_Z);
                 final Position cropUnder = new Position(cropUnderX, cropUnderY, cropUnderZ);
                 final Position base = new Position(baseX, baseY, baseZ);
-                plugin.getLogger().info("Loaded base: " + base);
                 final MultiSkyCrop skyCrop = new MultiSkyCrop(
                         plugin,
                         id,
@@ -232,7 +229,6 @@ public class MultiSkyCrop extends SkyCrop {
         final SkyBlock belowBlock = this.plugin.getWorlds().getBlockAt(below);
         if (belowBlock instanceof final MultiSkyCrop multiSkyCrop) {
             multiSkyCrop.currentTickCounter = 0;
-            Bukkit.broadcastMessage("Is sky crop under");
         }
         WorldPosition above = WorldPosition.fromLocation(location);
         event.setCancelled(true);

@@ -2,6 +2,9 @@ package io.github.fisher2911.skyblocklevels.world;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.booster.Booster;
+import io.github.fisher2911.skyblocklevels.booster.BoosterType;
+import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -29,7 +32,14 @@ public class BlockBreakManager implements Listener {
     public void startMining(Function<Player, Integer> tickFunction, Player player, WorldPosition position, Consumer<WorldPosition> onBreak) {
         final BlockBreakData current = this.blockBreakData.get(position);
         final int entityId = current == null ? Random.nextInt(10_000, 20_000) : current.getEntityId();
-        this.blockBreakData.put(position, new BlockBreakData(entityId, player, player.getInventory().getItemInMainHand(), tickFunction.apply(player), onBreak));
+        final BukkitUser user = this.plugin.getUserManager().getUser(player);
+        if (user == null) return;
+        double appliedFunction = tickFunction.apply(player);
+        final Booster active = user.getBoosters().getActiveBooster(BoosterType.MINING);
+        if (active != null) {
+            appliedFunction = active.apply(appliedFunction);
+        }
+        this.blockBreakData.put(position, new BlockBreakData(entityId, player, player.getInventory().getItemInMainHand(), (int) appliedFunction, onBreak));
     }
 
     public void updateTicks(Function<Player, Integer> tickFunction, WorldPosition position) {

@@ -14,6 +14,7 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.fisher2911.skyblocklevels.command.CollectionCommand;
+import io.github.fisher2911.skyblocklevels.command.GiveBoosterCommand;
 import io.github.fisher2911.skyblocklevels.command.GiveItemCommand;
 import io.github.fisher2911.skyblocklevels.command.RTPCommand;
 import io.github.fisher2911.skyblocklevels.command.ReloadCommand;
@@ -31,6 +32,7 @@ import io.github.fisher2911.skyblocklevels.listener.PlayerJoinListener;
 import io.github.fisher2911.skyblocklevels.listener.SkyblockMoveListener;
 import io.github.fisher2911.skyblocklevels.listener.VoidDamageListener;
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
+import io.github.fisher2911.skyblocklevels.papi.SkyblockExpansion;
 import io.github.fisher2911.skyblocklevels.teleport.TeleportManager;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -105,6 +107,7 @@ public final class SkyblockLevels extends JavaPlugin {
         this.dataManager.createTables();
         this.userManager.startSaveTask();
         this.teleportManager = new TeleportManager(this, new HashSet<>());
+        new SkyblockExpansion(this).register();
     }
 
     @Override
@@ -178,6 +181,7 @@ public final class SkyblockLevels extends JavaPlugin {
         new ReloadCommand(this).register();
         new CollectionCommand(this).register();
         new SpawnCommand(this).register();
+        new GiveBoosterCommand(this).register();
         this.registerListener(rtpCommand);
         try {
             this.annotationParser.parseContainers();
