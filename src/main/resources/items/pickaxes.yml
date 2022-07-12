@@ -6,10 +6,10 @@
     name: "<!i><blue>Cobblestone Generator Pickaxe"
     lore:
       - "<!i>"
-      - "%durability% / 10"
-      - "<!i><blue>Mines cobblestone generators faster!"
-    glow: true
-  durability: 10
+      - "<!i><aqua>%durability% / 80"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 80
 2:
   class: durable-item
   item-id: "stone-generator-pickaxe"
@@ -18,8 +18,10 @@
     name: "<!i><blue>Stone Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines stone generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 100"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+    durability: 100
 3:
   class: durable-item
   item-id: "diorite-generator-pickaxe"
@@ -28,8 +30,10 @@
     name: "<!i><blue>Diorite Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines diorite generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 120"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 120
 4:
   class: durable-item
   item-id: "andesite-generator-pickaxe"
@@ -38,8 +42,10 @@
     name: "<!i><blue>Andesite Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines andesite generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 140"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 140
 5:
   class: durable-item
   item-id: "granite-generator-pickaxe"
@@ -48,8 +54,10 @@
     name: "<!i><blue>Granite Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines granite generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 160"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 160
 6:
   class: durable-item
   item-id: "coal-ore-generator-pickaxe"
@@ -58,8 +66,10 @@
     name: "<!i><blue>Coal Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines coal ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 180"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 180
 7:
   class: durable-item
   item-id: "copper-ore-generator-pickaxe"
@@ -68,8 +78,10 @@
     name: "<!i><blue>Andesite Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines andesite generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 200"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 200
 8:
   class: durable-item
   item-id: "iron-ore-generator-pickaxe"
@@ -78,8 +90,10 @@
     name: "<!i><blue>Iron Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines iron ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 300"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 300
 9:
   class: durable-item
   item-id: "redstone-ore-generator-pickaxe"
@@ -88,8 +102,10 @@
     name: "<!i><blue>Redstone Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines redstone ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 400"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 400
 10:
   class: durable-item
   item-id: "lapis-ore-generator-pickaxe"
@@ -98,8 +114,10 @@
     name: "<!i><blue>Lapis Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines lapis ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 500"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 500
 11:
   class: durable-item
   item-id: "gold-ore-generator-pickaxe"
@@ -108,8 +126,10 @@
     name: "<!i><blue>Gold Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines gold ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 700"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 700
 12:
   class: durable-item
   item-id: "emerald-ore-generator-pickaxe"
@@ -118,8 +138,10 @@
     name: "<!i><blue>Emerald Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines emerald ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 1200"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 1200
 13:
   class: durable-item
   item-id: "diamond-ore-generator-pickaxe"
@@ -128,8 +150,10 @@
     name: "<!i><blue>Diamond Ore Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines diamond ore generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 1650"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 1650
 14:
   class: durable-item
   item-id: "obsidian-generator-pickaxe"
@@ -138,5 +162,7 @@
     name: "<!i><blue>Obsidian Generator Pickaxe"
     lore:
       - "<!i>"
-      - "<!i><blue>Mines obsidian generators faster!"
-    glow: true
+      - "<!i><aqua>%durability% / 1900"
+      - "<!i><blue>Mines generators faster!"
+    glow: false
+  durability: 1900
