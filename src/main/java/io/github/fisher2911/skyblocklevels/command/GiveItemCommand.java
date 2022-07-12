@@ -6,6 +6,9 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.User;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 public class GiveItemCommand extends SkyCommand {
 
@@ -29,16 +32,35 @@ public class GiveItemCommand extends SkyCommand {
                     return ArgumentParseResult.success(this.plugin.getItemManager().createItem(s.poll()));
                 }).build();
 
+        final CommandArgument<User, BukkitUser> userArgument = this.manager.argumentBuilder(BukkitUser.class, "user").
+                asRequired().
+                manager(this.manager).
+                asOptional().
+                withParser((u, s) -> {
+                    final String name = s.poll();
+                    final Player player;
+                    if (name == null) {
+                        player = null;
+                    } else {
+                        player = Bukkit.getPlayer(name);
+                    }
+                    if (player == null)
+                        return ArgumentParseResult.failure(new NullPointerException("No player specified"));
+                    return ArgumentParseResult.success(this.plugin.getUserManager().getUser(player));
+                }).build();
+
         this.manager.command(
                 this.manager.commandBuilder("skyitem").
                         permission(Permission.GIVE_ITEM).
                         literal("give").
-                        senderType(BukkitUser.class).
+                        senderType(User.class).
                         argument(argument).
+                        argument(userArgument).
                         handler(context -> {
                             final SpecialSkyItem skyItem = context.get("item");
-                            this.plugin.getItemManager().giveItem(context.getSender(), skyItem);
-                            context.getSender().sendMessage("Gave item");
+                            User user = context.getSender();
+                            if (context.contains("user")) user = context.get("user");
+                            this.plugin.getItemManager().giveItem(user, skyItem);
                         })
         );
     }

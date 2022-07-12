@@ -27,6 +27,7 @@ public class IdItemSupplier implements ItemSupplier {
 
     @Override
     public ItemStack get(Map<Class<?>, Transformer<Object>> transformers, Object... args) {
-        return this.get();
+        final ItemBuilder itemBuilder = ItemBuilder.from(this.get());
+        return itemBuilder.get(transformers, args);
     }
 }

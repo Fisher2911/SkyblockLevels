@@ -7,9 +7,77 @@
 #private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
 1:
   class: mob-spawner
+  item-id: "rabbit-spawner"
+  entity-type: RABBIT
+  name: "<aqua>Rabbit Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Rabbit Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-rabbit
+      weight: 100
+2:
+  class: mob-spawner
+  item-id: "chicken-spawner"
+  entity-type: CHICKEN
+  name: "<aqua>Chicken Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Chicken Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-chicken
+      weight: 100
+3:
+  class: mob-spawner
+  item-id: "pig-spawner"
+  entity-type: PIG
+  name: "<aqua>Pig Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Pig Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-pig
+      weight: 100
+4:
+  class: mob-spawner
+  item-id: "sheep-spawner"
+  entity-type: SHEEP
+  name: "<aqua>Sheep Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Sheep Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-sheep
+      weight: 100
+5:
+  class: mob-spawner
   item-id: "cow-spawner"
   entity-type: COW
-  name: "<green>Cow Spawner"
+  name: "<aqua>Cow Spawner"
   item:
     material: "SPAWNER"
     name: "<!i><green>Cow Spawner"
@@ -22,10 +90,156 @@
     1:
       item: spawner-cow
       weight: 100
-  items:
+6:
+  class: mob-spawner
+  item-id: "goat-spawner"
+  entity-type: GOAT
+  name: "<aqua>Goat Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Goat Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
     1:
+      item: spawner-goat
       weight: 100
-      item:
-        material: "STONE"
-  collection-requirements:
-    cobblestone-generator: 1
+7:
+  class: mob-spawner
+  item-id: "mushroom-cow-spawner"
+  entity-type: MUSHROOM_COW
+  name: "<aqua>Mooshroom Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Mooshroom Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-mushroom-cow
+      weight: 100
+8:
+  class: mob-spawner
+  item-id: "slime-spawner"
+  entity-type: SLIME
+  name: "<aqua>Slime Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Slime Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-cow
+      weight: 100
+9:
+  class: mob-spawner
+  item-id: "spider-spawner"
+  entity-type: SPIDER
+  name: "<aqua>Spider Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Spider Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-spider
+      weight: 100
+10:
+  class: mob-spawner
+  item-id: "cave-spider-spawner"
+  entity-type: CAVE_SPIDER
+  name: "<aqua>Cave Spider Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Cave Spider Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-cave-spider
+      weight: 100
+11:
+  class: mob-spawner
+  item-id: "zombie-spawner"
+  entity-type: ZOMBIE
+  name: "<aqua>Zombie Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Zombie Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-zombie
+      weight: 100
+12:
+  class: mob-spawner
+  item-id: "skeleton-spawner"
+  entity-type: SKELETON
+  name: "<aqua>Skeleton Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Skeleton Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-skeleton
+      weight: 100
+13:
+  class: mob-spawner
+  item-id: "witch-spawner"
+  entity-type: WITCH
+  name: "<aqua>Witch Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Witch Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-witch
+      weight: 100
+14:
+  class: mob-spawner
+  item-id: "silverfish-spawner"
+  entity-type: SILVERFISH
+  name: "<aqua>Silverfish Spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Silverfish Spawner"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 mob / %delay% seconds"
+    glow: true
+  tick-delay: 60
+  entities:
+    1:
+      item: spawner-silverfish
+      weight: 100

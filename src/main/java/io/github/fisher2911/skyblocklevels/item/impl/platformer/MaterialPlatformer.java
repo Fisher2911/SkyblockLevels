@@ -94,14 +94,12 @@ public class MaterialPlatformer extends Platformer {
         event.setCancelled(true);
         final int placed = this.place(event, this.type, this.radius, Math.min(this.stored, (int) Math.pow(this.radius * 2 + 1, 2)));
         if (placed <= 0) return;
-        user.sendMessage("Placed " + placed + " blocks");
         this.stored -= placed;
         this.stored = Math.max(0, this.stored);
         if (this.stored == 0) {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
             this.plugin.getItemManager().delete(this);
             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-                user.sendMessage("Deleted: " + this.id);
                 DeleteStatement.builder(TABLE).
                         condition(ID, String.valueOf(this.id)).
                         build().

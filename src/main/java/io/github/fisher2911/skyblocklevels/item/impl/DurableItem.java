@@ -1,12 +1,16 @@
 package io.github.fisher2911.skyblocklevels.item.impl;
 
+import com.google.common.collect.Multimaps;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.Usable;
+import io.github.fisher2911.skyblocklevels.placeholder.Transformer;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
+import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +22,9 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class DurableItem implements Usable, SpecialSkyItem {
@@ -28,12 +35,23 @@ public class DurableItem implements Usable, SpecialSkyItem {
     private final ItemSupplier itemSupplier;
     private final int maxDurability;
 
+    private final Map<Class<?>, Transformer<Object>> placeholders;
+
     public DurableItem(SkyblockLevels plugin, long id, String itemId, ItemSupplier itemSupplier, int maxDurability) {
         this.plugin = plugin;
         this.id = id;
         this.itemId = itemId;
         this.itemSupplier = itemSupplier;
         this.maxDurability = maxDurability;
+        this.placeholders = Map.of(ItemStack.class,
+                Transformer.builder(Multimaps.newSetMultimap(new HashMap<>(), HashSet::new)).
+                        with("%durability%", i -> {
+                            ItemStack itemStack = (ItemStack) i;
+                            if (itemStack.getType() == Material.AIR) return this.maxDurability;
+                            return Keys.getDurability((ItemStack) i, this.maxDurability);
+                        }).
+                        build()
+        );
     }
 
     @Override
@@ -59,12 +77,20 @@ public class DurableItem implements Usable, SpecialSkyItem {
         final int maxDamage = itemStack.getType().getMaxDurability();
         final int calculateDurability = this.calculateDurability(durability, maxDamage);
         damageable.setDamage(maxDamage - calculateDurability);
+        this.updateLoreAndName(itemStack, itemMeta);
         itemStack.setItemMeta(itemMeta);
         if (durability < 0) {
             this.plugin.getItemManager().delete(this);
             itemStack.setAmount(0);
         }
         Keys.setDurability(itemStack, durability);
+    }
+
+    private void updateLoreAndName(ItemStack itemStack, ItemMeta itemMeta) {
+        final ItemStack thisItem = this.itemSupplier.get(this.placeholders, itemStack);
+        final ItemMeta otherMeta = thisItem.getItemMeta();
+        itemMeta.displayName(otherMeta.displayName());
+        itemMeta.lore(otherMeta.lore());
     }
 
     @Override
@@ -79,7 +105,7 @@ public class DurableItem implements Usable, SpecialSkyItem {
 
     @Override
     public ItemStack getItemStack() {
-        return this.itemSupplier.get();
+        return this.itemSupplier.get(this.placeholders, ItemBuilder.EMPTY);
     }
 
     @Override

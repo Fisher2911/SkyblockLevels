@@ -9,6 +9,7 @@ import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
+import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Range;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
@@ -18,6 +19,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.Nullable;
@@ -52,6 +54,7 @@ public class CustomEntity implements SkyEntity {
         });
     }
 
+    private final SkyblockLevels plugin;
     private final String type;
     private final EntityType entityType;
     private final UUID entityUUID;
@@ -62,7 +65,8 @@ public class CustomEntity implements SkyEntity {
     private final WeightedList<ItemSupplier> drops;
     private final Range dropsOnDeath;
 
-    public CustomEntity(String type, EntityType entityType, UUID uuid, @Nullable Entity entity, @Nullable String displayName, WeightedList<ItemSupplier> drops, Range dropsOnDeath) {
+    public CustomEntity(SkyblockLevels plugin, String type, EntityType entityType, UUID uuid, @Nullable Entity entity, @Nullable String displayName, WeightedList<ItemSupplier> drops, Range dropsOnDeath) {
+        this.plugin = plugin;
         this.type = type;
         this.entityType = entityType;
         this.entityUUID = uuid;
@@ -131,6 +135,12 @@ public class CustomEntity implements SkyEntity {
     @Override
     public void onDeath(EntityDeathEvent event) {
         final LivingEntity entity = event.getEntity();
+        final Player killer = entity.getKiller();
+        if (killer != null) {
+            final User user = this.plugin.getUserManager().getUser(killer.getUniqueId());
+            if (user != null) user.getCollection().addAmount(this.type, 1);
+        }
+        if (this.dropsOnDeath.getMax() == 0 || this.drops.size() == 0) return;
         event.getDrops().clear();
         final Location location = entity.getLocation();
         final World world = location.getWorld();
@@ -166,7 +176,7 @@ public class CustomEntity implements SkyEntity {
             final TypeSerializer<WeightedList<ItemSupplier>> serializer = WeightedList.serializer(ItemSupplier.class, ItemSerializer.INSTANCE);
             final WeightedList<ItemSupplier> drops = serializer.deserialize(WeightedList.class, node.node(DROPS));
             final Range dropsOnDeath = Range.serializer().deserialize(Range.class, node.node(DROP_RANGE));
-            return (entity) -> new CustomEntity(entityId, entityType, entity.getUniqueId(), entity, displayName, drops, dropsOnDeath);
+            return (entity) -> new CustomEntity(SkyblockLevels.getPlugin(SkyblockLevels.class), entityId, entityType, entity.getUniqueId(), entity, displayName, drops, dropsOnDeath);
         }
 
         @Override

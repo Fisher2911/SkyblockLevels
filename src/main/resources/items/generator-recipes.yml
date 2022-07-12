@@ -1,0 +1,196 @@
+1:
+  class: skyitem
+  item-id: "cobblestone-generator-fragment"
+  item:
+    material: "STONE_BUTTON"
+    name: "<!i><green>Cobblestone Fragment"
+    glow: true
+2:
+  class: skyitem
+  item-id: "cobblestone-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Cobblestone Generator Core"
+    glow: true
+3:
+  class: skyitem
+  item-id: "stone-generator-fragment"
+  item:
+    material: "STONE_BUTTON"
+    name: "<!i><green>Stone Fragment"
+    glow: true
+4:
+  class: skyitem
+  item-id: "stone-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Stone Generator Core"
+    glow: true
+5:
+  class: skyitem
+  item-id: "diorite-generator-fragment"
+  item:
+    material: "STONE_BUTTON"
+    name: "<!i><green>Diorite Fragment"
+    glow: true
+6:
+  class: skyitem
+  item-id: "diorite-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Diorite Generator Core"
+    glow: true
+7:
+  class: skyitem
+  item-id: "andesite-generator-fragment"
+  item:
+    material: "STONE_BUTTON"
+    name: "<!i><green>Andesite Fragment"
+    glow: true
+8:
+  class: skyitem
+  item-id: "andesite-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Andesite Generator Core"
+    glow: true
+9:
+  class: skyitem
+  item-id: "granite-generator-fragment"
+  item:
+    material: "STONE_BUTTON"
+    name: "<!i><green>Granite Fragment"
+    glow: true
+10:
+  class: skyitem
+  item-id: "granite-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Granite Generator Core"
+    glow: true
+11:
+  class: skyitem
+  item-id: "coal-generator-fragment"
+  item:
+    material: "POLISHED_BLACKSTONE_BUTTON"
+    name: "<!i><green>Coal Fragment"
+    glow: true
+12:
+  class: skyitem
+  item-id: "coal-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Coal Generator Core"
+    glow: true
+13:
+  class: skyitem
+  item-id: "copper-generator-fragment"
+  item:
+    material: "ACACIA_BUTTON"
+    name: "<!i><green>Copper Fragment"
+    glow: true
+14:
+  class: skyitem
+  item-id: "copper-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Copper Generator Core"
+    glow: true
+15:
+  class: skyitem
+  item-id: "iron-generator-fragment"
+  item:
+    material: "IRON_NUGGET"
+    name: "<!i><green>Iron Fragment"
+    glow: true
+16:
+  class: skyitem
+  item-id: "iron-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Iron Generator Core"
+    glow: true
+17:
+  class: skyitem
+  item-id: "redstone-generator-fragment"
+  item:
+    material: "RED_CANDLE"
+    name: "<!i><green>Redstone Fragment"
+    glow: true
+18:
+  class: skyitem
+  item-id: "redstone-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Redstone Generator Core"
+    glow: true
+19:
+  class: skyitem
+  item-id: "lapis-generator-fragment"
+  item:
+    material: "BLUE_CANDLE"
+    name: "<!i><green>Lapis Fragment"
+    glow: true
+20:
+  class: skyitem
+  item-id: "lapis-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Lapis Generator Core"
+    glow: true
+21:
+  class: skyitem
+  item-id: "gold-generator-fragment"
+  item:
+    material: "GOLD_NUGGET"
+    name: "<!i><green>Gold Fragment"
+    glow: true
+22:
+  class: skyitem
+  item-id: "gold-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Gold Generator Core"
+    glow: true
+23:
+  class: skyitem
+  item-id: "emerald-generator-fragment"
+  item:
+    material: "LIME_CANDLE"
+    name: "<!i><green>Emerald Fragment"
+    glow: true
+24:
+  class: skyitem
+  item-id: "emerald-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Emerald Generator Core"
+    glow: true
+25:
+  class: skyitem
+  item-id: "diamond-generator-fragment"
+  item:
+    material: "LIGHT_BLUE_CANDLE"
+    name: "<!i><green>Diamond Fragment"
+    glow: true
+26:
+  class: skyitem
+  item-id: "diamond-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Diamond Generator Core"
+    glow: true
+27:
+  class: skyitem
+  item-id: "obsidian-generator-fragment"
+  item:
+    material: "BLACK_CANDLE"
+    name: "<!i><green>Obsidian Fragment"
+    glow: true
+28:
+  class: skyitem
+  item-id: "obsidian-generator-core"
+  item:
+    material: "BEACON"
+    name: "<!i><green>Obsidian Generator Core"
+    glow: true

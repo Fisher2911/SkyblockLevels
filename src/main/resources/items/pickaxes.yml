@@ -6,6 +6,7 @@
     name: "<!i><blue>Cobblestone Generator Pickaxe"
     lore:
       - "<!i>"
+      - "%durability% / 10"
       - "<!i><blue>Mines cobblestone generators faster!"
     glow: true
   durability: 10
@@ -130,16 +131,6 @@
       - "<!i><blue>Mines diamond ore generators faster!"
     glow: true
 14:
-  class: durable-item
-  item-id: "ancient-debris-generator-pickaxe"
-  item:
-    material: "NETHERITE_PICKAXE"
-    name: "<!i><blue>Ancient Debris Generator Pickaxe"
-    lore:
-      - "<!i>"
-      - "<!i><blue>Mines ancient debris generators faster!"
-    glow: true
-15:
   class: durable-item
   item-id: "obsidian-generator-pickaxe"
   item:

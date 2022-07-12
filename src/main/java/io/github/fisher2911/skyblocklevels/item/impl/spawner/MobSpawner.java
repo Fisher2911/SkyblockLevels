@@ -62,7 +62,6 @@ public class MobSpawner implements Spawner, Delayed {
     public void onBreak(User user, BlockBreakEvent event) {
         if (!(user instanceof final BukkitUser bukkitUser)) return;
         event.setExpToDrop(0);
-        user.sendMessage("Broke spawner");
         final WorldPosition position = WorldPosition.fromLocation(event.getBlock().getLocation());
         this.plugin.getWorlds().removeBlock(position);
         this.plugin.getItemManager().giveItem(bukkitUser, this);

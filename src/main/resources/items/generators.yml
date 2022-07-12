@@ -13,24 +13,24 @@
   generator-block: COBBLESTONE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      WOODEN_PICKAXE:
-        value: "*1"
-      STONE_PICKAXE:
-        value: "*0.95"
-      IRON_PICKAXE:
-        value: "*0.90"
-      GOLDEN_PICKAXE:
-        value: "*0.85"
-      DIAMOND_PICKAXE:
-        value: "*0.80"
+    STONE_PICKAXE:
+      value: "*0.50"
+    IRON_PICKAXE:
+      value: "*0.40"
+    GOLDEN_PICKAXE:
+      value: "*0.35"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
     sky-items:
-      generator-cobblestone-pickaxe:
-        value: "*0.90"
-      generator-stone-pickaxe:
-        value: "*0.85"
-      generator-iron-pickaxe:
+      cobblestone-generator-pickaxe:
         value: "*0.80"
+      stone-generator-pickaxe:
+        value: "*0.70"
+      diorite-generator-pickaxe:
+        value: "*0.60"
+    materials:
   items:
     1:
       weight: 100
@@ -46,14 +46,34 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: STONE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    IRON_PICKAXE:
+      value: "*0.50"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      cobblestone-generator-pickaxe:
+        value: "*0.95"
+      stone-generator-pickaxe:
+        value: "*0.80"
+      diorite-generator-pickaxe:
+        value: "*0.70"
+      andesite-generator-pickaxe:
+        value: "*0.60"
+      granite-generator-pickaxe:
+        value: "*0.50"
+      coal-ore-generator-pickaxe:
+        value: "*0.50"
+      copper-ore-generator-pickaxe:
+        value: "*0.50"
   items:
     1:
       weight: 100
@@ -71,14 +91,36 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: DIORITE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    IRON_PICKAXE:
+      value: "*0.50"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      cobblestone-generator-pickaxe:
+        value: "*0.95"
+      stone-generator-pickaxe:
+        value: "*0.95"
+      diorite-generator-pickaxe:
+        value: "*0.80"
+      andesite-generator-pickaxe:
+        value: "*0.70"
+      granite-generator-pickaxe:
+        value: "*0.60"
+      coal-ore-generator-pickaxe:
+        value: "*0.50"
+      copper-ore-generator-pickaxe:
+        value: "*0.50"
+      iron-ore-generator-pickaxe:
+        value: "*0.50"
   items:
     1:
       weight: 100
@@ -96,14 +138,38 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: ANDESITE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    IRON_PICKAXE:
+      value: "*0.50"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      cobblestone-generator-pickaxe:
+        value: "*0.95"
+      stone-generator-pickaxe:
+        value: "*0.95"
+      diorite-generator-pickaxe:
+        value: "*0.95"
+      andesite-generator-pickaxe:
+        value: "*0.80"
+      granite-generator-pickaxe:
+        value: "*0.70"
+      coal-ore-generator-pickaxe:
+        value: "*0.60"
+      copper-ore-generator-pickaxe:
+        value: "*0.50"
+      iron-ore-generator-pickaxe:
+        value: "*0.50"
+      redstone-ore-generator-pickaxe:
+        value: "*0.50"
   items:
     1:
       weight: 100
@@ -121,14 +187,36 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: GRANITE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.50"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      granite-generator-pickaxe:
+        value: "*0.80"
+      coal-ore-generator-pickaxe:
+        value: "*0.70"
+      copper-ore-generator-pickaxe:
+        value: "*0.60"
+      iron-ore-generator-pickaxe:
+        value: "*0.50"
+      redstone-ore-generator-pickaxe:
+        value: "*0.50"
+      lapis-ore-generator-pickaxe:
+        value: "*0.50"
   items:
     1:
       weight: 100
@@ -146,14 +234,36 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: COAL_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.50"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      coal-ore-generator-pickaxe:
+        value: "*0.80"
+      copper-ore-generator-pickaxe:
+        value: "*0.70"
+      iron-ore-generator-pickaxe:
+        value: "*0.60"
+      redstone-ore-generator-pickaxe:
+        value: "*0.50"
+      lapis-ore-generator-pickaxe:
+        value: "*0.50"
+      gold-ore-generator-pickaxe:
+        value: "*0.40"
   items:
     1:
       weight: 100
@@ -171,14 +281,36 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: COPPER_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      copper-ore-generator-pickaxe:
+        value: "*0.80"
+      iron-ore-generator-pickaxe:
+        value: "*0.70"
+      redstone-ore-generator-pickaxe:
+        value: "*0.60"
+      lapis-ore-generator-pickaxe:
+        value: "*0.50"
+      gold-ore-generator-pickaxe:
+        value: "*0.40"
+      emerald-ore-generator-pickaxe:
+        value: "*0.40"
   items:
     1:
       weight: 100
@@ -196,14 +328,34 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: IRON_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.40"
+    DIAMOND_PICKAXE:
+      value: "*0.30"
+    NETHERITE_PICKAXE:
+      value: "*0.20"
+    sky-items:
+      iron-ore-generator-pickaxe:
+        value: "*0.80"
+      redstone-ore-generator-pickaxe:
+        value: "*0.70"
+      lapis-ore-generator-pickaxe:
+        value: "*0.60"
+      gold-ore-generator-pickaxe:
+        value: "*0.40"
+      emerald-ore-generator-pickaxe:
+        value: "*0.40"
   items:
     1:
       weight: 100
@@ -221,14 +373,34 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: REDSTONE_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.60"
+    DIAMOND_PICKAXE:
+      value: "*0.40"
+    NETHERITE_PICKAXE:
+      value: "*0.30"
+    sky-items:
+      redstone-ore-generator-pickaxe:
+        value: "*0.80"
+      lapis-ore-generator-pickaxe:
+        value: "*0.70"
+      gold-ore-generator-pickaxe:
+        value: "*0.60"
+      emerald-ore-generator-pickaxe:
+        value: "*0.50"
+      diamond-ore-generator-pickaxe:
+        value: "*0.40"
   items:
     1:
       weight: 100
@@ -246,14 +418,34 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: LAPIS_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.60"
+    DIAMOND_PICKAXE:
+      value: "*0.50"
+    NETHERITE_PICKAXE:
+      value: "*0.40"
+    sky-items:
+      lapis-ore-generator-pickaxe:
+        value: "*0.80"
+      gold-ore-generator-pickaxe:
+        value: "*0.70"
+      emerald-ore-generator-pickaxe:
+        value: "*0.60"
+      diamond-ore-generator-pickaxe:
+        value: "*0.50"
+      obsidian-generator-pickaxe:
+        value: "*0.40"
   items:
     1:
       weight: 100
@@ -271,14 +463,32 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: GOLD_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.60"
+    DIAMOND_PICKAXE:
+      value: "*0.50"
+    NETHERITE_PICKAXE:
+      value: "*0.40"
+    sky-items:
+      gold-ore-generator-pickaxe:
+        value: "*0.80"
+      emerald-ore-generator-pickaxe:
+        value: "*0.70"
+      diamond-ore-generator-pickaxe:
+        value: "*0.60"
+      obsidian-generator-pickaxe:
+        value: "*0.50"
   items:
     1:
       weight: 100
@@ -296,14 +506,30 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: EMERALD_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.80"
+    DIAMOND_PICKAXE:
+      value: "*0.80"
+    NETHERITE_PICKAXE:
+      value: "*0.60"
+    sky-items:
+      emerald-ore-generator-pickaxe:
+        value: "*0.80"
+      diamond-ore-generator-pickaxe:
+        value: "*0.70"
+      obsidian-generator-pickaxe:
+        value: "*0.60"
   items:
     1:
       weight: 100
@@ -321,14 +547,28 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: DIAMOND_ORE
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.80"
+    DIAMOND_PICKAXE:
+      value: "*0.80"
+    NETHERITE_PICKAXE:
+      value: "*0.70"
+    sky-items:
+      diamond-ore-generator-pickaxe:
+        value: "*0.80"
+      obsidian-generator-pickaxe:
+        value: "*0.70"
   items:
     1:
       weight: 100
@@ -338,31 +578,6 @@
     cobblestone-generator: 1
 14:
   class: generator
-  item-id: "ancient-debris-generator"
-  item:
-    material: "ANCIENT_DEBRIS"
-    name: "<!i><green>Ancient Debris Generator"
-    lore:
-      - "<!i>"
-      - "<!i><green>Speed: 1 item / %delay% seconds"
-    glow: true
-  tick-delay: 40
-  reset-block: BEDROCK
-  generator-block: ANCIENT_DEBRIS
-  ticks-to-break: 40
-  speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
-  items:
-    1:
-      weight: 100
-      item:
-        material: "NETHERITE_SCRAP"
-  collection-requirements:
-    cobblestone-generator: 1
-15:
-  class: generator
   item-id: "obsidian-generator"
   item:
     material: "OBSIDIAN"
@@ -371,14 +586,26 @@
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
     glow: true
-  tick-delay: 40
+  tick-delay: 50
   reset-block: BEDROCK
   generator-block: OBSIDIAN
   ticks-to-break: 40
   speed-modifiers:
-    materials:
-      STONE_PICKAXE:
-        value: "*0.5"
+    WOODEN_PICAXE:
+      value: "*0.95"
+    STONE_PICAXE:
+      value: "*0.95"
+    IRON_PICKAXE:
+      value: "*0.95"
+    GOLDEN_PICKAXE:
+      value: "*0.80"
+    DIAMOND_PICKAXE:
+      value: "*0.80"
+    NETHERITE_PICKAXE:
+      value: "*0.80"
+    sky-items:
+      obsidian-generator-pickaxe:
+        value: "*0.80"
   items:
     1:
       weight: 100

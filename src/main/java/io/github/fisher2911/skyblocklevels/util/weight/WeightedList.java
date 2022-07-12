@@ -43,6 +43,10 @@ public class WeightedList<T> {
         return weightList;
     }
 
+    public int size() {
+        return this.weightList.size();
+    }
+
     public static class Builder<T> {
 
         private List<Weight<T>> list;

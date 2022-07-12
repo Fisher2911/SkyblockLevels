@@ -3,20 +3,72 @@
 #private static final String DROPS = "drops";
 #private static final String DROP_RANGE = "drop-range";
 1:
+  id: "spawner-rabbit"
+  type: RABBIT
+  display-name: "<aqua>Rabbit"
+#  drops:
+#    1:
+#      weight: 75
+#      amount:
+#      item:
+#        material: "BEEF"
+#    2:
+#      weight: 50
+#      amount: 1
+#      item:
+#        material: "LEATHER"
+#  drop-range:
+#    min: 1
+#    max: 3
+2:
+  id: "spawner-chicken"
+  type: CHICKEN
+  display-name: "<aqua>Chicken"
+3:
+  id: "spawner-pig"
+  type: PIG
+  display-name: "<aqua>Pig"
+4:
+  id: "spawner-sheep"
+  type: SHEEP
+  display-name: "<aqua>Sheep"
+5:
   id: "spawner-cow"
   type: COW
-  display-name: "<green>Spawner Cow"
-  drops:
-    1:
-      weight: 75
-      amount:
-      item:
-        material: "BEEF"
-    2:
-      weight: 50
-      amount: 1
-      item:
-        material: "LEATHER"
-  drop-range:
-    min: 1
-    max: 3
+  display-name: "<aqua>Cow"
+6:
+  id: "spawner-goat"
+  type: GOAT
+  display-name: "<aqua>Goat"
+7:
+  id: "spawner-mushroom-cow"
+  type: MUSHROOM_COW
+  display-name: "<aqua>Mooshroom"
+8:
+  id: "spawner-slime"
+  type: SLIME
+  display-name: "<aqua>Slime"
+9:
+  id: "spawner-spider"
+  type: SPIDER
+  display-name: "<aqua>Spider"
+10:
+  id: "spawner-cave-spider"
+  type: CAVE_SPIDER
+  display-name: "<aqua>Cave Spider"
+11:
+  id: "spawner-zombie"
+  type: ZOMBIE
+  display-name: "<aqua>Zombie"
+12:
+  id: "spawner-skeleton"
+  type: SKELETON
+  display-name: "<aqua>Skeleton"
+13:
+  id: "spawner-witch"
+  type: WITCH
+  display-name: "<aqua>Witch"
+14:
+  id: "spawner-silverfish"
+  type: SILVERFISH
+  display-name: "<aqua>Silverfish"

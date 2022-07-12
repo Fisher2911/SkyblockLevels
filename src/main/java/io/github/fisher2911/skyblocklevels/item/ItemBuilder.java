@@ -79,14 +79,12 @@ public class ItemBuilder implements ItemSupplier {
                     component -> {
                         final Placeholder placeholder = Placeholder.builder(component).transformers(transformers).build();
                         return placeholder.parse(args).get();
-//                        return Adventure.parse(placeholder.parse(args).get());
                     }
             ).collect(Collectors.toList()));
         }
         final Component displayName = meta.displayName();
         if (displayName != null) {
             final Placeholder placeholder = Placeholder.builder(displayName).transformers(transformers).build();
-//            meta.displayName(Adventure.parse(placeholder.parse(args).get()));
             meta.displayName(placeholder.parse(args).get());
         }
         itemStack.setItemMeta(meta);

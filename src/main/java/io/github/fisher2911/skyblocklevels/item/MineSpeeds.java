@@ -22,8 +22,8 @@ public class MineSpeeds {
         this.itemModifiers = itemModifiers;
     }
 
-    public MineSpeedModifier getModifier(SpecialSkyItem item) {
-        return skyItemModifiers.getOrDefault(item.getItemId(), MineSpeedModifier.SELF);
+    public MineSpeedModifier getModifier(SpecialSkyItem item, ItemStack itemStack) {
+        return skyItemModifiers.getOrDefault(item.getItemId(), getModifier(itemStack));
     }
 
     public MineSpeedModifier getModifier(ItemStack item) {
@@ -33,7 +33,7 @@ public class MineSpeeds {
     public MineSpeedModifier getModifier(ItemManager itemManager, ItemStack itemStack) {
         final SpecialSkyItem item = itemManager.getItem(itemStack);
         if (item == SpecialSkyItem.EMPTY) return this.getModifier(itemStack);
-        return this.getModifier(item);
+        return this.getModifier(item, itemStack);
     }
 
     public static Serializer serializer() {
