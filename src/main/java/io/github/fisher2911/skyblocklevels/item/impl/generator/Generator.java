@@ -96,6 +96,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
                         item.resetBlock,
                         item.generatorBlock,
                         item.items,
+                        item.bonusItems,
                         item.ticksToBreak,
                         item.mineSpeeds,
                         item.collectionCondition
@@ -124,6 +125,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
     private final Material resetBlock;
     private final Material generatorBlock;
     private final WeightedList<Supplier<ItemStack>> items;
+    private final WeightedList<Supplier<ItemStack>> bonusItems;
     private final int ticksToBreak;
     private final MineSpeeds mineSpeeds;
     private final CollectionCondition collectionCondition;
@@ -142,6 +144,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
             Material resetBlock,
             Material generatorBlock,
             WeightedList<Supplier<ItemStack>> items,
+            WeightedList<Supplier<ItemStack>> bonusItems,
             int ticksToBreak,
             MineSpeeds mineSpeeds,
             CollectionCondition collectionCondition
@@ -154,6 +157,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         this.resetBlock = resetBlock;
         this.generatorBlock = generatorBlock;
         this.items = items;
+        this.bonusItems = bonusItems;
         this.ticksToBreak = ticksToBreak;
         this.mineSpeeds = mineSpeeds;
         this.mineSpeedFunction = player -> {
@@ -213,9 +217,8 @@ public class Generator implements SkyBlock, Delayed, Durable {
             return;
         }
         final Location location = block.getLocation().add(0, 1, 0);
-        final Supplier<ItemStack> weight = this.items.getRandom();
-        if (weight == null) return;
-        location.getWorld().dropItem(location, weight.get());
+        this.dropItem(location, this.items);
+        this.dropItem(location, this.bonusItems);
         this.isGenerated = false;
         this.tickCounter = 0;
         block.setType(this.resetBlock);
@@ -224,6 +227,14 @@ public class Generator implements SkyBlock, Delayed, Durable {
         if (brokeWith == null) return;
         if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;
         durableItem.takeDamage(brokeWith, 1);
+    }
+
+    private void dropItem(Location location, WeightedList<Supplier<ItemStack>> items) {
+        final Supplier<ItemStack> weight = items.getRandom();
+        if (weight == null) return;
+        final ItemStack item = weight.get();
+        if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) return;
+        location.getWorld().dropItem(location, item);
     }
 
     @Override
@@ -408,6 +419,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         private static final String RESET_BLOCK = "reset-block";
         private static final String GENERATOR_BLOCK = "generator-block";
         private static final String ITEMS = "items";
+        private static final String BONUS_ITEMS = "items";
         private static final String TICKS_TO_BREAK = "ticks-to-break";
         private static final String SPEED_MODIFIERS = "speed-modifiers";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
@@ -428,6 +440,13 @@ public class Generator implements SkyBlock, Delayed, Durable {
                                         stream().
                                         map(w -> new Weight<>((Supplier<ItemStack>) () -> w.getValue().get(), w.getWeight())).
                                         collect(Collectors.toList()));
+                final WeightedList<Supplier<ItemStack>> bonusItems =
+                        new WeightedList<>(
+                                serializer.deserialize(WeightedList.class, node.node(BONUS_ITEMS)).
+                                        getWeightList().
+                                        stream().
+                                        map(w -> new Weight<>((Supplier<ItemStack>) () -> w.getValue().get(), w.getWeight())).
+                                        collect(Collectors.toList()));
                 final int ticksToBreak = node.node(TICKS_TO_BREAK).getInt();
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
                 final MineSpeeds speeds = MineSpeeds.serializer().deserialize(MineSpeeds.class, node.node(SPEED_MODIFIERS));
@@ -441,6 +460,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
                         resetBlock,
                         generatorBlock,
                         items,
+                        bonusItems,
                         ticksToBreak,
                         speeds,
                         requirements

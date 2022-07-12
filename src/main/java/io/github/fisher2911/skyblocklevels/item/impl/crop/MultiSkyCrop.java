@@ -116,6 +116,7 @@ public class MultiSkyCrop extends SkyCrop {
                         item.itemSupplier,
                         item.tickDelay,
                         item.items,
+                        item.bonusItems,
                         item.guaranteedItems,
                         item.itemCount,
                         item.collectionCondition,
@@ -153,13 +154,14 @@ public class MultiSkyCrop extends SkyCrop {
             ItemSupplier itemSupplier,
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
+            WeightedList<Supplier<ItemStack>> bonusItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
             Set<Material> placeableOn,
             int maxHeight
     ) {
-        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, guaranteedItems, itemCount, collectionCondition, placeableOn);
+        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedItems, itemCount, collectionCondition, placeableOn);
         this.maxHeight = maxHeight;
     }
 
@@ -171,6 +173,7 @@ public class MultiSkyCrop extends SkyCrop {
             ItemSupplier itemSupplier,
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
+            WeightedList<Supplier<ItemStack>> bonusItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
@@ -179,7 +182,7 @@ public class MultiSkyCrop extends SkyCrop {
             Position base,
             Position directlyUnder
     ) {
-        this(plugin, id, itemId, material, itemSupplier, tickDelay, items, guaranteedItems, itemCount, collectionCondition, placeableOn, maxHeight);
+        this(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedItems, itemCount, collectionCondition, placeableOn, maxHeight);
         this.base = base;
         this.directlyUnder = directlyUnder;
     }
@@ -302,6 +305,11 @@ public class MultiSkyCrop extends SkyCrop {
             if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
             location.getWorld().dropItem(location, itemStack);
         }
+        final Supplier<ItemStack> bonus = this.bonusItems.getRandom();
+        if (bonus == null) return;
+        final ItemStack itemStack = bonus.get();
+        if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) return;
+        location.getWorld().dropItem(location, itemStack);
     }
 
     @Override
@@ -412,6 +420,7 @@ public class MultiSkyCrop extends SkyCrop {
                 this.itemSupplier,
                 this.tickDelay,
                 this.items,
+                this.bonusItems,
                 this.guaranteedItems,
                 this.itemCount,
                 this.collectionCondition,
@@ -434,6 +443,7 @@ public class MultiSkyCrop extends SkyCrop {
         private static final String MATERIAL = "material";
         private static final String TICK_DELAY = "tick-delay";
         private static final String ITEMS = "items";
+        private static final String BONUS_ITEMS = "bonus-items";
         private static final String GUARANTEED_ITEMS = "guaranteed-items";
         private static final String ITEM_COUNT = "item-count";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
@@ -471,6 +481,13 @@ public class MultiSkyCrop extends SkyCrop {
                                         stream().
                                         map(w -> new Weight<>((Supplier<ItemStack>) () -> w.getValue().get(), w.getWeight())).
                                         collect(Collectors.toList()));
+                final WeightedList<Supplier<ItemStack>> bonusItems =
+                        new WeightedList<>(
+                                serializer.deserialize(WeightedList.class, node.node(BONUS_ITEMS)).
+                                        getWeightList().
+                                        stream().
+                                        map(w -> new Weight<>((Supplier<ItemStack>) () -> w.getValue().get(), w.getWeight())).
+                                        collect(Collectors.toList()));
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
                 final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
                 final Set<Material> placeableOn = node.node(PLACEABLE_ON).getList(String.class, new ArrayList<>()).
@@ -486,6 +503,7 @@ public class MultiSkyCrop extends SkyCrop {
                         itemSupplier,
                         tickDelay,
                         items,
+                        bonusItems,
                         guaranteedItems,
                         itemCount,
                         requirements,

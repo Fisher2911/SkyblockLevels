@@ -36,6 +36,22 @@
       weight: 100
       item:
         material: "COBBLESTONE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "cobblestone-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "cobblestone-generator-core"
+  collection-requirements:
+    cobblestone: 64
 2:
   class: generator
   item-id: "stone-generator"
@@ -79,8 +95,22 @@
       weight: 100
       item:
         material: "STONE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "stone-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "stone-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 93
 3:
   class: generator
   item-id: "diorite-generator"
@@ -126,8 +156,22 @@
       weight: 100
       item:
         material: "DIORITE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "diorite-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "diorite-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 131
 4:
   class: generator
   item-id: "andesite-generator"
@@ -175,8 +219,22 @@
       weight: 100
       item:
         material: "ANDESITE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "andesite-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "andesite-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 186
 5:
   class: generator
   item-id: "granite-generator"
@@ -222,8 +280,22 @@
       weight: 100
       item:
         material: "GRANITE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "granite-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "granite-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 270
 6:
   class: generator
   item-id: "coal-ore-generator"
@@ -269,8 +341,22 @@
       weight: 100
       item:
         material: "COAL_ORE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "coal-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "coal-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 400
 7:
   class: generator
   item-id: "copper-ore-generator"
@@ -316,8 +402,22 @@
       weight: 100
       item:
         material: "COPPER_ORE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "copper-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "copper-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 602
 8:
   class: generator
   item-id: "iron-ore-generator"
@@ -361,8 +461,22 @@
       weight: 100
       item:
         material: "RAW_IRON"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "iron-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "iron-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 921
 9:
   class: generator
   item-id: "redstone-ore-generator"
@@ -406,8 +520,22 @@
       weight: 100
       item:
         material: "REDSTONE"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "redstone-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "redstone-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 1431
 10:
   class: generator
   item-id: "lapis-ore-generator"
@@ -451,8 +579,22 @@
       weight: 100
       item:
         material: "LAPIS_LAZULI"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "lapis-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "lapis-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 2253
 11:
   class: generator
   item-id: "gold-ore-generator"
@@ -494,8 +636,22 @@
       weight: 100
       item:
         material: "RAW_GOLD"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "gold-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "gold-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 3587
 12:
   class: generator
   item-id: "emerald-ore-generator"
@@ -535,8 +691,22 @@
       weight: 100
       item:
         material: "EMERALD"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "emerald-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "emerald-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 5774
 13:
   class: generator
   item-id: "diamond-ore-generator"
@@ -574,8 +744,22 @@
       weight: 100
       item:
         material: "DIAMOND"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "diamond-ore-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "diamond-ore-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 9386
 14:
   class: generator
   item-id: "obsidian-generator"
@@ -611,5 +795,19 @@
       weight: 100
       item:
         material: "OBSIDIAN"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "obsidian-generator-fragment"
+    3:
+      weight: 3
+      item:
+        id: "obsidian-generator-core"
   collection-requirements:
-    cobblestone-generator: 1
+    cobblestone: 15397

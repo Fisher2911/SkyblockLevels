@@ -63,9 +63,20 @@ public class CustomEntity implements SkyEntity {
     @Nullable
     private final String displayName;
     private final WeightedList<ItemSupplier> drops;
+    private final WeightedList<ItemSupplier> bonusItems;
     private final Range dropsOnDeath;
 
-    public CustomEntity(SkyblockLevels plugin, String type, EntityType entityType, UUID uuid, @Nullable Entity entity, @Nullable String displayName, WeightedList<ItemSupplier> drops, Range dropsOnDeath) {
+    public CustomEntity(
+            SkyblockLevels plugin,
+            String type,
+            EntityType entityType,
+            UUID uuid,
+            @Nullable Entity entity,
+            @Nullable String displayName,
+            WeightedList<ItemSupplier> drops,
+            WeightedList<ItemSupplier> bonusItems,
+            Range dropsOnDeath
+    ) {
         this.plugin = plugin;
         this.type = type;
         this.entityType = entityType;
@@ -73,6 +84,7 @@ public class CustomEntity implements SkyEntity {
         this.entity = entity;
         this.displayName = displayName;
         this.drops = drops;
+        this.bonusItems = bonusItems;
         this.dropsOnDeath = dropsOnDeath;
     }
 
@@ -166,6 +178,7 @@ public class CustomEntity implements SkyEntity {
         private static final String TYPE = "type";
         private static final String DISPLAY_NAME = "display-name";
         private static final String DROPS = "drops";
+        private static final String BONUS_ITEMS = "bonus-items";
         private static final String DROP_RANGE = "drop-range";
 
         @Override
@@ -175,8 +188,9 @@ public class CustomEntity implements SkyEntity {
             final String displayName = node.node(DISPLAY_NAME).getString("");
             final TypeSerializer<WeightedList<ItemSupplier>> serializer = WeightedList.serializer(ItemSupplier.class, ItemSerializer.INSTANCE);
             final WeightedList<ItemSupplier> drops = serializer.deserialize(WeightedList.class, node.node(DROPS));
+            final WeightedList<ItemSupplier> bonusItems = serializer.deserialize(WeightedList.class, node.node(BONUS_ITEMS));
             final Range dropsOnDeath = Range.serializer().deserialize(Range.class, node.node(DROP_RANGE));
-            return (entity) -> new CustomEntity(SkyblockLevels.getPlugin(SkyblockLevels.class), entityId, entityType, entity.getUniqueId(), entity, displayName, drops, dropsOnDeath);
+            return (entity) -> new CustomEntity(SkyblockLevels.getPlugin(SkyblockLevels.class), entityId, entityType, entity.getUniqueId(), entity, displayName, drops, bonusItems, dropsOnDeath);
         }
 
         @Override

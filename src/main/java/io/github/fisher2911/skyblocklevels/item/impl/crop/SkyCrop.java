@@ -28,6 +28,7 @@ public abstract class SkyCrop implements SkyBlock {
     protected final ItemSupplier itemSupplier;
     protected final int tickDelay;
     protected final WeightedList<Supplier<ItemStack>> items;
+    protected final WeightedList<Supplier<ItemStack>> bonusItems;
     protected final List<ItemSupplier> guaranteedItems;
     protected final Range itemCount;
     protected final CollectionCondition collectionCondition;
@@ -41,6 +42,7 @@ public abstract class SkyCrop implements SkyBlock {
             ItemSupplier itemSupplier,
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
+            WeightedList<Supplier<ItemStack>> bonusItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
@@ -53,6 +55,7 @@ public abstract class SkyCrop implements SkyBlock {
         this.itemSupplier = itemSupplier;
         this.tickDelay = tickDelay;
         this.items = items;
+        this.bonusItems = bonusItems;
         this.guaranteedItems = guaranteedItems;
         this.itemCount = itemCount;
         this.collectionCondition = collectionCondition;
