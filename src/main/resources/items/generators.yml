@@ -110,7 +110,7 @@
       item:
         id: "stone-generator-core"
   collection-requirements:
-    cobblestone: 93
+    cobblestone-generator: 93
 3:
   class: generator
   item-id: "diorite-generator"
@@ -171,7 +171,7 @@
       item:
         id: "diorite-generator-core"
   collection-requirements:
-    cobblestone: 131
+    stone-generator: 131
 4:
   class: generator
   item-id: "andesite-generator"
@@ -234,7 +234,7 @@
       item:
         id: "andesite-generator-core"
   collection-requirements:
-    cobblestone: 186
+    diorite-generator: 186
 5:
   class: generator
   item-id: "granite-generator"
@@ -295,7 +295,7 @@
       item:
         id: "granite-generator-core"
   collection-requirements:
-    cobblestone: 270
+    andesite-generator: 270
 6:
   class: generator
   item-id: "coal-ore-generator"
@@ -356,7 +356,7 @@
       item:
         id: "coal-ore-generator-core"
   collection-requirements:
-    cobblestone: 400
+    granite-generator: 400
 7:
   class: generator
   item-id: "copper-ore-generator"
@@ -417,7 +417,7 @@
       item:
         id: "copper-ore-generator-core"
   collection-requirements:
-    cobblestone: 602
+    coal-ore-generator: 602
 8:
   class: generator
   item-id: "iron-ore-generator"
@@ -476,7 +476,7 @@
       item:
         id: "iron-ore-generator-core"
   collection-requirements:
-    cobblestone: 921
+    copper-ore-generator: 921
 9:
   class: generator
   item-id: "redstone-ore-generator"
@@ -535,7 +535,7 @@
       item:
         id: "redstone-ore-generator-core"
   collection-requirements:
-    cobblestone: 1431
+    iron-ore-generator: 1431
 10:
   class: generator
   item-id: "lapis-ore-generator"
@@ -594,7 +594,7 @@
       item:
         id: "lapis-ore-generator-core"
   collection-requirements:
-    cobblestone: 2253
+    redstone-ore-generator: 2253
 11:
   class: generator
   item-id: "gold-ore-generator"
@@ -651,7 +651,7 @@
       item:
         id: "gold-ore-generator-core"
   collection-requirements:
-    cobblestone: 3587
+    lapis-ore-generator: 3587
 12:
   class: generator
   item-id: "emerald-ore-generator"
@@ -706,7 +706,7 @@
       item:
         id: "emerald-ore-generator-core"
   collection-requirements:
-    cobblestone: 5774
+    gold-ore-generator: 5774
 13:
   class: generator
   item-id: "diamond-ore-generator"
@@ -759,7 +759,7 @@
       item:
         id: "diamond-ore-generator-core"
   collection-requirements:
-    cobblestone: 9386
+    emerald-ore-generator: 9386
 14:
   class: generator
   item-id: "obsidian-generator"
@@ -810,4 +810,4 @@
       item:
         id: "obsidian-generator-core"
   collection-requirements:
-    cobblestone: 15397
+    diamond-ore-generator: 15397

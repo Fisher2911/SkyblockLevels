@@ -51,6 +51,8 @@
     1:
       id: carrot-sky-crop
   placeable-on: FARMLAND
+  collection-requirements:
+    wheat-sky-crop: 257
 3:
   class: "single-sky-crop"
   item-id: "beetroot-sky-crop"
@@ -74,6 +76,8 @@
     1:
       id: beetroot-sky-crop
   placeable-on: FARMLAND
+  collection-requirements:
+    carrot-sky-crop: 322
 4:
   class: "single-sky-crop"
   item-id: "potato-sky-crop"
@@ -97,6 +101,8 @@
     1:
       id: potato-sky-crop
   placeable-on: FARMLAND
+  collection-requirements:
+    beetroot-sky-crop: 471
 5:
   class: "single-sky-crop"
   item-id: "pumpkin-sky-crop"
@@ -120,6 +126,8 @@
     1:
       id: pumpkin-sky-crop
   placeable-on: FARMLAND
+  collection-requirements:
+    potato-sky-crop: 803
 6:
   class: "single-sky-crop"
   item-id: "melon-sky-crop"
@@ -143,6 +151,8 @@
     1:
       id: melon-sky-crop
   placeable-on: FARMLAND
+  collection-requirements:
+    pumpkin-sky-crop: 1564
 7:
   class: "multi-sky-crop"
   item-id: "sugarcane-sky-crop"
@@ -166,30 +176,9 @@
     1:
       id: sugarcane-sky-crop
   placeable-on: [ "DIRT", "SAND", "RED_SAND" ]
+  collection-requirements:
+    melon-sky-crop: 3381
 8:
-  class: "multi-sky-crop"
-  item-id: "cactus-sky-crop"
-  tick-delay: 20
-  item:
-    material: "CACTUS"
-    name: "<!i><aqua>Cactus"
-  material: "CACTUS"
-#  items:
-#    1:
-#      item:
-#        id: cactus-sky-crop
-#        amount-range:
-#          min: 1
-#          max: 1
-#      weight: 100
-  item-count:
-    min: 1
-    max: 1
-  guaranteed-items:
-    1:
-      id: cactus-sky-crop
-  placeable-on: [ "SAND", "RED_SAND" ]
-9:
   class: "multi-sky-crop"
   item-id: "bamboo-sky-crop"
   tick-delay: 20
@@ -212,26 +201,30 @@
     1:
       id: bamboo-sky-crop
   placeable-on: [ "DIRT", "SAND", "RED_SAND" ]
-10:
-  class: "single-sky-crop"
-  item-id: "nether-wart-sky-crop"
+  collection-requirements:
+    sugarcane-sky-crop: 7886
+9:
+  class: "multi-sky-crop"
+  item-id: "cactus-sky-crop"
   tick-delay: 20
   item:
-    material: "NETHER_WART"
-    name: "<!i><aqua>Nether Wart"
-  material: "NETHER_WART"
-  items:
-    1:
-      item:
-        id: nether-wart-sky-crop
-        amount-range:
-          min: 1
-          max: 4
-      weight: 100
+    material: "CACTUS"
+    name: "<!i><aqua>Cactus"
+  material: "CACTUS"
+  #  items:
+  #    1:
+  #      item:
+  #        id: cactus-sky-crop
+  #        amount-range:
+  #          min: 1
+  #          max: 1
+  #      weight: 100
   item-count:
     min: 1
     max: 1
   guaranteed-items:
     1:
-      id: nether-wart-sky-crop
-  placeable-on: SOUL_SAND
+      id: cactus-sky-crop
+  placeable-on: [ "SAND", "RED_SAND" ]
+  collection-requirements:
+    sugarcane-sky-crop: 19461
