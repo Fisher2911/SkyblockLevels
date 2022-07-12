@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.crop;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
@@ -66,7 +67,8 @@ public class SingleSkyCrop extends SkyCrop {
         final Location location = block.getLocation();
         final WorldPosition position = WorldPosition.fromLocation(location);
         final Player player = event.getPlayer();
-        final boolean shifting = player.isSneaking();;
+        final boolean shifting = player.isSneaking();
+        event.setDropItems(false);
         if (!this.isMelonOrPumpkin(block) || shifting) this.plugin.getWorlds().removeBlock(position);
         final Material setType = this.fromBlock(block);
         if (setType != Material.AIR && !shifting) {
@@ -74,16 +76,18 @@ public class SingleSkyCrop extends SkyCrop {
         }
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> block.setType(setType), 1L);
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) return;
+        this.dropItems(block);
+    }
+
+    private void dropItems(Block block) {
+        final Location location = block.getLocation();
         for (ItemSupplier guaranteed : this.guaranteedItems) {
             final ItemStack itemStack = guaranteed.get();
             if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
             location.getWorld().dropItem(location, itemStack);
         }
 
-        if (block.getBlockData() instanceof Ageable ageable && ageable.getAge() < ageable.getMaximumAge()) {
-            player.sendMessage("Returned");
-            return;
-        }
+        if (block.getBlockData() instanceof Ageable ageable && ageable.getAge() < ageable.getMaximumAge()) return;
         int i = this.itemCount.getRandom();
         while (i > 0) {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
@@ -93,6 +97,15 @@ public class SingleSkyCrop extends SkyCrop {
             location.getWorld().dropItem(location, itemStack);
             i--;
         }
+    }
+
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+        event.setCancelled(true);
+        final Block block = event.getBlock();
+        this.dropItems(block);
+        block.setBlockData(event.getNewState(), true);
+        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override

@@ -49,7 +49,7 @@ public class Worlds implements Listener {
                 addField(Integer.class, DATABASE_X_COLUMN).
                 addField(Integer.class, DATABASE_Y_COLUMN).
                 addField(Integer.class, DATABASE_Z_COLUMN).
-                groupKeys(KeyType.UNIQUE, DATABASE_WORLD_COLUMN, DATABASE_CHUNK_X_COLUMN, DATABASE_CHUNK_Z_COLUMN, DATABASE_BLOCK_ID_COLUMN, DATABASE_BLOCK_TYPE_COLUMN, DATABASE_TABLE_NAME_COLUMN, DATABASE_X_COLUMN, DATABASE_Y_COLUMN, DATABASE_Z_COLUMN).
+                groupKeys(KeyType.UNIQUE, DATABASE_WORLD_COLUMN, DATABASE_CHUNK_X_COLUMN, DATABASE_CHUNK_Z_COLUMN, DATABASE_X_COLUMN, DATABASE_Y_COLUMN, DATABASE_Z_COLUMN).
                 build());
     }
 

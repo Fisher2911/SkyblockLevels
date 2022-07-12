@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.builder;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
@@ -55,6 +56,15 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
     public void onBreak(User user, BlockBreakEvent event) {
         this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(event.getBlock().getLocation()));
         this.plugin.getItemManager().giveItem(user, this);
+    }
+
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+        event.setCancelled(true);
+        final Block block = event.getBlock();
+        block.setBlockData(event.getNewState(), true);
+        block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
+        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.generator;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
@@ -223,6 +224,15 @@ public class Generator implements SkyBlock, Delayed, Durable {
         if (brokeWith == null) return;
         if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;
         durableItem.takeDamage(brokeWith, 1);
+    }
+
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+        event.setCancelled(true);
+        final Block block = event.getBlock();
+        block.setBlockData(event.getNewState());
+        block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
+        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override

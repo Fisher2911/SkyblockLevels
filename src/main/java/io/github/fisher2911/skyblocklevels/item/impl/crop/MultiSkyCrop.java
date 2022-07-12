@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.crop;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -39,6 +40,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -233,10 +235,14 @@ public class MultiSkyCrop extends SkyCrop {
         WorldPosition above = WorldPosition.fromLocation(location);
         event.setCancelled(true);
         if (this.base.equals(this.directlyUnder)) this.plugin.getWorlds().removeBlock(above);
-        SkyBlock crop;
-        block.setType(Material.AIR, false);
+        event.setDropItems(false);
         this.dropItems(location);
         this.removed = true;
+        this.breakBlocksAbove(above);
+    }
+
+    private void breakBlocksAbove(WorldPosition above) {
+        SkyBlock crop;
         above = above.getRelative(BlockFace.UP);
         while ((crop = this.plugin.getWorlds().getBlockAt(above)) != SkyBlock.EMPTY) {
             if (!(crop instanceof MultiSkyCrop multiSkyCrop)) break;
@@ -244,14 +250,45 @@ public class MultiSkyCrop extends SkyCrop {
             this.plugin.getWorlds().removeBlock(above);
             multiSkyCrop.removed = true;
             if (!multiSkyCrop.isGrown() && above.toLocation().getBlock().getType() != this.material) break;
-            above.toLocation().getBlock().setType(Material.AIR, false);
-            multiSkyCrop.dropItems(location);
+            multiSkyCrop.dropItems(above.toLocation());
             above = above.getRelative(BlockFace.UP);
         }
     }
 
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+//        event.setCancelled(true);
+//        final Block block = event.getBlock();
+//        final Location location = block.getLocation();
+//        this.dropItems(location);
+//        block.setBlockData(event.getNewState(), true);
+//        this.breakBlocksAbove(WorldPosition.fromLocation(location));
+//        if (this.base.equals(this.directlyUnder)) this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(location));
+//        final SkyBlock below = this.plugin.getWorlds().getBlockAt(this.directlyUnder.toWorldPosition(block.getWorld()));
+//        if (below instanceof MultiSkyCrop multiSkyCrop) {
+//            multiSkyCrop.currentTickCounter = 0;
+//        }
+        final Block block = event.getBlock();
+        final Location location = block.getLocation();
+        final WorldPosition below = WorldPosition.fromLocation(location.getBlock().getRelative(BlockFace.DOWN).getLocation());
+        final SkyBlock belowBlock = this.plugin.getWorlds().getBlockAt(below);
+        if (belowBlock instanceof final MultiSkyCrop multiSkyCrop) {
+            multiSkyCrop.currentTickCounter = 0;
+        }
+        WorldPosition above = WorldPosition.fromLocation(location);
+        event.setCancelled(true);
+        if (this.base.equals(this.directlyUnder)) this.plugin.getWorlds().removeBlock(above);
+        event.setCancelled(true);
+        this.dropItems(location);
+        block.setBlockData(event.getNewState(), true);
+        this.removed = true;
+        this.breakBlocksAbove(above);
+    }
+
     private void dropItems(Location location) {
         int i = this.itemCount.getRandom();
+        if (location.getBlock().getType() != this.material) return;
+        location.getBlock().setType(Material.AIR, false);
         while (i > 0) {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
             if (itemStackSupplier == null) break;
@@ -282,6 +319,18 @@ public class MultiSkyCrop extends SkyCrop {
 
     }
 
+    private final Predicate<WorldPosition> surroundingCanPlacePredicate = position -> {
+        final Block block = position.toLocation().getBlock();
+        if (this.material == Material.CACTUS) {
+            return !block.getType().isSolid();
+        }
+        if (this.material == Material.SUGAR_CANE && position.getPosition().equals(this.base)) {
+            return block.getRelative(BlockFace.DOWN).getType() == Material.WATER;
+        }
+        return true;
+    };
+
+    // todo fix cactus growing twice bug
     @Override
     public void tick(WorldPosition worldPosition) {
         if (this.removed) return;
@@ -301,8 +350,27 @@ public class MultiSkyCrop extends SkyCrop {
             return;
         }
         if (above.getPosition().distanceSquared(this.base) < Math.pow(this.maxHeight, 2)) {
-            above.toLocation().getBlock().setType(this.material);
+            if (!checkSurroundingCanPlace(above, this.surroundingCanPlacePredicate)) {
+                final Location aboveLocation = above.toLocation();
+                aboveLocation.getBlock().setType(this.material, false);
+                this.dropItems(above.toLocation());
+                this.currentTickCounter = 0;
+                this.breakBlocksAbove(above);
+                return;
+            }
+            above.toLocation().getBlock().setType(this.material, true);
         }
+    }
+
+    private static final BlockFace[] FACES = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+
+    private boolean checkSurroundingCanPlace(WorldPosition position, Predicate<WorldPosition> predicate) {
+        for (BlockFace face : FACES) {
+            final WorldPosition relative = position.getRelative(face);
+            if (predicate.test(relative)) continue;
+            return false;
+        }
+        return true;
     }
 
     @Override

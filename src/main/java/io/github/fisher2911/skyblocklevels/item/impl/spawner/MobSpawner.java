@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.spawner;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.Delayed;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
@@ -65,6 +66,15 @@ public class MobSpawner implements Spawner, Delayed {
         final WorldPosition position = WorldPosition.fromLocation(event.getBlock().getLocation());
         this.plugin.getWorlds().removeBlock(position);
         this.plugin.getItemManager().giveItem(bukkitUser, this);
+    }
+
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+        event.setCancelled(true);
+        final Block block = event.getBlock();
+        block.setBlockData(event.getNewState(), true);
+        block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
+        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override

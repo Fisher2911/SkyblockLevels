@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.crop.MultiSkyCrop;
@@ -10,7 +11,6 @@ import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import io.github.fisher2911.skyblocklevels.util.TriConsumer;
 import io.github.fisher2911.skyblocklevels.util.WorldUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -52,7 +52,8 @@ public class ItemManager {
             EntitySpawnEvent.class, List.of(Spawner.class),
             SpawnerSpawnEvent.class, List.of(Spawner.class),
             BlockGrowEvent.class, List.of(SkyCrop.class, MultiSkyCrop.class, SingleSkyCrop.class),
-            BlockSpreadEvent.class, List.of(MultiSkyCrop.class)
+            BlockSpreadEvent.class, List.of(MultiSkyCrop.class),
+            BlockDestroyEvent.class, List.of(SkyBlock.class)
     );
 
     private static <K, V>  Map<K, V> mapOf(Object... objects) {
@@ -84,6 +85,10 @@ public class ItemManager {
                 }
                 if (e instanceof BlockDamageEvent event) {
                     (skyBlock).onBlockDamage((User) u, event);
+                    return;
+                }
+                if (e instanceof BlockDestroyEvent event) {
+                    (skyBlock).onDestroy(event);
                     return;
                 }
                 skyBlock.onPlace((User) u, (BlockPlaceEvent) e);

@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item.impl.grower;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
@@ -130,6 +131,15 @@ public class Grower implements SkyBlock {
     public void onBreak(User user, BlockBreakEvent event) {
         this.plugin.getItemManager().giveItem(user, this);
         this.plugin.getWorlds().removeBlock(this.worldPosition);
+    }
+
+    @Override
+    public void onDestroy(BlockDestroyEvent event) {
+        event.setCancelled(true);
+        final Block block = event.getBlock();
+        block.setBlockData(event.getNewState(), true);
+        block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
+        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override

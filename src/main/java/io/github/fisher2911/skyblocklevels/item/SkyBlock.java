@@ -1,5 +1,6 @@
 package io.github.fisher2911.skyblocklevels.item;
 
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.database.DataTable;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
@@ -24,6 +25,8 @@ public interface SkyBlock extends SpecialSkyItem, DataTable {
 
     void tick(WorldPosition worldPosition);
 
+    void onDestroy(BlockDestroyEvent block);
+
     boolean isAsync();
 
     SkyBlock EMPTY = new SkyBlock() {
@@ -41,6 +44,8 @@ public interface SkyBlock extends SpecialSkyItem, DataTable {
         public void onClick(User user, PlayerInteractEvent event) {}
         @Override
         public void tick(WorldPosition worldPosition) {}
+        @Override
+        public void onDestroy(BlockDestroyEvent block) {}
         @Override
         public boolean isAsync() { return true; }
         @Override
