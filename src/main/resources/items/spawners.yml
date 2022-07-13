@@ -17,7 +17,9 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-rabbit
@@ -34,11 +36,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-chicken
       weight: 100
+  collection-requirements:
+    spawner-rabbit: 64
 3:
   class: mob-spawner
   item-id: "pig-spawner"
@@ -51,11 +57,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-pig
       weight: 100
+  collection-requirements:
+    spawner-chicken: 92
 4:
   class: mob-spawner
   item-id: "sheep-spawner"
@@ -68,11 +78,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-sheep
       weight: 100
+  collection-requirements:
+    spawner-pig: 128
 5:
   class: mob-spawner
   item-id: "cow-spawner"
@@ -85,11 +99,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-cow
       weight: 100
+  collection-requirements:
+    spawner-sheep: 179
 6:
   class: mob-spawner
   item-id: "goat-spawner"
@@ -102,11 +120,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-goat
       weight: 100
+  collection-requirements:
+    spawner-cow: 254
 7:
   class: mob-spawner
   item-id: "mushroom-cow-spawner"
@@ -119,11 +141,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-mushroom-cow
       weight: 100
+  collection-requirements:
+    spawner-goat: 366
 8:
   class: mob-spawner
   item-id: "slime-spawner"
@@ -136,11 +162,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-cow
       weight: 100
+  collection-requirements:
+    spawner-mushroom-cow: 539
 9:
   class: mob-spawner
   item-id: "spider-spawner"
@@ -153,11 +183,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-spider
       weight: 100
+  collection-requirements:
+    spawner-slime: 804
 10:
   class: mob-spawner
   item-id: "cave-spider-spawner"
@@ -170,11 +204,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-cave-spider
       weight: 100
+  collection-requirements:
+    spawner-spider: 1216
 11:
   class: mob-spawner
   item-id: "zombie-spawner"
@@ -187,11 +225,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-zombie
       weight: 100
+  collection-requirements:
+    spawner-cave-spider: 1861
 12:
   class: mob-spawner
   item-id: "skeleton-spawner"
@@ -204,11 +246,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-skeleton
       weight: 100
+  collection-requirements:
+    spawner-zombie: 2882
 13:
   class: mob-spawner
   item-id: "witch-spawner"
@@ -221,11 +267,15 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-witch
       weight: 100
+  collection-requirements:
+    spawner-skeleton: 4506
 14:
   class: mob-spawner
   item-id: "silverfish-spawner"
@@ -238,8 +288,12 @@
       - "<!i>"
       - "<!i><green>Speed: 1 mob / %delay% seconds"
     glow: true
-  tick-delay: 60
+  tick-delay:
+    min: 100
+    max: 600
   entities:
     1:
       item: spawner-silverfish
       weight: 100
+  collection-requirements:
+    spawner-witch: 7112

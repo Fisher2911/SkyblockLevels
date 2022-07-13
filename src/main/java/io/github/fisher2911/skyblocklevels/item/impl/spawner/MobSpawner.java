@@ -9,6 +9,7 @@ import io.github.fisher2911.skyblocklevels.item.Spawner;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
+import io.github.fisher2911.skyblocklevels.util.Range;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Material;
@@ -30,6 +31,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class MobSpawner implements Spawner, Delayed {
@@ -42,11 +44,11 @@ public class MobSpawner implements Spawner, Delayed {
     private final EntityType entityType;
     private final String name;
     private final ItemSupplier itemSupplier;
-    private final int tickDelay;
+    private final Range tickDelay;
     private final WeightedList<String> entityTypes;
     private final CollectionCondition collectionCondition;
 
-    public MobSpawner(SkyblockLevels plugin, long id, String itemId, EntityType entityType, String name, ItemSupplier itemSupplier, int tickDelay, WeightedList<String> entityTypes, CollectionCondition collectionCondition) {
+    public MobSpawner(SkyblockLevels plugin, long id, String itemId, EntityType entityType, String name, ItemSupplier itemSupplier, Range tickDelay, WeightedList<String> entityTypes, CollectionCondition collectionCondition) {
         this.plugin = plugin;
         this.id = id;
         this.itemId = itemId;
@@ -99,9 +101,9 @@ public class MobSpawner implements Spawner, Delayed {
         block.setType(Material.SPAWNER);
         if (block.getState() instanceof final CreatureSpawner spawner) {
             spawner.setSpawnedType(this.entityType);
-            spawner.setDelay(this.tickDelay);
-            spawner.setMinSpawnDelay(this.tickDelay);
-            spawner.setMaxSpawnDelay(this.tickDelay + 1);
+            spawner.setMinSpawnDelay(this.tickDelay.getMin());
+            spawner.setMaxSpawnDelay(this.tickDelay.getMax());
+            spawner.setSpawnCount(2);
             spawner.setSpawnCount(1);
             spawner.update(true, false);
         }
@@ -145,12 +147,12 @@ public class MobSpawner implements Spawner, Delayed {
 
     @Override
     public int getTickDelay() {
-        return this.tickDelay;
+        return this.tickDelay.getMax();
     }
 
     @Override
     public ItemStack getItemStack() {
-        return this.itemSupplier.get(PLACEHOLDERS);
+        return this.itemSupplier.get(PLACEHOLDERS, this);
     }
 
     @Override
@@ -198,7 +200,7 @@ public class MobSpawner implements Spawner, Delayed {
                 final EntityType entityType = EntityType.valueOf(node.node(ENTITY_TYPE).getString(""));
                 final String name = node.node(NAME).getString("");
                 final ItemSupplier itemSupplier = ItemSerializer.deserialize(node.node(ITEM));
-                final int tickDelay = node.node(TICK_DELAY).getInt();
+                final Range tickDelay = Objects.requireNonNullElse(Range.serializer().deserialize(Range.class, node.node(TICK_DELAY)), new Range(10 * 20, 40 * 20));
                 final TypeSerializer<WeightedList<String>> serializer = WeightedList.serializer(String.class, null);
                 final WeightedList<String> entities = serializer.deserialize(WeightedList.class, node.node(ENTITIES));
                 final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
