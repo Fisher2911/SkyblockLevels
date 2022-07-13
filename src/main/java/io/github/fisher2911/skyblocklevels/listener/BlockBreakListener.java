@@ -19,11 +19,13 @@ import org.bukkit.event.block.BlockDamageEvent;
 
 public class BlockBreakListener implements Listener {
 
+    private final SkyblockLevels plugin;
     private final Worlds worlds;
     private final ItemManager itemManager;
     private final UserManager userManager;
 
     public BlockBreakListener(SkyblockLevels plugin) {
+        this.plugin = plugin;
         this.worlds = plugin.getWorlds();
         this.itemManager = plugin.getItemManager();
         this.userManager = plugin.getUserManager();
@@ -35,7 +37,7 @@ public class BlockBreakListener implements Listener {
         final User user = this.userManager.getUser(player);
         if (user == null) return;
         final SkyBlock block = this.worlds.getBlockAt(WorldPosition.fromLocation(event.getBlock().getLocation()));
-        if (block == SkyBlock.EMPTY) user.getCollection().addAmount(event.getBlock().getType().toString(), 1);
+        if (block == SkyBlock.EMPTY) this.plugin.getUserManager().addCollectionAmount(user, event.getBlock().getType().toString(), 1);
         this.itemManager.handle(user, block, event);
         final SpecialSkyItem skyItem = this.itemManager.getItem(player.getInventory().getItemInMainHand());
         if (!(skyItem instanceof Usable)) return;

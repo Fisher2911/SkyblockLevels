@@ -222,7 +222,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         this.isGenerated = false;
         this.tickCounter = 0;
         block.setType(this.resetBlock);
-        user.getCollection().addAmount(this.itemId, 1);
+        this.plugin.getUserManager().addCollectionAmount(user, this.itemId, 1);
         final ItemStack brokeWith = event.getPlayer().getInventory().getItemInMainHand();
         if (brokeWith == null) return;
         if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;

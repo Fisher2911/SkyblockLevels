@@ -19,7 +19,7 @@ public class Collection implements Changeable<Set<String>> {
         return this.itemsCollected.getOrDefault(id, 0) >= amount;
     }
 
-    public void addAmount(String id, int amount) {
+    protected void addAmount(String id, int amount) {
         this.itemsCollected.put(id, this.itemsCollected.getOrDefault(id, 0) + amount);
         this.changed.add(id);
     }

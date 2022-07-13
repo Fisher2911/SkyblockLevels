@@ -77,10 +77,10 @@ public class SingleSkyCrop extends SkyCrop {
         }
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> block.setType(setType), 1L);
         if (!(this.collectionCondition.isAllowed(user.getCollection()))) return;
-        this.dropItems(block);
+        this.dropItems(block, user);
     }
 
-    private void dropItems(Block block) {
+    private void dropItems(Block block, User user) {
         final Location location = block.getLocation();
         for (ItemSupplier guaranteed : this.guaranteedItems) {
             final ItemStack itemStack = guaranteed.get();
@@ -98,6 +98,7 @@ public class SingleSkyCrop extends SkyCrop {
             location.getWorld().dropItem(location, itemStack);
             i--;
         }
+        this.plugin.getUserManager().addCollectionAmount(user, this.itemId, 1);
         final Supplier<ItemStack> bonusItemSupplier = this.bonusItems.getRandom();
         if (bonusItemSupplier == null) return;
         final ItemStack itemStack = bonusItemSupplier.get();
@@ -109,7 +110,7 @@ public class SingleSkyCrop extends SkyCrop {
     public void onDestroy(BlockDestroyEvent event) {
         event.setCancelled(true);
         final Block block = event.getBlock();
-        this.dropItems(block);
+        this.dropItems(block, User.SERVER);
         block.setBlockData(event.getNewState(), true);
         this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
     }

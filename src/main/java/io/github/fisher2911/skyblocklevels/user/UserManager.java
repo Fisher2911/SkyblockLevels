@@ -6,14 +6,16 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.booster.Boosters;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
-import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemBuilder;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -60,12 +62,14 @@ public class UserManager {
     private final Map<UUID, BukkitUser> users;
     private final Set<String> shouldStore;
     private final Map<String, CollectionCategory> collectionCategories;
+    private final Map<String, CollectionPermission> collectionPermissions;
 
     public UserManager(SkyblockLevels plugin, Map<UUID, BukkitUser> users, Set<String> shouldStore) {
         this.plugin = plugin;
         this.users = users;
         this.shouldStore = shouldStore;
         this.collectionCategories = new HashMap<>();
+        this.collectionPermissions = new HashMap<>();
     }
 
     @Nullable
@@ -135,6 +139,22 @@ public class UserManager {
         }
     }
 
+    public void addCollectionAmount(User user, String id, int amount) {
+        user.getCollection().addAmount(id, amount);
+        final int currentAmount = user.getCollection().getAmount(id);
+        final CollectionPermission collectionPermission = this.collectionPermissions.get(id);
+        if (collectionPermission == null) return;
+        if (collectionPermission.getAmount() > currentAmount) return;
+        final var luckPerms = this.plugin.getLuckPermsProvider();
+        if (luckPerms == null) return;
+        final LuckPerms api = luckPerms.getProvider();
+        api.getUserManager().modifyUser(user.getId(), luckPermsUser -> {
+            final String permission = collectionPermission.getPermission();
+            if (luckPermsUser.getCachedData().getPermissionData().checkPermission(permission).asBoolean()) return;
+            luckPermsUser.data().add(Node.builder(permission).build());
+        });
+    }
+
     public void loadUser(UUID uuid) {
         final Boosters boosters = Boosters.load(this.plugin.getDataManager().getConnection(), uuid);
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -159,6 +179,10 @@ public class UserManager {
     private static final String COLLECTION_CATEGORIES_PATH = "collection-categories";
     private static final String ITEM = "item";
     private static final String COLLECTIONS = "collections";
+    private static final String AMOUNT_PATH = "amount";
+    private static final String COLLECTION_PERMISSIONS_PATH = "collection-permissions";
+    private static final String PERMISSION_PATH = "permission";
+
 
     public void load(SkyblockLevels plugin) {
         try {
@@ -185,6 +209,15 @@ public class UserManager {
             }
             this.shouldStore.clear();
             this.shouldStore.addAll(shouldStore.getList(String.class, new ArrayList<>()));
+            this.collectionPermissions.clear();
+            final ConfigurationNode collectionPermissions = source.node(COLLECTION_PERMISSIONS_PATH);
+            for (var entry : collectionPermissions.childrenMap().entrySet()) {
+                if (!(entry.getKey() instanceof final String id)) continue;
+                final ConfigurationNode node = entry.getValue();
+                final String permission = node.node(PERMISSION_PATH).getString();
+                final int amount = node.node(AMOUNT_PATH).getInt(0);
+                this.collectionPermissions.put(id, new CollectionPermission(id, amount, permission));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -44,11 +44,13 @@ import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import me.angeschossen.lands.api.integration.LandsIntegration;
 import me.wolfyscript.customcrafting.CustomCrafting;
 import me.wolfyscript.customcrafting.registry.RegistryRecipes;
+import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -76,6 +78,8 @@ public final class SkyblockLevels extends JavaPlugin {
     private AnnotationParser<User> annotationParser;
     private LandsIntegration lands;
     private TeleportManager teleportManager;
+    RegisteredServiceProvider<LuckPerms> provider;
+
 
     @Override
     public void onLoad() {
@@ -109,6 +113,7 @@ public final class SkyblockLevels extends JavaPlugin {
         this.userManager.startSaveTask();
         this.teleportManager = new TeleportManager(this, new HashSet<>());
         new SkyblockExpansion(this).register();
+        provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
     }
 
     @Override
@@ -269,5 +274,9 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public TeleportManager getTeleportManager() {
         return teleportManager;
+    }
+
+    public RegisteredServiceProvider<LuckPerms> getLuckPermsProvider() {
+        return provider;
     }
 }

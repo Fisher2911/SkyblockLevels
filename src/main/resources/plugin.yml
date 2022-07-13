@@ -3,7 +3,7 @@ version: '${version}'
 main: io.github.fisher2911.skyblocklevels.SkyblockLevels
 api-version: 1.18
 load: STARTUP
-depend: [ Lands, packetevents, PlaceholderAPI ]
+depend: [ Lands, packetevents, PlaceholderAPI, LuckPerms ]
 permissions:
   skyblocklevels.giveitem:
     description: "Allows you to give a Skyblock item to a player"

@@ -150,7 +150,7 @@ public class CustomEntity implements SkyEntity {
         final Player killer = entity.getKiller();
         if (killer != null) {
             final User user = this.plugin.getUserManager().getUser(killer.getUniqueId());
-            if (user != null) user.getCollection().addAmount(this.type, 1);
+            if (user != null) this.plugin.getUserManager().addCollectionAmount(user, this.type, 1);
         }
         if (this.dropsOnDeath.getMax() == 0 || this.drops.size() == 0) return;
         event.getDrops().clear();

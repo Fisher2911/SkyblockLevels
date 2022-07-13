@@ -1,10 +1,3 @@
-#private static final String ITEM_ID = "item-id";
-#private static final String ENTITY_TYPE = "entity-type";
-#private static final String NAME = "name";
-#private static final String ITEM = "item";
-#private static final String TICK_DELAY = "tick-delay";
-#private static final String ENTITIES = "entities";
-#private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
 1:
   class: mob-spawner
   item-id: "rabbit-spawner"

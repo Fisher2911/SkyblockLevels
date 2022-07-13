@@ -241,7 +241,7 @@ public class MultiSkyCrop extends SkyCrop {
         event.setDropItems(false);
         this.dropItems(location);
         this.removed = true;
-        user.getCollection().addAmount(this.itemId, this.breakBlocksAbove(above) + 1);
+        this.plugin.getUserManager().addCollectionAmount(user, this.itemId, this.breakBlocksAbove(above) + 1);
     }
 
     private int breakBlocksAbove(WorldPosition above) {
