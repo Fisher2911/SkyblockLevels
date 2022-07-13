@@ -51,7 +51,7 @@
       item:
         id: "cobblestone-generator-core"
   collection-requirements:
-    cobblestone: 64
+    COBBLESTONE: 64
 2:
   class: generator
   item-id: "stone-generator"

@@ -76,10 +76,3 @@
       weight: 60
       item:
         material: "STICK"
-#8:
-#  class: skyitem
-#  item-id: "cobblestone-generator-fragment"
-#  item:
-#    material: "STONE_BUTTON"
-#    name: "<!i><green>Cobblestone Fragment"
-#    glow: true

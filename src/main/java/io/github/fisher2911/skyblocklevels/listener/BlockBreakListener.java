@@ -3,6 +3,7 @@ package io.github.fisher2911.skyblocklevels.listener;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.ItemManager;
+import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.Usable;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -33,7 +34,9 @@ public class BlockBreakListener implements Listener {
         final Player player = event.getPlayer();
         final User user = this.userManager.getUser(player);
         if (user == null) return;
-        this.itemManager.handle(user, this.worlds.getBlockAt(WorldPosition.fromLocation(event.getBlock().getLocation())), event);
+        final SkyBlock block = this.worlds.getBlockAt(WorldPosition.fromLocation(event.getBlock().getLocation()));
+        if (block == SkyBlock.EMPTY) user.getCollection().addAmount(event.getBlock().getType().toString(), 1);
+        this.itemManager.handle(user, block, event);
         final SpecialSkyItem skyItem = this.itemManager.getItem(player.getInventory().getItemInMainHand());
         if (!(skyItem instanceof Usable)) return;
         this.itemManager.handle(user, player.getInventory().getItemInMainHand(), event);

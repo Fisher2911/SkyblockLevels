@@ -241,21 +241,24 @@ public class MultiSkyCrop extends SkyCrop {
         event.setDropItems(false);
         this.dropItems(location);
         this.removed = true;
-        this.breakBlocksAbove(above);
+        user.getCollection().addAmount(this.itemId, this.breakBlocksAbove(above) + 1);
     }
 
-    private void breakBlocksAbove(WorldPosition above) {
+    private int breakBlocksAbove(WorldPosition above) {
         SkyBlock crop;
         above = above.getRelative(BlockFace.UP);
+        int totalBroken = 0;
         while ((crop = this.plugin.getWorlds().getBlockAt(above)) != SkyBlock.EMPTY) {
             if (!(crop instanceof MultiSkyCrop multiSkyCrop)) break;
             if (!multiSkyCrop.itemId.equals(this.itemId)) break;
             this.plugin.getWorlds().removeBlock(above);
             multiSkyCrop.removed = true;
+            totalBroken++;
             if (!multiSkyCrop.isGrown() && above.toLocation().getBlock().getType() != this.material) break;
             multiSkyCrop.dropItems(above.toLocation());
             above = above.getRelative(BlockFace.UP);
         }
+        return totalBroken;
     }
 
     @Override

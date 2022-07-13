@@ -8,7 +8,7 @@
 1:
   class: "single-sky-crop"
   item-id: "wheat-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "WHEAT_SEEDS"
     name: "<!i><aqua>Wheat"
@@ -31,7 +31,7 @@
 2:
   class: "single-sky-crop"
   item-id: "carrot-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "CARROT"
     name: "<!i><aqua>Carrot"
@@ -56,7 +56,7 @@
 3:
   class: "single-sky-crop"
   item-id: "beetroot-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "BEETROOT_SEEDS"
     name: "<!i><aqua>Beetroot Seeds"
@@ -81,7 +81,7 @@
 4:
   class: "single-sky-crop"
   item-id: "potato-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "POTATO"
     name: "<!i><aqua>Potato"
@@ -106,7 +106,7 @@
 5:
   class: "single-sky-crop"
   item-id: "pumpkin-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "PUMPKIN_SEEDS"
     name: "<!i><aqua>Pumpkin Seeds"
@@ -131,7 +131,7 @@
 6:
   class: "single-sky-crop"
   item-id: "melon-sky-crop"
-  tick-delay: 20
+  tick-delay: 6857
   item:
     material: "MELON_SEEDS"
     name: "<!i><aqua>Melon Seeds"
@@ -156,11 +156,12 @@
 7:
   class: "multi-sky-crop"
   item-id: "sugarcane-sky-crop"
-  tick-delay: 100
+  tick-delay: 16000
   item:
     material: "SUGAR_CANE"
     name: "<!i><aqua>Sugar Cane"
   material: "SUGAR_CANE"
+  max-height: 3
 #  items:
 #    1:
 #      item:
@@ -181,7 +182,7 @@
 8:
   class: "multi-sky-crop"
   item-id: "bamboo-sky-crop"
-  tick-delay: 20
+  tick-delay: 3429
   item:
     material: "BAMBOO"
     name: "<!i><aqua>Bamboo"
@@ -194,6 +195,7 @@
 #          min: 1
 #          max: 1
 #      weight: 100
+  max-height: 14
   item-count:
     min: 1
     max: 1
@@ -202,15 +204,16 @@
       id: bamboo-sky-crop
   placeable-on: [ "DIRT", "SAND", "RED_SAND" ]
   collection-requirements:
-    sugarcane-sky-crop: 7886
+    sugarcane-sky-crop: 23658
 9:
   class: "multi-sky-crop"
   item-id: "cactus-sky-crop"
-  tick-delay: 20
+  tick-delay: 16000
   item:
     material: "CACTUS"
     name: "<!i><aqua>Cactus"
   material: "CACTUS"
+  max-height: 3
   #  items:
   #    1:
   #      item:
@@ -227,4 +230,4 @@
       id: cactus-sky-crop
   placeable-on: [ "SAND", "RED_SAND" ]
   collection-requirements:
-    sugarcane-sky-crop: 19461
+    sugarcane-sky-crop: 233532
