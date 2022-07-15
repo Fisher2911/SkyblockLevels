@@ -1,11 +1,5 @@
-#private static final String ITEM_ID = "item-id";
-#private static final String TICK_DELAY = "tick-delay";
-#private static final String ITEM = "item";
-#private static final String REQUIREMENTS = "requirements";
-#private static final String AMOUNT = "amount";
-#private static final String REWARDS = "rewards";
-#private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
 1:
+  class: transformer
   item-id: dirt-transformer
   tick-delay: 600
   item:
@@ -29,6 +23,7 @@
       material: DIRT
       amount: 1
 2:
+  class: transformer
   item-id: grass-block-transformer
   tick-delay: 600
   item:

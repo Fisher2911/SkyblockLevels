@@ -28,6 +28,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -138,12 +139,14 @@ public class Transformer implements SkyBlock, Delayed {
         event.setDropItems(false);
         if (block.getState() instanceof Container container) {
             final Location location = block.getLocation();
-            for (ItemStack itemStack : container.getInventory()) {
-                Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            final Inventory inventory = container.getSnapshotInventory();
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+                for (ItemStack itemStack : inventory) {
+                    if (itemStack == null) continue;
                     final ItemStack item = itemStack.clone();
                     location.getWorld().dropItem(location, item);
-                }, 1);
-            }
+                }
+            }, 1);
         }
         this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
         this.plugin.getItemManager().giveItem(user, this);
@@ -189,34 +192,42 @@ public class Transformer implements SkyBlock, Delayed {
         if (!(block.getState() instanceof Container container)) return;
         final Collection<ItemStack> items = new HashSet<>();
         for (ItemStack itemStack : container.getInventory()) items.add(itemStack);
-        if (this.previousBlocks.equals(items)) return;
+        if (this.previousBlocks.equals(items)) {
+            this.tickCounter = 0;
+            return;
+        }
         this.previousBlocks = items;
-        final Map<ItemStack, Integer> toRemove = new HashMap<>();
+        final Map<Integer, Integer> slotsToRemove = new HashMap<>();
         this.tickCounter = 0;
         for (var entry : this.requirements.entrySet()) {
             final ItemSupplier itemSupplier = entry.getKey();
             final int amount = entry.getValue();
             final ItemStack created = itemSupplier.get();
             boolean found = false;
-            for (ItemStack itemStack : items) {
+            for (int i = 0; i < container.getInventory().getSize(); i++) {
+                final ItemStack itemStack = container.getInventory().getItem(i);
+                if (itemStack == null) continue;
                 if (itemStack.getAmount() < amount) continue;
                 if (!itemStack.isSimilar(created)) continue;
-                toRemove.put(itemStack, (itemStack.getAmount() / amount) * amount);
+                slotsToRemove.put(i, amount);
                 found = true;
                 break;
             }
             if (!found) return;
         }
-        if (toRemove.isEmpty()) return;
-        for (var entry : toRemove.entrySet()) {
-            final ItemStack itemStack = entry.getKey();
+        if (slotsToRemove.isEmpty()) return;
+        for (var entry : slotsToRemove.entrySet()) {
+            final int slot = entry.getKey();
             final int amount = entry.getValue();
+            final ItemStack itemStack = container.getInventory().getItem(slot);
             final int setAmount = itemStack.getAmount() - amount;
             if (setAmount <= 0) {
                 itemStack.setType(Material.AIR);
+                container.getInventory().setItem(slot, itemStack);
                 continue;
             }
             itemStack.setAmount(setAmount);
+            container.getInventory().setItem(slot, itemStack);
         }
         for (var entry : this.rewards.entrySet()) {
             final ItemSupplier itemSupplier = entry.getKey();
@@ -225,7 +236,6 @@ public class Transformer implements SkyBlock, Delayed {
             created.setAmount(amount);
             container.getInventory().addItem(created);
         }
-        container.update();
     }
 
     @Override
@@ -243,7 +253,7 @@ public class Transformer implements SkyBlock, Delayed {
 
     @Override
     public ItemStack getItemStack() {
-        return this.itemSupplier.get(PLACEHOLDERS);
+        return this.itemSupplier.get(PLACEHOLDERS, this);
     }
 
     @Override
@@ -274,7 +284,8 @@ public class Transformer implements SkyBlock, Delayed {
 
         public static final Serializer INSTANCE = new Serializer();
 
-        private Serializer() {}
+        private Serializer() {
+        }
 
         private static final String ITEM_ID = "item-id";
         private static final String TICK_DELAY = "tick-delay";
