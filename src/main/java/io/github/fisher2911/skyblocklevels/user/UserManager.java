@@ -47,7 +47,7 @@ public class UserManager {
         final DataManager dataManager = plugin.getDataManager();
 
         dataManager.addTable(CreateTableStatement.builder(TABLE).
-                addField(VarChar.UUID, UUID, KeyType.PRIMARY).
+                addField(VarChar.UUID, UUID).
                 addField(VarChar.ITEM_ID, ITEM_ID).
                 addField(Integer.class, AMOUNT).
                 groupKeys(KeyType.UNIQUE, UUID, ITEM_ID).
@@ -127,8 +127,7 @@ public class UserManager {
             builder.newEntry().
                     addEntry(UUID, user.getId().toString()).
                     addEntry(ITEM_ID, collectionType).
-                    addEntry(AMOUNT, collection.getAmount(collectionType)).
-                    batchSize(changed.size());
+                    addEntry(AMOUNT, collection.getAmount(collectionType));
         }
         builder.build().execute(this.plugin.getDataManager().getConnection());
     }

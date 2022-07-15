@@ -8,25 +8,22 @@
       - "<!i>"
       - "<!i><green>Amount: %amount%"
     glow: true
-  radius: 5
+  radius: 3
   type: DIRT
-  stored: 120
+  stored: 24
 2:
   class: grower
-  item-id: "tree-grower"
+  item-id: "oak-tree-grower"
   block: "BARREL"
   tick-delay: 20
   item:
-    material: "OAK_SAPLING"
+    material: "BARREL"
     name: "<!i><red>Oak Tree Grower"
     glow: true
   items:
     1:
       weight: 50
       item: "OAK_SAPLING"
-    2:
-      weight: 50
-      item: "BIRCH_SAPLING"
 3:
   class: limited-bridger
   item-id: "limited-bridger"

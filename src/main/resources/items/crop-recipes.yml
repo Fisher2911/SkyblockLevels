@@ -1,0 +1,14 @@
+1:
+  class: skyitem
+  item-id: "wheat-essence"
+  item:
+    material: "scute"
+    name: "<!i><green>Wheat Essence"
+    glow: true
+2:
+  class: skyitem
+  item-id: "fractured-rabbit-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Rabbit Spawner"
+    glow: true

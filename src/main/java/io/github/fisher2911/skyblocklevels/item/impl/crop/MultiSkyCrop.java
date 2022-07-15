@@ -117,6 +117,7 @@ public class MultiSkyCrop extends SkyCrop {
                         item.tickDelay,
                         item.items,
                         item.bonusItems,
+                        item.guaranteedFullyGrownItems,
                         item.guaranteedItems,
                         item.itemCount,
                         item.collectionCondition,
@@ -155,13 +156,14 @@ public class MultiSkyCrop extends SkyCrop {
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
             WeightedList<Supplier<ItemStack>> bonusItems,
+            List<ItemSupplier> guaranteedFullyGrownItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
             Set<Material> placeableOn,
             int maxHeight
     ) {
-        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedItems, itemCount, collectionCondition, placeableOn);
+        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedFullyGrownItems, guaranteedItems, itemCount, collectionCondition, placeableOn);
         this.maxHeight = maxHeight;
     }
 
@@ -174,6 +176,7 @@ public class MultiSkyCrop extends SkyCrop {
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
             WeightedList<Supplier<ItemStack>> bonusItems,
+            List<ItemSupplier> guaranteedFullyGrownItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
@@ -182,7 +185,7 @@ public class MultiSkyCrop extends SkyCrop {
             Position base,
             Position directlyUnder
     ) {
-        this(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedItems, itemCount, collectionCondition, placeableOn, maxHeight);
+        this(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedFullyGrownItems, guaranteedItems, itemCount, collectionCondition, placeableOn, maxHeight);
         this.base = base;
         this.directlyUnder = directlyUnder;
     }
@@ -424,6 +427,7 @@ public class MultiSkyCrop extends SkyCrop {
                 this.tickDelay,
                 this.items,
                 this.bonusItems,
+                this.guaranteedFullyGrownItems,
                 this.guaranteedItems,
                 this.itemCount,
                 this.collectionCondition,
@@ -447,6 +451,7 @@ public class MultiSkyCrop extends SkyCrop {
         private static final String TICK_DELAY = "tick-delay";
         private static final String ITEMS = "items";
         private static final String BONUS_ITEMS = "bonus-items";
+        private static final String GUARANTEED_FULLY_GROWN_ITEMS = "guaranteed-fully-grown-items";
         private static final String GUARANTEED_ITEMS = "guaranteed-items";
         private static final String ITEM_COUNT = "item-count";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
@@ -468,6 +473,16 @@ public class MultiSkyCrop extends SkyCrop {
                 final TypeSerializer<WeightedList<ItemSupplier>> serializer = WeightedList.serializer(ItemSupplier.class, ItemSerializer.INSTANCE);
                 final ConfigurationNode guaranteedItemsNode = node.node(GUARANTEED_ITEMS);
                 final List<ItemSupplier> guaranteedItems = guaranteedItemsNode.childrenMap().values().stream().
+                        map(itemNode -> {
+                            try {
+                                return ItemSerializer.INSTANCE.deserialize(ItemSupplier.class, itemNode);
+                            } catch (Exception e) {
+                                throw new IllegalArgumentException("Failed to deserialize item supplier", e);
+                            }
+                        }).
+                        collect(Collectors.toList());
+                final ConfigurationNode guaranteedFullyGrownItemsNode = node.node(GUARANTEED_FULLY_GROWN_ITEMS);
+                final List<ItemSupplier> guaranteedFullyGrownItems = guaranteedFullyGrownItemsNode.childrenMap().values().stream().
                         map(itemNode -> {
                             try {
                                 return ItemSerializer.INSTANCE.deserialize(ItemSupplier.class, itemNode);
@@ -508,6 +523,7 @@ public class MultiSkyCrop extends SkyCrop {
                         items,
                         bonusItems,
                         guaranteedItems,
+                        guaranteedFullyGrownItems,
                         itemCount,
                         requirements,
                         placeableOn,

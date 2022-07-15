@@ -49,12 +49,13 @@ public class SingleSkyCrop extends SkyCrop {
             int tickDelay,
             WeightedList<Supplier<ItemStack>> items,
             WeightedList<Supplier<ItemStack>> bonusItems,
+            List<ItemSupplier> guaranteedFullyGrownItems,
             List<ItemSupplier> guaranteedItems,
             Range itemCount,
             CollectionCondition collectionCondition,
             Set<Material> placeableOn
     ) {
-        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedItems, itemCount, collectionCondition, placeableOn);
+        super(plugin, id, itemId, material, itemSupplier, tickDelay, items, bonusItems, guaranteedFullyGrownItems, guaranteedItems, itemCount, collectionCondition, placeableOn);
     }
 
     @Override
@@ -90,6 +91,11 @@ public class SingleSkyCrop extends SkyCrop {
 
         if (block.getBlockData() instanceof Ageable ageable && ageable.getAge() < ageable.getMaximumAge()) return;
         int i = this.itemCount.getRandom();
+        for (ItemSupplier guaranteed : this.guaranteedFullyGrownItems) {
+            final ItemStack itemStack = guaranteed.get();
+            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getAmount() == 0) continue;
+            location.getWorld().dropItem(location, itemStack);
+        }
         while (i > 0) {
             final Supplier<ItemStack> itemStackSupplier = this.items.getRandom();
             if (itemStackSupplier == null) continue;
@@ -210,6 +216,7 @@ public class SingleSkyCrop extends SkyCrop {
         private static final String TICK_DELAY = "tick-delay";
         private static final String ITEMS = "items";
         private static final String BONUS_ITEMS = "bonus-items";
+        private static final String GUARANTEED_FULLY_GROWN_ITEMS = "guaranteed-fully-grown-items";
         private static final String GUARANTEED_ITEMS = "guaranteed-items";
         private static final String ITEM_COUNT = "item-count";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";
@@ -230,6 +237,16 @@ public class SingleSkyCrop extends SkyCrop {
                 final TypeSerializer<WeightedList<ItemSupplier>> serializer = WeightedList.serializer(ItemSupplier.class, ItemSerializer.INSTANCE);
                 final ConfigurationNode guaranteedItemsNode = node.node(GUARANTEED_ITEMS);
                 final List<ItemSupplier> guaranteedItems = guaranteedItemsNode.childrenMap().values().stream().
+                        map(itemNode -> {
+                            try {
+                                return ItemSerializer.INSTANCE.deserialize(ItemSupplier.class, itemNode);
+                            } catch (Exception e) {
+                                throw new IllegalArgumentException("Failed to deserialize item supplier", e);
+                            }
+                        }).
+                        collect(Collectors.toList());
+                final ConfigurationNode guaranteedFullyGrownItemsNode = node.node(GUARANTEED_FULLY_GROWN_ITEMS);
+                final List<ItemSupplier> guaranteedFullyGrownItems = guaranteedFullyGrownItemsNode.childrenMap().values().stream().
                         map(itemNode -> {
                             try {
                                 return ItemSerializer.INSTANCE.deserialize(ItemSupplier.class, itemNode);
@@ -268,6 +285,7 @@ public class SingleSkyCrop extends SkyCrop {
                         tickDelay,
                         items,
                         bonusItems,
+                        guaranteedFullyGrownItems,
                         guaranteedItems,
                         itemCount,
                         requirements,

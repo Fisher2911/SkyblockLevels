@@ -417,7 +417,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         private static final String RESET_BLOCK = "reset-block";
         private static final String GENERATOR_BLOCK = "generator-block";
         private static final String ITEMS = "items";
-        private static final String BONUS_ITEMS = "items";
+        private static final String BONUS_ITEMS = "bonus-items";
         private static final String TICKS_TO_BREAK = "ticks-to-break";
         private static final String SPEED_MODIFIERS = "speed-modifiers";
         private static final String COLLECTION_REQUIREMENTS = "collection-requirements";

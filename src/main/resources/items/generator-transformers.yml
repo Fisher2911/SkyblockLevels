@@ -1,0 +1,338 @@
+1:
+  class: transformer
+  item-id: cobblestone-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Cobblestone Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Cobblestone Generator Cores"
+      - "<!i><blue>    16 Cobblestone Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Stone Generator"
+    glow: true
+  requirements:
+    1:
+      id: cobblestone-generator-core
+      amount: 3
+    2:
+      id: cobblestone-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: stone-generator
+      amount: 1
+2:
+  class: transformer
+  item-id: stone-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Stone Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Stone Generator Cores"
+      - "<!i><blue>    16 Stone Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Diorite Generator"
+    glow: true
+  requirements:
+    1:
+      id: stone-generator-core
+      amount: 3
+    2:
+      id: stone-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: diorite-generator
+      amount: 1
+3:
+  class: transformer
+  item-id: diorite-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Diorite Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Diorite Generator Cores"
+      - "<!i><blue>    16 Diorite Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Andesite Generator"
+    glow: true
+  requirements:
+    1:
+      id: diorite-generator-core
+      amount: 3
+    2:
+      id: diorite-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: andesite-generator
+      amount: 1
+4:
+  class: transformer
+  item-id: andesite-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Andesite Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Andesite Generator Cores"
+      - "<!i><blue>    16 Andesite Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Granite Generator"
+    glow: true
+  requirements:
+    1:
+      id: andesite-generator-core
+      amount: 3
+    2:
+      id: andesite-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: granite-generator
+      amount: 1
+5:
+  class: transformer
+  item-id: granite-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Granite Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Granite Generator Cores"
+      - "<!i><blue>    16 Granite Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Coal Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: granite-generator-core
+      amount: 3
+    2:
+      id: granite-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: coal-ore-generator
+      amount: 1
+6:
+  class: transformer
+  item-id: coal-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Coal Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Coal Ore Generator Cores"
+      - "<!i><blue>    16 Coal Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Copper Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: coal-ore-generator-core
+      amount: 3
+    2:
+      id: coal-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: copper-ore-generator
+      amount: 1
+7:
+  class: transformer
+  item-id: copper-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Copper Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Copper Ore Generator Cores"
+      - "<!i><blue>    16 Copper Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Iron Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: copper-ore-generator-core
+      amount: 3
+    2:
+      id: copper-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: iron-ore-generator
+      amount: 1
+8:
+  class: transformer
+  item-id: iron-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Iron Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Iron Ore Generator Cores"
+      - "<!i><blue>    16 Iron Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Redstone Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: iron-ore-generator-core
+      amount: 3
+    2:
+      id: iron-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: redstone-ore-generator
+      amount: 1
+9:
+  class: transformer
+  item-id: redstone-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Redstone Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Redstone Ore Generator Cores"
+      - "<!i><blue>    16 Redstone Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Lapis Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: redstone-ore-generator-core
+      amount: 3
+    2:
+      id: redstone-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: lapis-ore-generator
+      amount: 1
+10:
+  class: transformer
+  item-id: lapis-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Lapis Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Lapis Ore Generator Cores"
+      - "<!i><blue>    16 Lapis Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Gold Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: lapis-ore-generator-core
+      amount: 3
+    2:
+      id: lapis-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: gold-ore-generator
+      amount: 1
+11:
+  class: transformer
+  item-id: gold-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Gold Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Gold Ore Generator Cores"
+      - "<!i><blue>    16 Gold Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Emerald Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: gold-ore-generator-core
+      amount: 3
+    2:
+      id: gold-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: emerald-ore-generator
+      amount: 1
+12:
+  class: transformer
+  item-id: emerald-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Emerald Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Emerald Ore Generator Cores"
+      - "<!i><blue>    16 Emerald Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Diamond Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: emerald-ore-generator-core
+      amount: 3
+    2:
+      id: emerald-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: diamond-ore-generator
+      amount: 1
+13:
+  class: transformer
+  item-id: diamond-ore-generator-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Diamond Ore Generator Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Diamond Ore Generator Cores"
+      - "<!i><blue>    16 Diamond Ore Generator Fragment"
+      - "<!i><aqua>Rewards: 1 Emerald Ore Generator"
+    glow: true
+  requirements:
+    1:
+      id: diamond-ore-generator-core
+      amount: 3
+    2:
+      id: diamond-ore-generator-fragment
+      amount: 16
+  rewards:
+    1:
+      id: obsidian-generator
+      amount: 1

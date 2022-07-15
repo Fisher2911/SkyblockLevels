@@ -1,0 +1,196 @@
+1:
+  class: skyitem
+  item-id: "rabbit-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Rabbit Spawner Shard"
+    glow: true
+2:
+  class: skyitem
+  item-id: "fractured-rabbit-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Rabbit Spawner"
+    glow: true
+3:
+  class: skyitem
+  item-id: "chicken-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Chicken Spawner Shard"
+    glow: true
+4:
+  class: skyitem
+  item-id: "fractured-chicken-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Chicken Spawner"
+    glow: true
+5:
+  class: skyitem
+  item-id: "pig-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Pig Spawner Shard"
+    glow: true
+6:
+  class: skyitem
+  item-id: "fractured-pig-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Pig Spawner"
+    glow: true
+7:
+  class: skyitem
+  item-id: "sheep-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Sheep Spawner Shard"
+    glow: true
+8:
+  class: skyitem
+  item-id: "fractured-sheep-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Sheep Spawner"
+    glow: true
+9:
+  class: skyitem
+  item-id: "cow-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Cow Spawner Shard"
+    glow: true
+10:
+  class: skyitem
+  item-id: "fractured-cow-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Cow Spawner"
+    glow: true
+11:
+  class: skyitem
+  item-id: "goat-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Goat Spawner Shard"
+    glow: true
+12:
+  class: skyitem
+  item-id: "fractured-goat-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Goat Spawner"
+    glow: true
+13:
+  class: skyitem
+  item-id: "mushroom-cow-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Mooshroom Spawner Shard"
+    glow: true
+14:
+  class: skyitem
+  item-id: "fractured-mushroom-cow-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Mooshroom Spawner"
+    glow: true
+15:
+  class: skyitem
+  item-id: "slime-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Slime Spawner Shard"
+    glow: true
+16:
+  class: skyitem
+  item-id: "fractured-slime-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Slime Spawner"
+    glow: true
+17:
+  class: skyitem
+  item-id: "spider-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Spider Spawner Shard"
+    glow: true
+18:
+  class: skyitem
+  item-id: "fractured-spider-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Spider Spawner"
+    glow: true
+19:
+  class: skyitem
+  item-id: "cave-spider-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Cave Spider Spawner Shard"
+    glow: true
+20:
+  class: skyitem
+  item-id: "fractured-cave-spider-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Cave Spider Spawner"
+    glow: true
+21:
+  class: skyitem
+  item-id: "zombie-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Zombie Spawner Shard"
+    glow: true
+22:
+  class: skyitem
+  item-id: "fractured-zombie-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Zombie Spawner"
+    glow: true
+23:
+  class: skyitem
+  item-id: "skeleton-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Skeleton Spawner Shard"
+    glow: true
+24:
+  class: skyitem
+  item-id: "fractured-skeleton-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Skeleton Spawner"
+    glow: true
+25:
+  class: skyitem
+  item-id: "witch-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Witch Spawner Shard"
+    glow: true
+26:
+  class: skyitem
+  item-id: "fractured-witch-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Witch Spawner"
+    glow: true
+27:
+  class: skyitem
+  item-id: "silverfish-spawner-shard"
+  item:
+    material: "amethyst_shard"
+    name: "<!i><green>Silverfish Spawner Shard"
+    glow: true
+28:
+  class: skyitem
+  item-id: "fractured-silverfish-spawner"
+  item:
+    material: "SPAWNER"
+    name: "<!i><green>Fractured Silverfish Spawner"
+    glow: true
