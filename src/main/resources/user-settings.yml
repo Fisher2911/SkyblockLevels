@@ -1,5 +1,5 @@
 should-store:
-  - cobblestone
+  - COBBLESTONE
   - cobblestone-generator
   - andesite-generator
 collection-categories:
@@ -7,7 +7,17 @@ collection-categories:
     item:
       material: COBBLESTONE
       amount: 1
-      name: "<!i><green>Mining Collection"
+      name: "<!i><blue>Mining Collection"
+  farming:
+    item:
+      material: WHEAT
+      amount: 1
+      name: "<!i><blue>Farming Collection"
+  spawners:
+    item:
+      material: SPAWNER
+      amount: 1
+      name: "<!i><blue>Mob Collection"
 collection-permissions:
   COBBLESTONE:
     amount: 64
@@ -97,55 +107,55 @@ collection-permissions:
     amount: 233532
     permission: skyblocklevels.collection.farming.bamboo-sky-crop
     category: farming
-  spawner-rabbit:
+  rabbit-spawner:
     amount: 64
     permission: skyblocklevels.collection.spawners.spawner-rabbit
     category: spawners
-  spawner-chicken:
+  chicken-spawner:
     amount: 92
     permission: skyblocklevels.collection.spawners.spawner-chicken
     category: spawners
-  spawner-pig:
+  pig-spawner:
     amount: 128
     permission: skyblocklevels.collection.spawners.spawner-pig
     category: spawners
-  spawner-sheep:
+  sheep-spawner:
     amount: 179
     permission: skyblocklevels.collection.spawners.spawner-cow
     category: spawners
-  spawner-cow:
+  cow-spawner:
     amount: 254
     permission: skyblocklevels.collection.spawners.spawner-cow
     category: spawners
-  spawner-goat:
+  goat-spawner:
     amount: 366
     permission: skyblocklevels.collection.spawners.spawner-goat
     category: spawners
-  spawner-mushroom-cow:
+  mushroom-cow-spawner:
     amount: 539
     permission: skyblocklevels.collection.spawners.spawner-mushroom-cow
     category: spawners
-  spawner-slime:
+  slime-spawner:
     amount: 804
     permission: skyblocklevels.collection.spawners.spawner-slime
     category: spawners
-  spawner-spider:
+  spider-spawner:
     amount: 1216
     permission: skyblocklevels.collection.spawners.spawner-spider
     category: spawners
-  spawner-cave-spider:
+  cave-spider-spawner:
     amount: 1861
     permission: skyblocklevels.collection.spawners.spawner-cave-spider
     category: spawners
-  spawner-zombie:
+  zombie-spawner:
     amount: 2882
     permission: skyblocklevels.collection.spawners.spawner-zombie
     category: spawners
-  spawner-skeleton:
+  skeleton-spawner:
     amount: 4506
     permission: skyblocklevels.collection.spawners.spawner-skeleton
     category: spawners
-  spawner-witch:
+  witch-spawner:
     amount: 7112
     permission: skyblocklevels.collection.spawners.spawner-witch
     category: spawners

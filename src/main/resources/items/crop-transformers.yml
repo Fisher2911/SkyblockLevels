@@ -1,0 +1,232 @@
+1:
+  class: transformer
+  item-id: wheat-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Wheat Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Wheat Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Carrot"
+    glow: true
+  requirements:
+    1:
+      id: wheat-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: carrot-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+2:
+  class: transformer
+  item-id: carrot-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Carrot Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Carrot Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Beetroot"
+    glow: true
+  requirements:
+    1:
+      id: carrot-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: beetroot-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+3:
+  class: transformer
+  item-id: beetroot-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Beetroot Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Beetroot Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Potato"
+    glow: true
+  requirements:
+    1:
+      id: beetroot-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: potato-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+4:
+  class: transformer
+  item-id: poptato-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Potato Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Potato Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Pumpkin"
+    glow: true
+  requirements:
+    1:
+      id: potato-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: pumpkin-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+5:
+  class: transformer
+  item-id: pumpkin-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Pumpkin Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Pumpkin Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Melon"
+    glow: true
+  requirements:
+    1:
+      id: pumpkin-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: melon-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+6:
+  class: transformer
+  item-id: melon-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Melon Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    16 Melon Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Sugarcane"
+    glow: true
+  requirements:
+    1:
+      id: melon-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: sugarcane-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+7:
+  class: transformer
+  item-id: melon-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Sugarcane Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    32 Sugarcane Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Bamboo"
+    glow: true
+  requirements:
+    1:
+      id: sugarcane-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: bamboo-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1
+8:
+  class: transformer
+  item-id: bamboo-sky-crop-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Bamboo Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    32 Bamboo Essence"
+      - "<!i><blue>    1 Water Bucket"
+      - "<!i><aqua>Rewards: 1 Cactus"
+    glow: true
+  requirements:
+    1:
+      id: bamboo-sky-crop-essence
+      amount: 16
+    2:
+      material: WATER_BUCKET
+      amount: 1
+  rewards:
+    1:
+      id: cactus-sky-crop
+      amount: 1
+    2:
+      material: BUCKET
+      amount: 1

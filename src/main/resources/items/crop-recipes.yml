@@ -1,14 +1,56 @@
 1:
   class: skyitem
-  item-id: "wheat-essence"
+  item-id: "wheat-sky-crop-essence"
   item:
-    material: "scute"
+    material: "SCUTE"
     name: "<!i><green>Wheat Essence"
     glow: true
 2:
   class: skyitem
-  item-id: "fractured-rabbit-spawner"
+  item-id: "carrot-sky-crop-essence"
   item:
-    material: "SPAWNER"
-    name: "<!i><green>Fractured Rabbit Spawner"
+    material: "SCUTE"
+    name: "<!i><green>Carrot Essence"
+    glow: true
+3:
+  class: skyitem
+  item-id: "beetroot-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Beetroot Essence"
+    glow: true
+4:
+  class: skyitem
+  item-id: "potato-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Potato Essence"
+    glow: true
+5:
+  class: skyitem
+  item-id: "pumpkin-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Pumpkin Essence"
+    glow: true
+6:
+  class: skyitem
+  item-id: "melon-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Melon Essence"
+    glow: true
+7:
+  class: skyitem
+  item-id: "sugarcane-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Sugarcane Essence"
+    glow: true
+8:
+  class: skyitem
+  item-id: "bamboo-sky-crop-essence"
+  item:
+    material: "SCUTE"
+    name: "<!i><green>Bamboo Essence"
     glow: true

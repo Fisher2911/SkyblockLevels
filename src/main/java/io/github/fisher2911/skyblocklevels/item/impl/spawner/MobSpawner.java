@@ -10,6 +10,7 @@ import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Range;
+import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Material;
@@ -173,6 +174,15 @@ public class MobSpawner implements Spawner, Delayed {
     @Override
     public String getTableName() {
         return TABLE;
+    }
+
+    @Override
+    public int getCollectionAmount(User user) {
+        int total = 0;
+        for (String type : this.entityTypes.getWeightList().stream().map(Weight::getValue).toList()) {
+            user.getCollection().getAmount(type);
+        }
+        return total;
     }
 
     public static Serializer serializer() {

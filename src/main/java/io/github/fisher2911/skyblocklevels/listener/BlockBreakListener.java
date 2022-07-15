@@ -37,7 +37,7 @@ public class BlockBreakListener implements Listener {
         final User user = this.userManager.getUser(player);
         if (user == null) return;
         final SkyBlock block = this.worlds.getBlockAt(WorldPosition.fromLocation(event.getBlock().getLocation()));
-        if (block == SkyBlock.EMPTY) this.plugin.getUserManager().addCollectionAmount(user, event.getBlock().getType().toString(), 1);
+        if (block == SkyBlock.EMPTY) this.plugin.getUserManager().addCollectionAmount(user, event.getBlock().getType().toString(), 1, true);
         this.itemManager.handle(user, block, event);
         final SpecialSkyItem skyItem = this.itemManager.getItem(player.getInventory().getItemInMainHand());
         if (!(skyItem instanceof Usable)) return;

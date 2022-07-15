@@ -1,74 +1,252 @@
-#private static final String ID = "id";
-#private static final String TYPE = "type";
-#private static final String DROPS = "drops";
-#private static final String DROP_RANGE = "drop-range";
 1:
   id: "spawner-rabbit"
   type: RABBIT
   display-name: "<aqua>Rabbit"
-#  drops:
-#    1:
-#      weight: 75
-#      amount:
-#      item:
-#        material: "BEEF"
-#    2:
-#      weight: 50
-#      amount: 1
-#      item:
-#        material: "LEATHER"
-#  drop-range:
-#    min: 1
-#    max: 3
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "rabbit-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-rabbit-spawner"
 2:
   id: "spawner-chicken"
   type: CHICKEN
   display-name: "<aqua>Chicken"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "chicken-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-chicken-spawner"
 3:
   id: "spawner-pig"
   type: PIG
   display-name: "<aqua>Pig"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "pig-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-pig-spawner"
 4:
   id: "spawner-sheep"
   type: SHEEP
   display-name: "<aqua>Sheep"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "sheep-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-sheep-spawner"
 5:
   id: "spawner-cow"
   type: COW
   display-name: "<aqua>Cow"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "cow-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-cow-spawner"
 6:
   id: "spawner-goat"
   type: GOAT
   display-name: "<aqua>Goat"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "goat-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-goat-spawner"
 7:
   id: "spawner-mushroom-cow"
   type: MUSHROOM_COW
   display-name: "<aqua>Mooshroom"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "sheep-mushroom-cow-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-mushroom-cow-spawner"
 8:
   id: "spawner-slime"
   type: SLIME
   display-name: "<aqua>Slime"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "slime-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-slime-spawner"
 9:
   id: "spawner-spider"
   type: SPIDER
   display-name: "<aqua>Spider"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "spider-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-spider-spawner"
 10:
   id: "spawner-cave-spider"
   type: CAVE_SPIDER
   display-name: "<aqua>Cave Spider"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "cave-spider-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-cave-spider-spawner"
 11:
   id: "spawner-zombie"
   type: ZOMBIE
   display-name: "<aqua>Zombie"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "zombie-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-zombie-spawner"
 12:
   id: "spawner-skeleton"
   type: SKELETON
   display-name: "<aqua>Skeleton"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "skeleton-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-skeleton-spawner"
 13:
   id: "spawner-witch"
   type: WITCH
   display-name: "<aqua>Witch"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "witch-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-witch-spawner"
 14:
   id: "spawner-silverfish"
   type: SILVERFISH
   display-name: "<aqua>Silverfish"
+  bonus-items:
+    1:
+      weight: 92
+      item:
+        material: AIR
+        amount: 1
+    2:
+      weight: 5
+      item:
+        id: "silverfish-spawner-shard"
+    3:
+      weight: 3
+      item:
+        id: "fractured-silverfish-spawner"

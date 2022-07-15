@@ -16,6 +16,7 @@ public class ReloadCommand extends SkyCommand {
                         literal("reload").
                         handler(context -> {
                             this.plugin.getItemManager().reload();
+                            this.plugin.getUserManager().load(this.plugin);
                             context.getSender().sendMessage("<green>Reloaded successfully");
                         })
         );

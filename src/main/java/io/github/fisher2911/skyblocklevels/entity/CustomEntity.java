@@ -22,6 +22,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -152,6 +153,7 @@ public class CustomEntity implements SkyEntity {
             final User user = this.plugin.getUserManager().getUser(killer.getUniqueId());
             if (user != null) this.plugin.getUserManager().addCollectionAmount(user, this.type, 1);
         }
+        this.dropBonus(entity.getLocation());
         if (this.dropsOnDeath.getMax() == 0 || this.drops.size() == 0) return;
         event.getDrops().clear();
         final Location location = entity.getLocation();
@@ -164,6 +166,14 @@ public class CustomEntity implements SkyEntity {
             world.dropItem(location, itemSupplier.get());
             i--;
         }
+    }
+
+    private void dropBonus(Location location) {
+        final ItemSupplier itemSupplier = this.bonusItems.getRandom();
+        if (itemSupplier == null) return;
+        final ItemStack item = itemSupplier.get();
+        if (item == null) return;
+        location.getWorld().dropItem(location, item);
     }
 
     public static Serializer serializer() {

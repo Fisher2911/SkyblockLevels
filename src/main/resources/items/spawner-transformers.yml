@@ -1,0 +1,338 @@
+1:
+  class: transformer
+  item-id: rabbit-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Rabbit Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Rabbit Spawners"
+      - "<!i><blue>    16 Rabbit Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Chicken Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-rabbit-spawner
+      amount: 3
+    2:
+      id: rabbit-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: rabbit-spawner
+      amount: 1
+2:
+  class: transformer
+  item-id: chicken-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Chicken Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Chicken Spawners"
+      - "<!i><blue>    16 Chicken Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Pig Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-chicken-spawner
+      amount: 3
+    2:
+      id: chicken-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: pig-spawner
+      amount: 1
+3:
+  class: transformer
+  item-id: pig-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Pig Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Pig Spawners"
+      - "<!i><blue>    16 Pig Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Sheep Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-pig-spawner
+      amount: 3
+    2:
+      id: pig-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: sheep-spawner
+      amount: 1
+4:
+  class: transformer
+  item-id: sheep-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Sheep Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Sheep Spawners"
+      - "<!i><blue>    16 Sheep Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Cow Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-sheep-spawner
+      amount: 3
+    2:
+      id: sheep-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: cow-spawner
+      amount: 1
+5:
+  class: transformer
+  item-id: cow-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Cow Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Cow Spawners"
+      - "<!i><blue>    16 Cow Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Goat Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-cow-spawner
+      amount: 3
+    2:
+      id: cow-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: goat-spawner
+      amount: 1
+6:
+  class: transformer
+  item-id: goat-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Goat Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Goat Spawners"
+      - "<!i><blue>    16 Goat Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Mooshroom Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-goat-spawner
+      amount: 3
+    2:
+      id: goat-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: mushroom-cow-spawner
+      amount: 1
+7:
+  class: transformer
+  item-id: mushroom-cow-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Mooshroom Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Mooshroom Spawners"
+      - "<!i><blue>    16 Mooshroom Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Slime Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-mushroom-cow-spawner
+      amount: 3
+    2:
+      id: mushroom-cow-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: slime-spawner
+      amount: 1
+8:
+  class: transformer
+  item-id: slime-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Slime Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Slime Spawners"
+      - "<!i><blue>    16 Slime Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Spider Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-slime-spawner
+      amount: 3
+    2:
+      id: slime-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: spider-spawner
+      amount: 1
+9:
+  class: transformer
+  item-id: spider-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Spider Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Spider Spawners"
+      - "<!i><blue>    16 Spider Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Cave Spider Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-spider-spawner
+      amount: 3
+    2:
+      id: spider-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: cave-spider-spawner
+      amount: 1
+10:
+  class: transformer
+  item-id: cave-spider-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Cave Spider Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Cave Spider Spawners"
+      - "<!i><blue>    16 Cave Spider Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Zombie Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-cave-spider-spawner
+      amount: 3
+    2:
+      id: cave-spider-spawner-shard
+      amount: 16
+  rewards:
+    1:
+      id: zombie-spawner
+      amount: 1
+11:
+  class: transformer
+  item-id: zombie-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Zombie Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Zombie Spawners"
+      - "<!i><blue>    16 Zombie Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Skeleton Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-zombie-spawner
+      amount: 3
+    2:
+      id: zombie-shard
+      amount: 16
+  rewards:
+    1:
+      id: skeleton-spawner
+      amount: 1
+12:
+  class: transformer
+  item-id: skeleton-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Skeleton Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Skeleton Spawners"
+      - "<!i><blue>    16 Skeleton Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Witch Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-skeleton-spawner
+      amount: 3
+    2:
+      id: skeleton-shard
+      amount: 16
+  rewards:
+    1:
+      id: witch-spawner
+      amount: 1
+13:
+  class: transformer
+  item-id: witch-spawner-transformer
+  tick-delay: 6000
+  item:
+    material: "TRAPPED_CHEST"
+    name: "<!i><blue>Witch Spawner Transformer"
+    lore:
+      - "<!i>"
+      - "<!i><green>Speed: 1 transform / %delay% seconds"
+      - "<!i><blue>Requires:"
+      - "<!i><blue>    3 Fractured Witch Spawners"
+      - "<!i><blue>    16 Witch Spawner Shards"
+      - "<!i><aqua>Rewards: 1 Silverfish Spawner"
+    glow: true
+  requirements:
+    1:
+      id: fractured-witch-spawner
+      amount: 3
+    2:
+      id: witch-shard
+      amount: 16
+  rewards:
+    1:
+      id: silverfish-spawner
+      amount: 1

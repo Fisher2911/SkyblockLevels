@@ -138,6 +138,11 @@ public class UserManager {
         }
     }
 
+    public void addCollectionAmount(User user, String id, int amount, boolean requiresShouldStore) {
+        if (requiresShouldStore && !this.shouldStore.contains(id)) return;
+        this.addCollectionAmount(user, id, amount);
+    }
+
     public void addCollectionAmount(User user, String id, int amount) {
         user.getCollection().addAmount(id, amount);
         final int currentAmount = user.getCollection().getAmount(id);
@@ -191,6 +196,9 @@ public class UserManager {
 
 
     public void load(SkyblockLevels plugin) {
+        this.shouldStore.clear();
+        this.collectionCategories.clear();
+        this.collectionPermissions.clear();
         try {
             final File file = FILE_PATH.toFile();
             if (!file.exists()) {
