@@ -8,113 +8,144 @@ collection-categories:
       material: COBBLESTONE
       amount: 1
       name: "<!i><green>Mining Collection"
-    collections:
-      - cobblestone
-      - cobblestone-generator
-      - andesite-generator
 collection-permissions:
-  cobblestone:
+  COBBLESTONE:
     amount: 64
     permission: skyblocklevels.collection.mining.cobblestone
+    category: mining
   cobblestone-generator:
     amount: 93
     permission: skyblocklevels.collection.mining.cobblestone-generator
+    category: mining
   stone-generator:
     amount: 131
     permission: skyblocklevels.collection.mining.stone-generator
+    category: mining
   diorite-generator:
     amount: 186
     permission: skyblocklevels.collection.mining.diorite-generator
+    category: mining
   andesite-generator:
     amount: 270
     permission: skyblocklevels.collection.mining.andesite-generator
+    category: mining
   granite-generator:
     amount: 400
     permission: skyblocklevels.collection.mining.granite-generator
+    category: mining
   coal-ore-generator:
     amount: 602
     permission: skyblocklevels.collection.mining.coal-ore-generator
+    category: mining
   copper-ore-generator:
     amount: 921
     permission: skyblocklevels.collection.mining.copper-ore-generator
+    category: mining
   iron-ore-generator:
     amount: 1431
     permission: skyblocklevels.collection.mining.iron-ore-generator
+    category: mining
   redstone-ore-generator:
     amount: 2253
     permission: skyblocklevels.collection.mining.redstone-ore-generator
+    category: mining
   lapis-ore-generator:
     amount: 3587
     permission: skyblocklevels.collection.mining.lapis-ore-generator
+    category: mining
   gold-ore-generator:
     amount: 5774
     permission: skyblocklevels.collection.mining.gold-ore-generator
+    category: mining
   emerald-ore-generator:
     amount: 9386
     permission: skyblocklevels.collection.mining.emerald-ore-generator
+    category: mining
   diamond-ore-generator:
     amount: 15397
     permission: skyblocklevels.collection.mining.diamond-ore-generator
+    category: mining
   wheat-sky-crop:
     amount: 257
     permission: skyblocklevels.collection.farming.wheat-sky-crop
+    category: farming
   carrot-sky-crop:
     amount: 322
     permission: skyblocklevels.collection.farming.carrot-sky-crop
+    category: farming
   beetroot-sky-crop:
     amount: 471
     permission: skyblocklevels.collection.farming.beetroot-sky-crop
+    category: farming
   potato-sky-crop:
     amount: 803
     permission: skyblocklevels.collection.farming.potato-sky-crop
+    category: farming
   pumpkin-sky-crop:
     amount: 1564
     permission: skyblocklevels.collection.farming.pumpkin-sky-crop
+    category: farming
   melon-sky-crop:
     amount: 3381
     permission: skyblocklevels.collection.farming.melon-sky-crop
+    category: farming
   sugarcane-sky-crop:
     amount: 23658
     permission: skyblocklevels.collection.farming.sugarcane-sky-crop
+    category: farming
   bamboo-sky-crop:
     amount: 233532
     permission: skyblocklevels.collection.farming.bamboo-sky-crop
+    category: farming
   spawner-rabbit:
     amount: 64
     permission: skyblocklevels.collection.spawners.spawner-rabbit
+    category: spawners
   spawner-chicken:
     amount: 92
     permission: skyblocklevels.collection.spawners.spawner-chicken
+    category: spawners
   spawner-pig:
     amount: 128
     permission: skyblocklevels.collection.spawners.spawner-pig
+    category: spawners
   spawner-sheep:
     amount: 179
     permission: skyblocklevels.collection.spawners.spawner-cow
+    category: spawners
   spawner-cow:
     amount: 254
     permission: skyblocklevels.collection.spawners.spawner-cow
+    category: spawners
   spawner-goat:
     amount: 366
     permission: skyblocklevels.collection.spawners.spawner-goat
+    category: spawners
   spawner-mushroom-cow:
     amount: 539
     permission: skyblocklevels.collection.spawners.spawner-mushroom-cow
+    category: spawners
   spawner-slime:
     amount: 804
     permission: skyblocklevels.collection.spawners.spawner-slime
+    category: spawners
   spawner-spider:
     amount: 1216
     permission: skyblocklevels.collection.spawners.spawner-spider
+    category: spawners
   spawner-cave-spider:
     amount: 1861
     permission: skyblocklevels.collection.spawners.spawner-cave-spider
+    category: spawners
   spawner-zombie:
     amount: 2882
     permission: skyblocklevels.collection.spawners.spawner-zombie
+    category: spawners
   spawner-skeleton:
     amount: 4506
     permission: skyblocklevels.collection.spawners.spawner-skeleton
+    category: spawners
   spawner-witch:
     amount: 7112
     permission: skyblocklevels.collection.spawners.spawner-witch
+    category: spawners

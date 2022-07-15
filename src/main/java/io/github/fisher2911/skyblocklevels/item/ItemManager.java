@@ -66,50 +66,61 @@ public class ItemManager {
 
     private final Map<Class<?>, TriConsumer<Object, Object, Object>> itemActions = Map.of(
             SkyTool.class, (u, s, e) -> {
+                if (!(u instanceof User user)) return;
                 if (!(s instanceof SkyTool skyTool)) return;
                 if (e instanceof BlockBreakEvent event) {
-                    skyTool.onBreak((User) u, event);
+                    skyTool.onBreak(user, event);
                     return;
                 }
-                skyTool.onUse((User) u, (PlayerInteractEvent) e);
+                skyTool.onUse(user, (PlayerInteractEvent) e);
             },
             SkyBlock.class, (u, s, e) -> {
+                if (!(u instanceof User user)) return;
                 if (!(s instanceof SkyBlock skyBlock)) return;
                 if (e instanceof BlockBreakEvent event) {
-                    (skyBlock).onBreak((User) u, event);
+                    (skyBlock).onBreak(user, event);
                     return;
                 }
                 if (e instanceof PlayerInteractEvent event) {
-                    (skyBlock).onClick((User) u, event);
+                    (skyBlock).onClick(user, event);
                     return;
                 }
                 if (e instanceof BlockDamageEvent event) {
-                    (skyBlock).onBlockDamage((User) u, event);
+                    (skyBlock).onBlockDamage(user, event);
                     return;
                 }
                 if (e instanceof BlockDestroyEvent event) {
                     (skyBlock).onDestroy(event);
                     return;
                 }
-                skyBlock.onPlace((User) u, (BlockPlaceEvent) e);
+                if (e instanceof BlockPlaceEvent event) {
+                    skyBlock.onPlace(user, event);
+                }
             },
             SkyWeapon.class, (u, s, e) -> {
+                if (!(u instanceof User user)) return;
                 if (!(s instanceof SkyWeapon skyWeapon)) return;
-                skyWeapon.onAttack((User) u, (EntityDamageEvent) e);
+                if (e instanceof EntityDamageEvent event) {
+                    skyWeapon.onAttack(user, event);
+                }
             },
             Usable.class, (u, s, e) -> {
+                if (!(u instanceof User user)) return;
                 if (!(s instanceof Usable usable)) return;
                 if (e instanceof final PlayerItemDamageEvent event) {
-                    usable.onItemDamage((User) u, event);
+                    usable.onItemDamage(user, event);
                     return;
                 }
                 if (e instanceof final PlayerInteractEvent event) {
-                    usable.onUse((User) u, event);
+                    usable.onUse(user, event);
                 }
             },
             RedstoneBlock.class, (u, s, e) -> {
+                if (!(u instanceof User user)) return;
                 if (!(s instanceof RedstoneBlock redstoneBlock)) return;
-                redstoneBlock.onActivate((User) u, (BlockRedstoneEvent) e);
+                if (e instanceof BlockRedstoneEvent event) {
+                    redstoneBlock.onActivate(user, event);
+                }
             },
             Spawner.class, (u, s, e) -> {
                 if (!(s instanceof Spawner spawner)) return;
@@ -126,15 +137,15 @@ public class ItemManager {
                 if (e instanceof Cancellable cancellable) cancellable.setCancelled(true);
             },
             SkyCrop.class, (u, s, e) -> {
-                if (!(s instanceof SkyCrop)) return;
+                if (!(s instanceof SkyCrop skyCrop)) return;
                 if (e instanceof BlockGrowEvent event) {
-                    ((SkyCrop) s).onGrow(event);
+                    skyCrop.onGrow(event);
                 }
             },
             MultiSkyCrop.class, (u, s, e) -> {
-                if (!(s instanceof MultiSkyCrop)) return;
+                if (!(s instanceof MultiSkyCrop multiSkyCrop)) return;
                 if (e instanceof BlockSpreadEvent event) {
-                    ((MultiSkyCrop) s).onGrow(event);
+                    multiSkyCrop.onGrow(event);
                 }
             }
     );

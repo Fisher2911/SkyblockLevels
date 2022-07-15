@@ -513,8 +513,7 @@ public class MultiSkyCrop extends SkyCrop {
                         placeableOn,
                         maxHeight
                 );
-            } catch (
-                    SerializationException e) {
+            } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }
         }

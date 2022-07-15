@@ -155,6 +155,12 @@ public class UserManager {
         });
     }
 
+    public boolean hasPermissionForCollection(User user, String id) {
+        final CollectionPermission collectionPermission = this.collectionPermissions.get(id);
+        if (collectionPermission == null) return true;
+        return user.getCollection().getAmount(id) >= collectionPermission.getAmount();
+    }
+
     public void loadUser(UUID uuid) {
         final Boosters boosters = Boosters.load(this.plugin.getDataManager().getConnection(), uuid);
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -182,6 +188,7 @@ public class UserManager {
     private static final String AMOUNT_PATH = "amount";
     private static final String COLLECTION_PERMISSIONS_PATH = "collection-permissions";
     private static final String PERMISSION_PATH = "permission";
+    private static final String CATEGORY_PATH = "category";
 
 
     public void load(SkyblockLevels plugin) {
@@ -216,7 +223,12 @@ public class UserManager {
                 final ConfigurationNode node = entry.getValue();
                 final String permission = node.node(PERMISSION_PATH).getString();
                 final int amount = node.node(AMOUNT_PATH).getInt(0);
-                this.collectionPermissions.put(id, new CollectionPermission(id, amount, permission));
+                final String category = node.node(CATEGORY_PATH).getString("");
+                final CollectionCategory collectionCategory = this.collectionCategories.get(category);
+                if (collectionCategory != null) {
+                    collectionCategory.getTypes().add(id);
+                }
+                this.collectionPermissions.put(id, new CollectionPermission(id, amount, permission, category));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -12,6 +12,7 @@ import io.github.fisher2911.skyblocklevels.item.impl.generator.Generator;
 import io.github.fisher2911.skyblocklevels.item.impl.grower.Grower;
 import io.github.fisher2911.skyblocklevels.item.impl.platformer.MaterialPlatformer;
 import io.github.fisher2911.skyblocklevels.item.impl.spawner.MobSpawner;
+import io.github.fisher2911.skyblocklevels.item.impl.transformer.Transformer;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -45,6 +46,7 @@ public class ItemLoader {
         register(MobSpawner.class.getSimpleName().toLowerCase(), node -> MobSpawner.serializer().deserialize(MobSpawner.class, node));
         register(SingleSkyCrop.class.getSimpleName().toLowerCase(), node -> SingleSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
         register(MultiSkyCrop.class.getSimpleName().toLowerCase(), node -> MultiSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
+        register(Transformer.class.getSimpleName().toLowerCase(), node -> Transformer.serializer().deserialize(Transformer.class, node));
     }
 
     private static final String CLASS = "class";
