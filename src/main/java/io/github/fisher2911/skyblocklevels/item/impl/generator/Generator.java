@@ -69,14 +69,12 @@ public class Generator implements SkyBlock, Delayed, Durable {
 
         dataManager.registerItemSaveConsumer(Generator.class, (conn, collection) -> {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
-            collection.forEach(item -> {
-                builder.newEntry().
-                        addEntry(ID, item.getId()).
-                        addEntry(ITEM_ID, item.getItemId()).
-                        addEntry(TICK_COUNTER, ((Generator) item).tickCounter).
-                        build().
-                        execute(conn);
-            });
+            collection.forEach(item -> builder.newEntry().
+                    addEntry(ID, item.getId()).
+                    addEntry(ITEM_ID, item.getItemId()).
+                    addEntry(TICK_COUNTER, ((Generator) item).tickCounter).
+                    build().
+                    execute(conn));
         });
 
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {

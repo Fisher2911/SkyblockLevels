@@ -1,12 +1,14 @@
 package io.github.fisher2911.skyblocklevels.world;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
-import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.KeyType;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.VarChar;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import org.bukkit.Bukkit;
@@ -20,6 +22,8 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -186,12 +190,12 @@ public class Worlds implements Listener {
                 () -> {
                     final InsertStatement.Builder builder = InsertStatement.builder(DATABASE_TABLE_COLUMN);
                     final int batchSize = 50;
-                    Class<?> clazz = null;
+                    final Multimap<Class<?>, SkyBlock> toSave = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
                     for (var entry : blocks.entrySet()) {
                         final WorldPosition worldPosition = entry.getKey();
                         final Position position = worldPosition.getPosition();
                         final SkyBlock block = entry.getValue();
-                        if (clazz == null) clazz = block.getClass();
+                        toSave.put(block.getClass(), block);
                         builder.newEntry().
                                 addEntry(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
                                 addEntry(DATABASE_BLOCK_ID_COLUMN, block.getId()).
@@ -206,8 +210,10 @@ public class Worlds implements Listener {
                                 build().
                                 execute(this.plugin.getDataManager().getConnection());
                     }
-                    if (clazz == null) return;
-                    this.plugin.getDataManager().saveItems(blocks.values(), clazz);
+                    if (toSave.isEmpty()) return;
+                    for (var entry : toSave.asMap().entrySet()) {
+                        this.plugin.getDataManager().saveItems(entry.getValue(), entry.getKey());
+                    }
                 });
     }
 }
