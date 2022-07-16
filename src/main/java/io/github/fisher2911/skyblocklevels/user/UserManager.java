@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class UserManager {
 
@@ -63,6 +64,7 @@ public class UserManager {
     private final Set<String> shouldStore;
     private final Map<String, CollectionCategory> collectionCategories;
     private final Map<String, CollectionPermission> collectionPermissions;
+    private final List<String> startItems;
 
     public UserManager(SkyblockLevels plugin, Map<UUID, BukkitUser> users, Set<String> shouldStore) {
         this.plugin = plugin;
@@ -70,6 +72,7 @@ public class UserManager {
         this.shouldStore = shouldStore;
         this.collectionCategories = new HashMap<>();
         this.collectionPermissions = new HashMap<>();
+        this.startItems = new ArrayList<>();
     }
 
     @Nullable
@@ -97,6 +100,16 @@ public class UserManager {
     public void endSaveTask() {
         if (this.saveTask == null) return;
         this.saveTask.cancel();
+    }
+
+    public List<String> getStartItems() {
+        return startItems;
+    }
+
+    public int getCollectionRequirement(String id) {
+        final CollectionPermission permission = this.collectionPermissions.get(id);
+        if (permission == null) return 0;
+        return permission.getAmount();
     }
 
     public void showMenu(BukkitUser user) {
@@ -165,7 +178,7 @@ public class UserManager {
         return user.getCollection().getAmount(id) >= collectionPermission.getAmount();
     }
 
-    public void loadUser(UUID uuid) {
+    public void loadUser(UUID uuid, Consumer<User> onLoad) {
         final Boosters boosters = Boosters.load(this.plugin.getDataManager().getConnection(), uuid);
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             final SelectStatement statement = SelectStatement.
@@ -182,10 +195,12 @@ public class UserManager {
             });
             BukkitUser user = users.isEmpty() ? new BukkitUser(uuid, new Collection(new HashMap<>()), new Cooldowns(new HashMap<>()), boosters) : users.get(0);
             this.addUser(user);
+            onLoad.accept(user);
         });
     }
 
     private static final String SHOULD_STORE_PATH = "should-store";
+    private static final String START_ITEMS_PATH = "start-items";
     private static final String COLLECTION_CATEGORIES_PATH = "collection-categories";
     private static final String ITEM = "item";
     private static final String COLLECTIONS = "collections";
@@ -199,6 +214,7 @@ public class UserManager {
         this.shouldStore.clear();
         this.collectionCategories.clear();
         this.collectionPermissions.clear();
+        this.startItems.clear();
         try {
             final File file = FILE_PATH.toFile();
             if (!file.exists()) {
@@ -210,9 +226,10 @@ public class UserManager {
                     path(FILE_PATH).
                     build();
             final ConfigurationNode source = loader.load();
+            final ConfigurationNode startItemsNode = source.node(START_ITEMS_PATH);
+            this.startItems.addAll(startItemsNode.getList(String.class, new ArrayList<>()));
             final ConfigurationNode shouldStore = source.node(SHOULD_STORE_PATH);
             final ConfigurationNode collectionCategories = source.node(COLLECTION_CATEGORIES_PATH);
-            this.collectionCategories.clear();
             for (var entry : collectionCategories.childrenMap().entrySet()) {
                 if (!(entry.getKey() instanceof final String category)) continue;
                 final ConfigurationNode node = entry.getValue();
@@ -221,7 +238,6 @@ public class UserManager {
                 final CollectionCategory collectionCategory = new CollectionCategory(this.plugin, category, supplier, collections);
                 this.collectionCategories.put(category, collectionCategory);
             }
-            this.shouldStore.clear();
             this.shouldStore.addAll(shouldStore.getList(String.class, new ArrayList<>()));
             this.collectionPermissions.clear();
             final ConfigurationNode collectionPermissions = source.node(COLLECTION_PERMISSIONS_PATH);

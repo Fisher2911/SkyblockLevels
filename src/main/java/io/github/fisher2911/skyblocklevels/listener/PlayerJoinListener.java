@@ -3,6 +3,7 @@ package io.github.fisher2911.skyblocklevels.listener;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.item.ItemManager;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
@@ -31,7 +32,14 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        this.userManager.loadUser(player.getUniqueId());
+        this.userManager.loadUser(player.getUniqueId(), user -> {
+            if (!player.hasPlayedBefore()) {
+                final ItemManager itemManager = this.plugin.getItemManager();
+                for (String giveItem : this.userManager.getStartItems()) {
+                    this.plugin.getItemManager().giveItem(user, itemManager.getItem(giveItem));
+                }
+            }
+        });
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (ItemStack itemStack : player.getInventory()) {
                 if (itemStack == null) continue;

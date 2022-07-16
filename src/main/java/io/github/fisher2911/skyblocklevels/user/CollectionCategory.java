@@ -52,7 +52,7 @@ public class CollectionCategory {
                 }
                 builder = ItemBuilder.from(itemManager.getItem(item));
             }
-            builder.lore("").lore("<green>Collected: " + amount);
+            builder.lore("").lore("<green>Collected: " + amount + " / " + userManager.getCollectionRequirement(type));
             gui.addItem(new GuiItem(builder.build()));
         }
         gui.setItem(rows * 9 - 5, new GuiItem(ItemBuilder.from(Material.ARROW).name("Back").build(), event -> userManager.showMenu(user)));

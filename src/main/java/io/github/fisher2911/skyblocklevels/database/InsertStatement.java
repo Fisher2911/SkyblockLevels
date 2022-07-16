@@ -1,5 +1,7 @@
 package io.github.fisher2911.skyblocklevels.database;
 
+import org.bukkit.Bukkit;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -34,14 +36,19 @@ public class InsertStatement {
     }
 
     public void execute(Connection connection) {
-        try (final PreparedStatement statement = connection.prepareStatement(this.getStatement())) {
-            if (this.batchSize <= 0) {
-                for (Map<String, DatabaseEntry> value : this.values) {
+        if (this.batchSize <= 0) {
+            for (Map<String, DatabaseEntry> value : this.values) {
+                try (final PreparedStatement statement = connection.prepareStatement(this.getStatement())) {
                     this.setValues(statement, value);
                     statement.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("Error with statement: " + this.getStatement());
+                    e.printStackTrace();
                 }
-                return;
             }
+            return;
+        }
+        try (final PreparedStatement statement = connection.prepareStatement(this.getStatement())) {
             int i = 0;
             for (Map<String, DatabaseEntry> value : this.values) {
                 this.setValues(statement, value);

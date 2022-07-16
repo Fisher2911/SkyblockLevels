@@ -1,3 +1,11 @@
+start-items:
+  - "dirt-platformer"
+  - "dirt-transformer"
+  - "grass-block-transformer"
+  - "rabbit-spawner"
+  - "oak-tree-grower"
+  - "wheat-sky-crop"
+
 should-store:
   - COBBLESTONE
   - cobblestone-generator

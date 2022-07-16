@@ -63,14 +63,12 @@ public class Grower implements SkyBlock {
 
         dataManager.registerItemSaveConsumer(Grower.class, (conn, collection) -> {
             final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
-            collection.forEach(item -> {
-                builder.newEntry().
-                        addEntry(ID, item.getId()).
-                        addEntry(ITEM_ID, item.getItemId()).
-                        addEntry(TICK_COUNTER, ((Grower) item).tickCounter).
-                        build().
-                        execute(conn);
-            });
+            collection.forEach(item -> builder.newEntry().
+                    addEntry(ID, item.getId()).
+                    addEntry(ITEM_ID, item.getItemId()).
+                    addEntry(TICK_COUNTER, ((Grower) item).tickCounter).
+                    build().
+                    execute(conn));
         });
 
 
@@ -127,8 +125,13 @@ public class Grower implements SkyBlock {
         this.growChances = growChances;
     }
 
+    public void setWorldPosition(WorldPosition worldPosition) {
+        this.worldPosition = worldPosition;
+    }
+
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
+        event.getBlock().setType(Material.AIR);
         this.plugin.getItemManager().giveItem(user, this);
         this.plugin.getWorlds().removeBlock(this.worldPosition);
     }
@@ -161,6 +164,7 @@ public class Grower implements SkyBlock {
 
     @Override
     public void tick(WorldPosition worldPosition) {
+        if (this.worldPosition == null) this.worldPosition = worldPosition;
         if (this.tickCounter++ < this.tickDelay) return;
         this.tickCounter = 0;
         final Block above = worldPosition.toLocation().getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.UP);

@@ -282,7 +282,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
             itemBuilder.name("<!i>" + itemType);
             itemBuilder.amount(1);
             itemBuilder.lore("").
-                    lore(user.getCollection().getAmount(itemType) + "/" + entry.getValue());
+                    lore("<!i><aqua>" + user.getCollection().getAmount(itemType) + "/" + entry.getValue());
             gui.addItem(new GuiItem(itemBuilder.build()));
         }
         final Player player = user.getPlayer();
