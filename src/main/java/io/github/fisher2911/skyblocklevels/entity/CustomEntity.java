@@ -15,6 +15,7 @@ import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -163,7 +164,9 @@ public class CustomEntity implements SkyEntity {
         while (i > 0) {
             final ItemSupplier itemSupplier = this.drops.getRandom();
             if (itemSupplier == null) break;
-            world.dropItem(location, itemSupplier.get());
+            final ItemStack item = itemSupplier.get();
+            if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) return;
+            world.dropItem(location, item);
             i--;
         }
     }
@@ -172,7 +175,7 @@ public class CustomEntity implements SkyEntity {
         final ItemSupplier itemSupplier = this.bonusItems.getRandom();
         if (itemSupplier == null) return;
         final ItemStack item = itemSupplier.get();
-        if (item == null) return;
+        if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) return;
         location.getWorld().dropItem(location, item);
     }
 

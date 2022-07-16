@@ -8,7 +8,7 @@
       - "<!i>"
       - "<!i><green>Amount: %amount%"
     glow: true
-  radius: 3
+  radius: 2
   type: DIRT
   stored: 24
 2:

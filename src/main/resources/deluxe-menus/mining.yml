@@ -1,0 +1,113 @@
+#  A DeluxeMenus basic configuration guide for beginners
+#=========================================================
+#
+# This note will help you understand the basic functions and configuring of DeluxeMenus: commands, requirements, items and others, and from then on you can start to work with more advanced stuff. You can delete this note or any note below at any time. But if you are still here anyway, then let's move down below
+#
+
+# Open Command
+#
+# This setting is the command that will be used to open this menu. Supports normal String or a String List
+# NOTE: Use "open_command: []" to create a menu with no commands needed
+#
+# open_command: <command>
+# open_command:
+#   - <command1>
+#   - <command2>
+#
+open_command: ""
+
+# Size
+#
+# This allows you to set the size of the menu inventory. Range from 9-54.
+# If this option is not present in the menu configuration, it will default to 54.
+#
+size: 27
+
+# Menu title
+#
+# This is the title of the menu. You can change it with your custom name
+# Color codes and placeholders are supported
+#
+menu_title: '&9Mining Menu'
+
+# Open requirement
+#
+# This setting section allows you to define requirements the menu viewer must meet
+# to be allowed to open this menu in game.
+#
+# Any menu you want to restrict access to based on permission
+# should have a basic "has permission" requirement
+#
+# This setting and requirements can be explained more in depth by checking out
+# the requirements_menu.yml file in your menus folder.
+# For full reference, check https://wiki.helpch.at/clips-plugins/deluxemenus/options-and-configurations/requirements
+#
+#open_requirement:
+#  requirements:
+#    permission:
+#      type: has permission
+#      permission: deluxemenus.admin
+#      deny_commands:
+#        - '[message] &cYou don''t have permission to do that!'
+
+# Item section. This is where you can start add items into menu, and add functions into each items that you did.
+# For depth explanation on the functions, you can check on the note given from config.yml
+# For full reference, check https://wiki.helpch.at/clips-plugins/deluxemenus/options-and-configurations/item
+#
+
+items:
+  '1':
+    material: COBBLESTONE
+    slot: 10
+    display_name: "&aGenerators"
+    lore:
+      - ""
+      - "&bGenerators are blocks that regenerate at intervals,"
+      - "&band you can mine them to collect materials."
+  '2':
+    material: BEACON
+    slot: 11
+    display_name: "&aTiers"
+    lore:
+      - ""
+      - "&bThey have a chance to drop generator cores and"
+      - "&bgenerator fragments, which can be used to craft more generators."
+  '3':
+    material: TRAPPED_CHEST
+    slot: 12
+    glow: true
+    display_name: "&aGenerator Transformers"
+    lore:
+      - ""
+      - "&bYou can also put them in transformers to create higher tier generators."
+  '5':
+    material: ARROW
+    slot: 18
+    display_name: "&aGo Back"
+    click_commands:
+      - "[openguimenu] help_menu"
+  'filler_item':
+    material: GRAY_STAINED_GLASS_PANE
+    slots:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 17
+      #      - 18
+      - 19
+      - 20
+      - 21
+      - 22
+      - 23
+      - 24
+      - 25
+      - 26
+    display_name: ' '
+sweet: true

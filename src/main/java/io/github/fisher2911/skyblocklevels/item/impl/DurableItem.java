@@ -105,7 +105,7 @@ public class DurableItem implements Usable, SpecialSkyItem {
 
     @Override
     public ItemStack getItemStack() {
-        return this.itemSupplier.get(this.placeholders, ItemBuilder.EMPTY);
+        return this.itemSupplier.get(this.placeholders, ItemBuilder.EMPTY.build());
     }
 
     @Override

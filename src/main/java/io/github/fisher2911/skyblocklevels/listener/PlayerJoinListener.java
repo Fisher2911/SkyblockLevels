@@ -8,7 +8,6 @@ import io.github.fisher2911.skyblocklevels.user.BukkitUser;
 import io.github.fisher2911.skyblocklevels.user.UserManager;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,7 +32,6 @@ public class PlayerJoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         this.userManager.loadUser(player.getUniqueId());
-        player.getInventory().addItem(new ItemStack(Material.OAK_SAPLING));
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (ItemStack itemStack : player.getInventory()) {
                 if (itemStack == null) continue;
