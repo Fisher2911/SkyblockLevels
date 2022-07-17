@@ -59,16 +59,15 @@ public class ItemCatcher implements SkyBlock, Delayed {
                 build());
 
         dataManager.registerItemSaveConsumer(ItemCatcher.class, (conn, collection) -> {
-            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item -> {
-                builder.newEntry().
+                InsertStatement.builder(TABLE).
+                        newEntry().
                         addEntry(ID, item.getId()).
                         addEntry(ITEM_ID, item.getItemId()).
                         addEntry(TICK_COUNTER, ((ItemCatcher) item).tickCounter).
                         build().
                         execute(conn);
             });
-            builder.build().execute(conn);
         });
         
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {

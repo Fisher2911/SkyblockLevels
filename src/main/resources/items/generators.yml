@@ -47,7 +47,7 @@
       item:
         id: "cobblestone-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "cobblestone-generator-core"
   collection-requirements:
@@ -106,7 +106,7 @@
       item:
         id: "stone-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "stone-generator-core"
   collection-requirements:
@@ -167,7 +167,7 @@
       item:
         id: "diorite-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "diorite-generator-core"
   collection-requirements:
@@ -230,7 +230,7 @@
       item:
         id: "andesite-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "andesite-generator-core"
   collection-requirements:
@@ -291,7 +291,7 @@
       item:
         id: "granite-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "granite-generator-core"
   collection-requirements:
@@ -352,7 +352,7 @@
       item:
         id: "coal-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "coal-ore-generator-core"
   collection-requirements:
@@ -413,7 +413,7 @@
       item:
         id: "copper-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "copper-ore-generator-core"
   collection-requirements:
@@ -472,7 +472,7 @@
       item:
         id: "iron-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "iron-ore-generator-core"
   collection-requirements:
@@ -531,7 +531,7 @@
       item:
         id: "redstone-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "redstone-ore-generator-core"
   collection-requirements:
@@ -590,7 +590,7 @@
       item:
         id: "lapis-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "lapis-ore-generator-core"
   collection-requirements:
@@ -647,7 +647,7 @@
       item:
         id: "gold-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "gold-ore-generator-core"
   collection-requirements:
@@ -702,7 +702,7 @@
       item:
         id: "emerald-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "emerald-ore-generator-core"
   collection-requirements:
@@ -755,7 +755,7 @@
       item:
         id: "diamond-ore-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "diamond-ore-generator-core"
   collection-requirements:
@@ -806,7 +806,7 @@
       item:
         id: "obsidian-generator-fragment"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "obsidian-generator-core"
   collection-requirements:

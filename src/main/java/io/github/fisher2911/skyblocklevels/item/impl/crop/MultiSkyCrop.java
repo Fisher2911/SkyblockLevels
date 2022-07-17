@@ -74,10 +74,10 @@ public class MultiSkyCrop extends SkyCrop {
                 build());
 
         dataManager.registerItemSaveConsumer(MultiSkyCrop.class, (conn, collection) -> {
-            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item -> {
                 if (!(item instanceof MultiSkyCrop crop)) return;
-                builder.newEntry().
+                InsertStatement.builder(TABLE).
+                        newEntry().
                         addEntry(ID, item.getId()).
                         addEntry(ITEM_ID, item.getItemId()).
                         addEntry(TICK_COUNTER, crop.currentTickCounter).

@@ -18,6 +18,7 @@ import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -99,7 +100,7 @@ public class EntityManager implements Listener {
         return this.getEntity(entity.getUniqueId());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntitySpawn(EntitySpawnEvent event) {
         final Entity entity = event.getEntity();
         if (event instanceof final SpawnerSpawnEvent e) {
@@ -111,14 +112,14 @@ public class EntityManager implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.loadEntity(entity));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntitySpawn(EntityAddToWorldEvent event) {
         final Entity entity = event.getEntity();
         if (!Keys.isSkyEntity(entity)) return;
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.loadEntity(entity));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onWorldLoad(WorldLoadEvent event) {
         final Collection<Entity> entities = event.getWorld().getEntities();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
@@ -129,9 +130,9 @@ public class EntityManager implements Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onChunkLoad(ChunkLoadEvent event) {
-        final Collection<Entity> entities = event.getWorld().getEntities();
+        final Entity[] entities = event.getChunk().getEntities();
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             for (Entity entity : entities) {
                 if (!Keys.isSkyEntity(entity)) continue;
@@ -140,15 +141,15 @@ public class EntityManager implements Listener {
         });
     }
 
-     @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityRemove(EntityDeathEvent event) {
         final Entity entity = event.getEntity();
-         if (!Keys.isSkyEntity(entity)) return;
-         final UUID uuid = entity.getUniqueId();
-         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
+        if (!Keys.isSkyEntity(entity)) return;
+        final UUID uuid = entity.getUniqueId();
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
     }
 
-     @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityRemove(EntityRemoveFromWorldEvent event) {
         final Entity entity = event.getEntity();
         if (!Keys.isSkyEntity(entity)) return;
@@ -156,22 +157,24 @@ public class EntityManager implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
     }
 
-     @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onWorldUnload(WorldUnloadEvent event) {
-         if (!this.plugin.isShuttingDown()) {
-             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(event.getWorld().getEntities()));
-             return;
-         }
-         this.saveEntities(event.getWorld().getEntities());
-    }
-
-     @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent event) {
+        final Collection<Entity> entities = event.getWorld().getEntities();
         if (!this.plugin.isShuttingDown()) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(event.getChunk().getEntities()));
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(entities));
             return;
         }
-        this.saveEntities(event.getChunk().getEntities());
+        this.saveEntities(entities);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        final Entity[] entities = event.getChunk().getEntities();
+        if (!this.plugin.isShuttingDown()) {
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(entities));
+            return;
+        }
+        this.saveEntities(entities);
     }
 
     private void saveEntities(Collection<Entity> entities) {

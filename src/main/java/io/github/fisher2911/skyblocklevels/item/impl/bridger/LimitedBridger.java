@@ -42,16 +42,15 @@ public class LimitedBridger extends Bridger {
                 build());
 
         dataManager.registerItemSaveConsumer(LimitedBridger.class, (conn, collection) -> {
-            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item -> {
-                builder.newEntry().
+                InsertStatement.builder(TABLE).
+                        newEntry().
                         addEntry(ID, item.getId()).
                         addEntry(ITEM_ID, item.getItemId()).
                         addEntry(STORED_BLOCKS, ((LimitedBridger) item).storedBlocks).
                         build().
                         execute(conn);
             });
-            builder.build().execute(conn);
         });
 
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {

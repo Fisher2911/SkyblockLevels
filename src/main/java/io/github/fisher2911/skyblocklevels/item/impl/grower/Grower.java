@@ -62,8 +62,8 @@ public class Grower implements SkyBlock {
                 build());
 
         dataManager.registerItemSaveConsumer(Grower.class, (conn, collection) -> {
-            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
-            collection.forEach(item -> builder.newEntry().
+            collection.forEach(item -> InsertStatement.builder(TABLE).
+                    newEntry().
                     addEntry(ID, item.getId()).
                     addEntry(ITEM_ID, item.getItemId()).
                     addEntry(TICK_COUNTER, ((Grower) item).tickCounter).

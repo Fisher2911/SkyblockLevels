@@ -13,7 +13,7 @@
       item:
         id: "rabbit-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-rabbit-spawner"
 2:
@@ -31,7 +31,7 @@
       item:
         id: "chicken-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-chicken-spawner"
 3:
@@ -49,7 +49,7 @@
       item:
         id: "pig-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-pig-spawner"
 4:
@@ -67,7 +67,7 @@
       item:
         id: "sheep-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-sheep-spawner"
 5:
@@ -85,7 +85,7 @@
       item:
         id: "cow-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-cow-spawner"
 6:
@@ -103,7 +103,7 @@
       item:
         id: "goat-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-goat-spawner"
 7:
@@ -121,7 +121,7 @@
       item:
         id: "sheep-mushroom-cow-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-mushroom-cow-spawner"
 8:
@@ -139,7 +139,7 @@
       item:
         id: "slime-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-slime-spawner"
 9:
@@ -157,7 +157,7 @@
       item:
         id: "spider-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-spider-spawner"
 10:
@@ -175,7 +175,7 @@
       item:
         id: "cave-spider-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-cave-spider-spawner"
 11:
@@ -193,7 +193,7 @@
       item:
         id: "zombie-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-zombie-spawner"
 12:
@@ -211,7 +211,7 @@
       item:
         id: "skeleton-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-skeleton-spawner"
 13:
@@ -229,7 +229,7 @@
       item:
         id: "witch-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-witch-spawner"
 14:
@@ -247,6 +247,6 @@
       item:
         id: "silverfish-spawner-shard"
     3:
-      weight: 3
+      weight: 1
       item:
         id: "fractured-silverfish-spawner"

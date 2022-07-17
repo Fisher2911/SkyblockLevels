@@ -133,14 +133,13 @@ public class Boosters {
     private void delete(Booster booster) {
         if (!booster.isStarted()) return;
         final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
-                DeleteStatement.builder(TABLE).
-                        condition(OWNER_FIELD, booster.getOwner()).
-                        condition(START_TIME_EPOCH_FIELD, booster.getStartTime().toEpochMilli()).
-                        condition(TYPE_FIELD, booster.getBoosterType().toString()).
-                        condition(OPERATION_FIELD, booster.getOperation().getSign()).
-                        build().
-                        execute(plugin.getDataManager().getConnection()));
+        DeleteStatement.builder(TABLE).
+                condition(OWNER_FIELD, booster.getOwner()).
+                condition(START_TIME_EPOCH_FIELD, booster.getStartTime().toEpochMilli()).
+                condition(TYPE_FIELD, booster.getBoosterType().toString()).
+                condition(OPERATION_FIELD, booster.getOperation().getSign()).
+                build().
+                execute(plugin.getDataManager().getConnection());
     }
 
     public static Boosters load(Connection connection, UUID owner) {

@@ -7,6 +7,7 @@ public class Permission {
     public static final String RANDOM_TP = "skyblocklevels.randomtp";
     public static final String SPAWN_TP = "skyblocklevels.spawn";
     public static final String VIEW_COLLECTION = "skyblocklevels.viewcollection";
+    public static final String SET_COLLECTION = "skyblocklevels.setcollection";
     public static final String RELOAD = "skyblocklevels.reload";
 
 }

@@ -84,14 +84,18 @@ public final class SkyblockLevels extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        final PacketEventsAPI<Plugin> api = SpigotPacketEventsBuilder.build(this);
-        api.getSettings().debug(false);
-        PacketEvents.setAPI(api);
-        PacketEvents.getAPI().load();
+//        final PacketEventsAPI<Plugin> api = SpigotPacketEventsBuilder.build(this);
+//        api.getSettings().debug(false);
+//        PacketEvents.setAPI(api);
+//        PacketEvents.getAPI().load();
     }
 
     @Override
     public void onEnable() {
+        final PacketEventsAPI<Plugin> api = SpigotPacketEventsBuilder.build(this);
+        api.getSettings().debug(false);
+        PacketEvents.setAPI(api);
+        PacketEvents.getAPI().load();
         PacketEvents.getAPI().init();
         this.config = new Config(this);
         this.config.load();

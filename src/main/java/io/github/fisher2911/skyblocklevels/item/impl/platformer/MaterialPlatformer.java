@@ -44,14 +44,14 @@ public class MaterialPlatformer extends Platformer {
                 build());
 
         dataManager.registerItemSaveConsumer(MaterialPlatformer.class, (conn, collection) -> {
-            final InsertStatement.Builder builder = InsertStatement.builder(TABLE);
             collection.forEach(item ->
-                    builder.newEntry().
-                    addEntry(ID, item.getId()).
-                    addEntry(ITEM_ID, item.getItemId()).
-                    addEntry(STORED, ((MaterialPlatformer) item).stored).
-                    build().
-                    execute(conn));
+                    InsertStatement.builder(TABLE).
+                            newEntry().
+                            addEntry(ID, item.getId()).
+                            addEntry(ITEM_ID, item.getItemId()).
+                            addEntry(STORED, ((MaterialPlatformer) item).stored).
+                            build().
+                            execute(conn));
         });
 
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
