@@ -4,7 +4,6 @@ import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import net.brcdev.shopgui.provider.item.ItemProvider;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,9 +25,8 @@ public class SkyItemProvider extends ItemProvider {
 
     @Override
     public ItemStack loadItem(ConfigurationSection configurationSection) {
-        // todo - remove
-        if (true) return new ItemStack(Material.BARRIER);
         final String id = configurationSection.getString("id");
+        if (id == null) return null;
         final SpecialSkyItem item = this.plugin.getItemManager().getItem(id);
         if (item == SkyItem.EMPTY) return null;
         final ItemStack itemStack = item.getItemStack();

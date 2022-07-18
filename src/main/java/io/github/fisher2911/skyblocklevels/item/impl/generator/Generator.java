@@ -39,6 +39,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -227,6 +229,12 @@ public class Generator implements SkyBlock, Delayed, Durable {
         this.plugin.getUserManager().addCollectionAmount(user, this.itemId, 1);
         final ItemStack brokeWith = event.getPlayer().getInventory().getItemInMainHand();
         if (brokeWith == null) return;
+        final ItemMeta itemMeta = brokeWith.getItemMeta();
+        if (itemMeta instanceof Damageable damageable) {
+            damageable.setDamage(damageable.getDamage() + 1);
+            brokeWith.setItemMeta(itemMeta);
+            if (damageable.getDamage() - 1 <= 0) brokeWith.setType(Material.AIR);
+        }
         if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;
         durableItem.takeDamage(brokeWith, 1);
     }

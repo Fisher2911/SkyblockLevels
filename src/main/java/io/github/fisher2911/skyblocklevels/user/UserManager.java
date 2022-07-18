@@ -134,15 +134,13 @@ public class UserManager {
             bukkitUser.getBoosters().save(this.plugin.getDataManager().getConnection());
         }
         if (changed.isEmpty()) return;
-        final InsertStatement.Builder builder = InsertStatement.
-                builder(TABLE);
         for (String collectionType : changed) {
-            builder.newEntry().
+            InsertStatement.builder(TABLE).newEntry().
                     addEntry(UUID, user.getId().toString()).
                     addEntry(ITEM_ID, collectionType).
-                    addEntry(AMOUNT, collection.getAmount(collectionType));
+                    addEntry(AMOUNT, collection.getAmount(collectionType)).
+                    build().execute(this.plugin.getDataManager().getConnection());
         }
-        builder.build().execute(this.plugin.getDataManager().getConnection());
     }
 
     public void saveAll() {

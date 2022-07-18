@@ -84,19 +84,16 @@ public final class SkyblockLevels extends JavaPlugin {
 
     @Override
     public void onLoad() {
-//        final PacketEventsAPI<Plugin> api = SpigotPacketEventsBuilder.build(this);
-//        api.getSettings().debug(false);
-//        PacketEvents.setAPI(api);
-//        PacketEvents.getAPI().load();
-    }
-
-    @Override
-    public void onEnable() {
         final PacketEventsAPI<Plugin> api = SpigotPacketEventsBuilder.build(this);
         api.getSettings().debug(false);
         PacketEvents.setAPI(api);
         PacketEvents.getAPI().load();
+    }
+
+    @Override
+    public void onEnable() {
         PacketEvents.getAPI().init();
+        PacketHelper.registerListeners(this);
         this.config = new Config(this);
         this.config.load();
         this.dataManager = new DataManager(this);
@@ -113,12 +110,15 @@ public final class SkyblockLevels extends JavaPlugin {
         this.userManager.load(this);
         this.registerListeners();
         this.initCommands();
-        PacketHelper.registerListeners(this);
         this.dataManager.createTables();
         this.userManager.startSaveTask();
         this.teleportManager = new TeleportManager(this, new HashSet<>());
         new SkyblockExpansion(this).register();
         provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            this.worlds.load();
+            this.entityManager.load();
+        }, 20);
     }
 
     @Override

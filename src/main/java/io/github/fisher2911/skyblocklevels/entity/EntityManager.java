@@ -16,6 +16,7 @@ import io.github.fisher2911.skyblocklevels.user.User;
 import io.github.fisher2911.skyblocklevels.util.Keys;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -128,6 +129,18 @@ public class EntityManager implements Listener {
                 this.loadEntity(entity);
             }
         });
+    }
+
+    public void load() {
+        for (World world : Bukkit.getWorlds()) {
+            final Collection<Entity> entities = world.getEntities();
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                for (Entity entity : entities) {
+                    if (!Keys.isSkyEntity(entity)) continue;
+                    this.loadEntity(entity);
+                }
+            });
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)

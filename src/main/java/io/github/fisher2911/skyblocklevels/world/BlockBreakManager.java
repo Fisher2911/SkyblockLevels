@@ -62,8 +62,14 @@ public class BlockBreakManager implements Listener {
 
     public BlockTickData tick(UUID uuid, WorldPosition position) {
         final int currentTick = Bukkit.getCurrentTick();
-        final BlockTickData data = this.playerLastMineTick.computeIfAbsent(uuid, k -> new BlockTickData(currentTick, position, 0));
+        final BlockTickData data = this.playerLastMineTick.computeIfAbsent(uuid, k -> new BlockTickData(currentTick, position, currentTick));
         data.lastTick = currentTick;
+        final BlockBreakData blockBreakData = this.blockBreakData.get(position);
+        if (blockBreakData == null) {
+            data.lastTick = data.firstTick;
+            return data;
+        }
+        blockBreakData.tick(position);
         return data;
     }
 
@@ -77,11 +83,10 @@ public class BlockBreakManager implements Listener {
                         final WorldPosition position = entry.getKey();
                         final BlockBreakData data = entry.getValue();
                         data.send(position);
-                        data.tick(position);
-                        if (data.isBroken()) {
+                        if (data.isBroken() ) {
                             data.reset(position);
                             data.getOnBreak().accept(position);
-                            return false;
+                            return true;
                         }
                         return false;
                     });

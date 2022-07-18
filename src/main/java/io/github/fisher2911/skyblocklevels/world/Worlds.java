@@ -65,6 +65,21 @@ public class Worlds implements Listener {
         this.worlds = worlds;
     }
 
+    public void load() {
+        for (World world : Bukkit.getWorlds()) {
+            final UUID uuid = world.getUID();
+            if (this.worlds.get(uuid) != null) continue;
+            final WorldManager worldManager = new WorldManager(this.plugin, world, new ConcurrentHashMap<>());
+            this.worlds.put(world.getUID(), worldManager);
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+                for (Chunk chunk : world.getLoadedChunks()) {
+                    this.loadChunk(world.getUID(), chunk.getX(), chunk.getZ());
+                }
+                worldManager.startTicking();
+            });
+        }
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onWorldLoad(WorldLoadEvent event) {
         if (this.plugin.isShuttingDown()) return;

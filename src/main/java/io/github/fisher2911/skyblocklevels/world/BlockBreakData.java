@@ -49,6 +49,7 @@ public class BlockBreakData {
 
     public void tick(WorldPosition position) {
         final ItemStack held = this.player.getInventory().getItemInMainHand();
+        PacketHelper.sendMiningFatiguePacket(this.player);
         if (!(held.isSimilar(this.breakingWith))) {
             this.reset(position);
             this.breakingWith = held;
