@@ -236,7 +236,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         if (weight == null) return;
         final ItemStack item = weight.get();
         if (item == null || item.getType() == Material.AIR || item.getAmount() == 0) return;
-        location.getWorld().dropItem(location, item);
+        location.getWorld().dropItem(location.clone().add(0.5, 0, 0.5), item);
     }
 
     @Override
