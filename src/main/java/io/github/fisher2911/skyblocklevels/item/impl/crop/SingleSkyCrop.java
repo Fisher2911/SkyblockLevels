@@ -6,6 +6,7 @@ import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.user.CollectionCondition;
 import io.github.fisher2911.skyblocklevels.user.User;
+import io.github.fisher2911.skyblocklevels.util.Random;
 import io.github.fisher2911.skyblocklevels.util.Range;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
@@ -17,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockGrowEvent;
@@ -133,7 +135,16 @@ public class SingleSkyCrop extends SkyCrop {
 
     @Override
     public void onClick(User user, PlayerInteractEvent event) {
-
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        final ItemStack itemStack = event.getItem();
+        if (itemStack == null) return;
+        if (itemStack.getType() != Material.BONE_MEAL) return;
+        final Block block = event.getClickedBlock();
+        if (block == null) return;
+        if (!(block.getBlockData() instanceof Ageable ageable)) return;
+        final int currentAge = ageable.getAge();
+        ageable.setAge(Math.min(Random.nextInt(currentAge, currentAge + 2), ageable.getMaximumAge()));
+        block.setBlockData(ageable);
     }
 
     @Override
