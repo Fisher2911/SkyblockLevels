@@ -9,9 +9,9 @@ import java.util.List;
 public class DeleteStatement {
 
     private final String tableName;
-    private final List<DatabaseCondition> conditions;
+    private final List<EqualityCondition> conditions;
 
-    public DeleteStatement(String tableName, List<DatabaseCondition> conditions) {
+    public DeleteStatement(String tableName, List<EqualityCondition> conditions) {
         this.tableName = tableName;
         this.conditions = conditions;
     }
@@ -20,7 +20,7 @@ public class DeleteStatement {
         return tableName;
     }
 
-    public List<DatabaseCondition> getConditions() {
+    public List<EqualityCondition> getConditions() {
         return conditions;
     }
 
@@ -38,7 +38,7 @@ public class DeleteStatement {
         builder.append(this.tableName);
         if (!this.conditions.isEmpty()) {
             builder.append(" WHERE ");
-            for (DatabaseCondition condition : this.conditions) {
+            for (EqualityCondition condition : this.conditions) {
                 builder.append(condition.getCondition()).append(" AND ");
             }
             builder.delete(builder.length() - 5, builder.length());
@@ -53,24 +53,24 @@ public class DeleteStatement {
     public static class Builder {
 
         private final String tableName;
-        private final List<DatabaseCondition> conditions;
+        private final List<EqualityCondition> conditions;
 
         private Builder(String tableName) {
             this.tableName = tableName;
             this.conditions = new ArrayList<>();
         }
 
-        public Builder condition(DatabaseCondition condition) {
+        public Builder condition(EqualityCondition condition) {
             this.conditions.add(condition);
             return this;
         }
 
         public Builder condition(String field, String expected) {
-            return this.condition(new DatabaseCondition(field, expected));
+            return this.condition(new EqualityCondition(field, expected));
         }
 
         public Builder condition(String field, Object expected) {
-            return this.condition(new DatabaseCondition(field, expected));
+            return this.condition(new EqualityCondition(field, expected));
         }
 
         public DeleteStatement build() {

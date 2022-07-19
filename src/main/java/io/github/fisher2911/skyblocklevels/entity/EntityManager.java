@@ -212,7 +212,7 @@ public class EntityManager implements Listener {
 
     public void loadEntity(Entity entity) {
         final List<SkyEntity> skyEntities = SelectStatement.builder(TABLE).
-                condition(UUID, entity.getUniqueId().toString()).
+                whereEqual(UUID, entity.getUniqueId().toString()).
                 selectAll().
                 build().
                 execute(this.plugin.getDataManager().getConnection(), results -> {

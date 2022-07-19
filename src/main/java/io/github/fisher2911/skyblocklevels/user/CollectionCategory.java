@@ -9,12 +9,13 @@ import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.Spawner;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CollectionCategory {
 
@@ -31,6 +32,10 @@ public class CollectionCategory {
     }
 
     public void showMenu(BukkitUser user) {
+        this.showMenu(user, null, null);
+    }
+
+    public void showMenu(BukkitUser user, @Nullable Consumer<ItemBuilder> itemEditor, @Nullable Consumer<String> onClick) {
         final ItemManager itemManager = this.plugin.getItemManager();
         final UserManager userManager = this.plugin.getUserManager();
         final int rows = (int) Math.ceil((float) this.types.size() / 7f) + 2;
@@ -53,7 +58,11 @@ public class CollectionCategory {
                 builder = ItemBuilder.from(itemManager.getItem(item));
             }
             builder.lore("").lore("<green>Collected: " + amount + " / " + userManager.getCollectionRequirement(type));
-            gui.addItem(new GuiItem(builder.build()));
+            if (itemEditor != null) itemEditor.accept(builder);
+            gui.addItem(new GuiItem(builder.build(), event -> {
+                if (onClick == null) return;
+                onClick.accept(type);
+            }));
         }
         gui.setItem(rows * 9 - 5, new GuiItem(ItemBuilder.from(Material.ARROW).name("Back").build(), event -> userManager.showMenu(user)));
         final Player player = user.getPlayer();

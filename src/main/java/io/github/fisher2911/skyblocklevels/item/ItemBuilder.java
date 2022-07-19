@@ -96,6 +96,10 @@ public class ItemBuilder implements ItemSupplier {
         return this;
     }
 
+    public int amount() {
+        return this.itemRange.getRandom();
+    }
+
     public ItemBuilder amount(Range amount) {
         this.itemRange = amount;
         return this;

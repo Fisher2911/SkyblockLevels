@@ -95,7 +95,7 @@ public class MultiSkyCrop extends SkyCrop {
         dataManager.registerItemLoadFunction(TABLE, (conn, id) -> {
             final SelectStatement.Builder builder = SelectStatement.builder(TABLE).
                     selectAll().
-                    condition(ID, String.valueOf(id));
+                    whereEqual(ID, String.valueOf(id));
             final List<MultiSkyCrop> list = builder.build().execute(conn, results -> {
                 final String itemId = results.getString(ITEM_ID);
                 if (!(plugin.getItemManager().getItem(itemId) instanceof final MultiSkyCrop item)) return null;

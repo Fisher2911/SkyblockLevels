@@ -32,6 +32,15 @@ public class Collection implements Changeable<Set<String>> {
         return new Collection(Map.of());
     }
 
+    public void set(String id, int amount) {
+        this.itemsCollected.put(id, amount);
+        this.changed.add(id);
+    }
+
+    public Map<String, Integer> getItemsCollected() {
+        return itemsCollected;
+    }
+
     @Override
     public Set<String> getChanged() {
         return this.changed;

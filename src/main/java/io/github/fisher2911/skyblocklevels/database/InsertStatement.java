@@ -1,7 +1,5 @@
 package io.github.fisher2911.skyblocklevels.database;
 
-import org.bukkit.Bukkit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -146,13 +144,13 @@ public class InsertStatement {
             return this;
         }
 
-        public Builder condition(DatabaseCondition condition) {
+        public Builder condition(EqualityCondition condition) {
             this.conditions.add(condition.getCondition());
             return this;
         }
 
         public Builder condition(String field, String expected) {
-            return this.condition(new DatabaseCondition(field, expected));
+            return this.condition(new EqualityCondition(field, expected));
         }
 
         public Builder batchSize(int batchSize) {

@@ -145,7 +145,7 @@ public class Boosters {
     public static Boosters load(Connection connection, UUID owner) {
         final Boosters boosters = new Boosters();
         final List<Booster> boosterList = SelectStatement.builder(TABLE).
-                condition(OWNER_FIELD, owner).
+                whereEqual(OWNER_FIELD, owner).
                 selectAll().
                 build().
                 execute(connection, resultSet -> {

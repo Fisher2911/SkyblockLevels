@@ -34,14 +34,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class UserManager {
 
-    private static final String TABLE = "users";
-    private static final String UUID = "uuid";
-    private static final String ITEM_ID = "item_id";
-    private static final String AMOUNT = "amount";
+    public static final String TABLE = "users";
+    public static final String UUID = "uuid";
+    public static final String ITEM_ID = "item_id";
+    public static final String AMOUNT = "amount";
 
     static {
         final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
@@ -65,6 +67,7 @@ public class UserManager {
     private final Map<String, CollectionCategory> collectionCategories;
     private final Map<String, CollectionPermission> collectionPermissions;
     private final List<String> startItems;
+    private final CollectionTop collectionTop;
 
     public UserManager(SkyblockLevels plugin, Map<UUID, BukkitUser> users, Set<String> shouldStore) {
         this.plugin = plugin;
@@ -73,6 +76,7 @@ public class UserManager {
         this.collectionCategories = new HashMap<>();
         this.collectionPermissions = new HashMap<>();
         this.startItems = new ArrayList<>();
+        this.collectionTop = new CollectionTop(this.plugin, new ConcurrentHashMap<>());
     }
 
     @Nullable
@@ -112,7 +116,7 @@ public class UserManager {
         return permission.getAmount();
     }
 
-    public void showMenu(BukkitUser user) {
+    public void showMenu(BukkitUser user, @Nullable Consumer<ItemBuilder> itemEditor, @Nullable Consumer<CollectionCategory> onClick) {
         final Player player = user.getPlayer();
         if (player == null) return;
         final Gui gui = Gui.gui().
@@ -121,13 +125,27 @@ public class UserManager {
                 create();
         gui.getFiller().fillBorder(new GuiItem(ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).amount(1).name(" ").build()));
         for (CollectionCategory category : this.collectionCategories.values()) {
-            gui.addItem(new GuiItem(category.getMenuItem(), event -> category.showMenu(user)));
+            final ItemBuilder itemBuilder = ItemBuilder.from(category.getMenuItem());
+            if (itemEditor != null) itemEditor.accept(itemBuilder);
+            gui.addItem(new GuiItem(itemBuilder.build(), event -> {
+                if (onClick == null) return;
+                onClick.accept(category);
+            }));
         }
         gui.open(player);
     }
 
+    public void showMenu(BukkitUser user) {
+        this.showMenu(user, null, category -> category.showMenu(user));
+    }
+
+    public CollectionTop getCollectionTop() {
+        return collectionTop;
+    }
+
     public void saveUser(User user) {
         final Collection collection = user.getCollection();
+        this.collectionTop.update(user.getId(), collection);
         final Set<String> changed = collection.getChanged();
         collection.setChanged(new HashSet<>());
         if (user instanceof BukkitUser bukkitUser) {
@@ -181,7 +199,7 @@ public class UserManager {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
             final SelectStatement statement = SelectStatement.
                     builder(TABLE).
-                    condition(UUID, uuid.toString()).
+                    whereEqual(UUID, uuid.toString()).
                     selectAll().
                     build();
             final Map<String, Integer> collection = new HashMap<>();
@@ -254,6 +272,10 @@ public class UserManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.collectionTop.load(this.collectionCategories.values().
+                stream().
+                flatMap(category -> category.getTypes().stream()).
+                collect(Collectors.toList()));
     }
 
 }

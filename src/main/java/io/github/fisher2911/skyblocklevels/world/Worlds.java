@@ -163,9 +163,9 @@ public class Worlds implements Listener {
     private void loadChunk(UUID world, int chunkX, int chunkY) {
         final SelectStatement statement = SelectStatement.builder(DATABASE_TABLE_COLUMN).
                 selectAll().
-                condition(DATABASE_CHUNK_X_COLUMN, chunkX).
-                condition(DATABASE_CHUNK_Z_COLUMN, chunkY).
-                condition(DATABASE_WORLD_COLUMN, world.toString()).
+                whereEqual(DATABASE_CHUNK_X_COLUMN, chunkX).
+                whereEqual(DATABASE_CHUNK_Z_COLUMN, chunkY).
+                whereEqual(DATABASE_WORLD_COLUMN, world.toString()).
                 build();
         statement.execute(this.plugin.getDataManager().getConnection(), result -> {
             final String tableName = result.getString(DATABASE_TABLE_NAME_COLUMN);
