@@ -1,0 +1,135 @@
+generator-drops:
+  name: "&9&lGenerator Drops (page %page%)"
+  size: 54
+  fillItem:
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+  items:
+    1:
+      type: item
+      item:
+        material: COBBLESTONE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.25
+      slot: 10
+    2:
+      type: item
+      item:
+        material: STONE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.35
+      slot: 11
+    3:
+      type: item
+      item:
+        material: DIORITE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.45
+      slot: 12
+    4:
+      type: item
+      item:
+        material: ANDESITE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.55
+      slot: 13
+    5:
+      type: item
+      item:
+        material: GRANITE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.65
+      slot: 14
+    6:
+      type: item
+      item:
+        material: COAL
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.90
+      slot: 15
+    7:
+      type: item
+      item:
+        material: RAW_COPPER
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 1.10
+      slot: 16
+    8:
+      type: item
+      item:
+        material: COPPER_INGOT
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 1.50
+      slot: 19
+    9:
+      type: item
+      item:
+        material: RAW_IRON
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 1.25
+      slot: 20
+    10:
+      type: item
+      item:
+        material: IRON_INGOT
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 1.85
+      slot: 21
+    11:
+      type: item
+      item:
+        material: REDSTONE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 1.75
+      slot: 22
+    13:
+      type: item
+      item:
+        material: RAW_GOLD
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 2
+      slot: 23
+    14:
+      type: item
+      item:
+        material: GOLD_INGOT
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 2.75
+      slot: 24
+    15:
+      type: item
+      item:
+        material: EMERALD
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 2.75
+      slot: 25
+    16:
+      type: item
+      item:
+        material: DIAMOND
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 3
+      slot: 28
+    17:
+      type: item
+      item:
+        material: OBSIDIAN
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 3.5
+      slot: 29

@@ -222,7 +222,7 @@
     max: 1
   guaranteed-fully-grown-items:
     1:
-      id: melon-sky-crop
+      material: MELON_SLICE
       amount-range:
         min: 0
         max: 2

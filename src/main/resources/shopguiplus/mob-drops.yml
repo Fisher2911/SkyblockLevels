@@ -1,0 +1,87 @@
+mob-drops:
+  name: "&9&lMob Drops (page %page%)"
+  size: 54
+  fillItem:
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+  items:
+    1:
+      type: item
+      item:
+        material: RABBIT_HIDE
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.075
+      slot: 10
+    2:
+      type: item
+      item:
+        material: CHICKEN
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.1
+      slot: 11
+    3:
+      type: item
+      item:
+        material: FEATHER
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.1
+      slot: 12
+    4:
+      type: item
+      item:
+        material: COOKED_CHICKEN
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.2
+      slot: 13
+    5:
+      type: item
+      item:
+        material: PORKCHOP
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.15
+      slot: 14
+    6:
+      type: item
+      item:
+        material: COOKED_PORKCHOP
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.25
+      slot: 15
+    7:
+      type: item
+      item:
+        material: MUTTON
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.20
+      slot: 16
+    8:
+      type: item
+      item:
+        material: COOKED_MUTTON
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.30
+      slot: 19
+    9:
+      type: item
+      item:
+        material: BEED
+        quantity: 1
+      buyPrice: -1
+      sellPrice: 0.25
+      slot: 20
+    10:
+      type: item
+      item:
+        material: COOKED_BEEF
+        quantity: 0.35
+      buyPrice: -1
+      sellPrice: 1.85
+      slot: 21

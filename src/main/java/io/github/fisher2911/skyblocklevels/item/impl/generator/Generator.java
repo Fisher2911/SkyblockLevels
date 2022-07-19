@@ -182,14 +182,6 @@ public class Generator implements SkyBlock, Delayed, Durable {
         final GeneratorBreakEvent generatorBreakEvent = new GeneratorBreakEvent(block, event.getPlayer());
         Bukkit.getPluginManager().callEvent(generatorBreakEvent);
         if (generatorBreakEvent.isCancelled()) return;
-        if (event.getPlayer().isSneaking()) {
-            this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
-            this.plugin.getItemManager().giveItem(user, this);
-            block.setType(Material.AIR);
-            this.running = false;
-            this.plugin.getBlockBreakManager().cancel(position);
-            return;
-        }
         this.plugin.getBlockBreakManager().reset(position);
         event.setCancelled(true);
         final Player player = event.getPlayer();
@@ -267,13 +259,27 @@ public class Generator implements SkyBlock, Delayed, Durable {
     @Override
     public void onClick(User user, PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
+        final Player player = event.getPlayer();
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK && player.isSneaking()) {
+            final ItemStack inHand = event.getItem();
+            if (inHand != null && inHand.getType() != Material.AIR) return;
+            final Block block = event.getClickedBlock();
+            if (block == null) return;
+            final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
+            this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+            this.plugin.getItemManager().giveItem(user, this);
+            block.setType(Material.AIR);
+            this.running = false;
+            this.plugin.getBlockBreakManager().cancel(position);
+            return;
+        }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getPlayer().isSneaking() && user instanceof BukkitUser bukkitUser) {
             this.showCollectionRequirements(bukkitUser);
             return;
         }
         if (!this.isGenerated) {
-            user.sendMessage("<red>You must wait " + (this.getTimeLeft() / 20) + "seconds before you can mine this block");
+            user.sendMessage("<red>You must wait " + (this.getTimeLeft() / 20) + " seconds before you can mine this block");
         }
     }
 
