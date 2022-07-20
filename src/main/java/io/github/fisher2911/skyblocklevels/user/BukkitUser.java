@@ -23,6 +23,8 @@ public class BukkitUser implements User {
     private final Collection collection;
     private final Cooldowns cooldowns;
     private final Boosters boosters;
+    private WorldPosition lastInteractPosition;
+    private int samePositionCount;
 
     public BukkitUser(UUID uuid, Collection collection, Cooldowns cooldowns, Boosters boosters) {
         this.uuid = uuid;
@@ -141,5 +143,29 @@ public class BukkitUser implements User {
     @Override
     public Cooldowns getCooldowns() {
         return this.cooldowns;
+    }
+
+    public WorldPosition getLastInteractPosition() {
+        return lastInteractPosition;
+    }
+
+    public void setLastInteractPosition(WorldPosition lastInteractPosition, boolean onlyCountPitchAndYaw) {
+        if (lastInteractPosition.equals(this.lastInteractPosition) && !onlyCountPitchAndYaw) {
+            this.samePositionCount++;
+        } else if (
+                this.lastInteractPosition != null &&
+                onlyCountPitchAndYaw &&
+                lastInteractPosition.getPosition().getPitch() == this.lastInteractPosition.getPosition().getPitch() &&
+                lastInteractPosition.getPosition().getYaw() == this.lastInteractPosition.getPosition().getYaw()
+        ) {
+            this.samePositionCount++;
+        } else {
+            this.samePositionCount = 0;
+        }
+        this.lastInteractPosition = lastInteractPosition;
+    }
+
+    public int getSamePositionCount() {
+        return samePositionCount;
     }
 }

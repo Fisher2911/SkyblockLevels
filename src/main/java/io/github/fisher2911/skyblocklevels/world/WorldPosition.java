@@ -33,7 +33,7 @@ public class WorldPosition {
     }
 
     public static WorldPosition fromLocation(Location location) {
-        return new WorldPosition(location.getWorld(), new Position(location.getX(), location.getY(), location.getZ()));
+        return new WorldPosition(location.getWorld(), new Position(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch()));
     }
 
     public double distanceSquared(WorldPosition other) {

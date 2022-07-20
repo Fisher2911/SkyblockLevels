@@ -30,6 +30,7 @@ import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -171,6 +172,8 @@ public class Generator implements SkyBlock, Delayed, Durable {
         this.collectionCondition = collectionCondition;
     }
 
+    private static final int AFK_INTERACTION_LIMIT = 10;
+
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
         if (event instanceof GeneratorBreakEvent) {
@@ -213,9 +216,14 @@ public class Generator implements SkyBlock, Delayed, Durable {
             return;
         }
         final Location location = block.getLocation().add(0, 1, 0);
-        if (this.plugin.getEssentials().getUser(player).isAfk()) {
-            user.sendMessage("<red>You are AFK and cannot collect from this generator.");
-            return;
+        if (user instanceof BukkitUser bukkitUser) {
+            final WorldPosition current = WorldPosition.fromLocation(player.getLocation());
+            bukkitUser.setLastInteractPosition(current, true);
+            if (bukkitUser.getSamePositionCount() >= AFK_INTERACTION_LIMIT) {
+                user.sendMessage("<red>You are AFK and cannot collect from this generator.");
+                player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
+                return;
+            }
         }
         this.dropItem(location, this.items);
         this.dropItem(location, this.bonusItems);
