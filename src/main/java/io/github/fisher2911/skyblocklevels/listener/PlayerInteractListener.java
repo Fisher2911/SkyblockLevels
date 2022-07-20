@@ -70,7 +70,11 @@ public class PlayerInteractListener implements Listener {
         if (item instanceof Usable) {
             this.itemManager.handle(user, event.getItem(), event);
         }
-        if (item instanceof SkyBlock && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (
+                item instanceof SkyBlock &&
+                        event.getAction() == Action.RIGHT_CLICK_BLOCK &&
+                        !event.getItem().getType().isBlock()
+        ) {
             final Block placing = event.getClickedBlock().getRelative(event.getBlockFace());
             if (!placing.getWorld().getNearbyEntities(placing.getBoundingBox()).isEmpty()) return;
             final BlockPlaceEvent placeEvent = new BlockPlaceEvent(
