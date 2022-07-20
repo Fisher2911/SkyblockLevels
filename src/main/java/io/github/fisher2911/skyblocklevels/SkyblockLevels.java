@@ -11,6 +11,7 @@ import cloud.commandframework.extra.confirmation.CommandConfirmationManager;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
+import com.earth2me.essentials.Essentials;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import io.github.fisher2911.skyblocklevels.command.CollectionCommand;
@@ -79,7 +80,8 @@ public final class SkyblockLevels extends JavaPlugin {
     private AnnotationParser<User> annotationParser;
     private LandsIntegration lands;
     private TeleportManager teleportManager;
-    RegisteredServiceProvider<LuckPerms> provider;
+    private RegisteredServiceProvider<LuckPerms> provider;
+    private Essentials essentials;
 
 
     @Override
@@ -119,6 +121,7 @@ public final class SkyblockLevels extends JavaPlugin {
             this.worlds.load();
             this.entityManager.load();
         }, 20);
+        this.essentials = JavaPlugin.getPlugin(Essentials.class);
     }
 
     @Override
@@ -284,5 +287,9 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public RegisteredServiceProvider<LuckPerms> getLuckPermsProvider() {
         return provider;
+    }
+
+    public Essentials getEssentials() {
+        return essentials;
     }
 }

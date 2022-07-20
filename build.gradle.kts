@@ -25,6 +25,7 @@ dependencies {
     compileOnly("com.github.angeschossen:LandsAPI:6.5.1")
 //    implementation("com.github.retrooper.packetevents:spigot:2.0-SNAPSHOT")
     implementation(files("libs/packetevents-spigot-2.0.0.jar"))
+    compileOnly(files("libs/EssentialsX-2.19.4.jar"))
     implementation("org.spongepowered:configurate-yaml:4.1.2")
     implementation("dev.triumphteam:triumph-gui:3.1.2")
     compileOnly("me.clip:placeholderapi:2.11.2")

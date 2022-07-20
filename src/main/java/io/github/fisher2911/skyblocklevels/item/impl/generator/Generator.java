@@ -213,6 +213,10 @@ public class Generator implements SkyBlock, Delayed, Durable {
             return;
         }
         final Location location = block.getLocation().add(0, 1, 0);
+        if (this.plugin.getEssentials().getUser(player).isAfk()) {
+            user.sendMessage("<red>You are AFK and cannot collect from this generator.");
+            return;
+        }
         this.dropItem(location, this.items);
         this.dropItem(location, this.bonusItems);
         this.isGenerated = false;
@@ -225,7 +229,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
         if (itemMeta instanceof Damageable damageable) {
             damageable.setDamage(damageable.getDamage() + 1);
             brokeWith.setItemMeta(itemMeta);
-            if (damageable.getDamage() - 1 <= 0) brokeWith.setType(Material.AIR);
+            if (damageable.getDamage() >= brokeWith.getType().getMaxDurability()) brokeWith.setType(Material.AIR);
         }
         if (!(this.plugin.getItemManager().getItem(brokeWith) instanceof DurableItem durableItem)) return;
         durableItem.takeDamage(brokeWith, 1);
