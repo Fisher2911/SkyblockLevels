@@ -254,6 +254,8 @@ public class Generator implements SkyBlock, Delayed, Durable {
         final Block block = event.getBlock();
         this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(this.resetBlock);
+        event.setCancelled(true);
+        event.getItemInHand().setAmount(event.getItemInHand().getAmount() - 1);
     }
 
     @Override
@@ -266,6 +268,9 @@ public class Generator implements SkyBlock, Delayed, Durable {
             final Block block = event.getClickedBlock();
             if (block == null) return;
             final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
+            final GeneratorBreakEvent generatorBreakEvent = new GeneratorBreakEvent(block, event.getPlayer());
+            Bukkit.getPluginManager().callEvent(generatorBreakEvent);
+            if (generatorBreakEvent.isCancelled()) return;
             this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
             this.plugin.getItemManager().giveItem(user, this);
             block.setType(Material.AIR);

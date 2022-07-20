@@ -10,6 +10,7 @@ import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.spawner.MobSpawner;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.util.Pair;
+import io.github.fisher2911.skyblocklevels.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -113,7 +114,7 @@ public class CollectionTop {
         }
         final var top = this.getTop(category);
         int i = 1;
-        final Gui gui = Gui.gui(GuiType.CHEST).rows(4).title(Adventure.parse("<blue>Top 10 in " + category)).disableAllInteractions().create();
+        final Gui gui = Gui.gui(GuiType.CHEST).rows(4).title(Adventure.parse("<blue>Top 10 in " + StringUtil.formatId(category))).disableAllInteractions().create();
         gui.setDragAction(event -> event.setCancelled(true));
         for (var entry : top) {
             final int slot = TOP_10_SLOTS.get(i++);
