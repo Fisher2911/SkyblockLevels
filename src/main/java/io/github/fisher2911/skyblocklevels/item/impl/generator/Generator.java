@@ -254,8 +254,6 @@ public class Generator implements SkyBlock, Delayed, Durable {
         final Block block = event.getBlock();
         this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(this.resetBlock);
-        event.setCancelled(true);
-        event.getItemInHand().setAmount(event.getItemInHand().getAmount() - 1);
     }
 
     @Override

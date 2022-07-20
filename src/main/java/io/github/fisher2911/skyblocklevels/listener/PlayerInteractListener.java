@@ -83,7 +83,11 @@ public class PlayerInteractListener implements Listener {
                     Objects.requireNonNullElse(event.getHand(), EquipmentSlot.HAND)
             );
             this.itemManager.handle(user, event.getItem(), placeEvent);
-            if (placeEvent.isCancelled()) event.setCancelled(true);
+            if (placeEvent.isCancelled()) {
+                event.setCancelled(true);
+            } else {
+                event.getItem().setAmount(event.getItem().getAmount() - 1);
+            }
         }
     }
 
