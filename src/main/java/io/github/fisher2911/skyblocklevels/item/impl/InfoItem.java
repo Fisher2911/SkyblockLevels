@@ -48,8 +48,11 @@ public class InfoItem implements Usable, SpecialSkyItem {
         event.setCancelled(true);
         final ItemBuilder itemBuilder = ItemBuilder.from(skyBlock.getItemStack());
         user.sendMessage("<green>Block Info:");
-        user.sendMessage(itemBuilder.name());
-        for (Component line : itemBuilder.lore()) {
+        final Component name = itemBuilder.name();
+        if (name != null) user.sendMessage(itemBuilder.name());
+        final var lore = itemBuilder.lore();
+        if (lore == null) return;
+        for (Component line : lore) {
             user.sendMessage(line);
         }
     }
