@@ -65,7 +65,7 @@ public class PlayerInteractListener implements Listener {
         final WorldPosition position = WorldPosition.fromLocation(event.getClickedBlock().getLocation());
         this.itemManager.handle(user, this.worlds.getBlockAt(position), event);
         if (event.getItem() == null) return;
-        final SpecialSkyItem item = this.itemManager.getItem(Keys.getSkyItem(event.getItem()));
+        final SpecialSkyItem item = this.itemManager.getItem(event.getItem());
         if (item.equals(SpecialSkyItem.EMPTY)) return;
         if (item instanceof Usable) {
             this.itemManager.handle(user, event.getItem(), event);

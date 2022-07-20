@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.item;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.item.impl.DurableItem;
+import io.github.fisher2911.skyblocklevels.item.impl.InfoItem;
 import io.github.fisher2911.skyblocklevels.item.impl.SkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;
 import io.github.fisher2911.skyblocklevels.item.impl.builder.Builder;
@@ -47,6 +48,7 @@ public class ItemLoader {
         register(SingleSkyCrop.class.getSimpleName().toLowerCase(), node -> SingleSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
         register(MultiSkyCrop.class.getSimpleName().toLowerCase(), node -> MultiSkyCrop.serializer().deserialize(SingleSkyCrop.class, node));
         register(Transformer.class.getSimpleName().toLowerCase(), node -> Transformer.serializer().deserialize(Transformer.class, node));
+        register(InfoItem.class.getSimpleName().toLowerCase(), node -> InfoItem.serializer().deserialize(InfoItem.class, node));
     }
 
     private static final String CLASS = "class";

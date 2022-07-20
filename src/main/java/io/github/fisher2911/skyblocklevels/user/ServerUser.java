@@ -1,6 +1,7 @@
 package io.github.fisher2911.skyblocklevels.user;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +28,11 @@ public class ServerUser implements User {
 
     @Override
     public void sendMessage(String message) {
+        Bukkit.getServer().getConsoleSender().sendMessage(message);
+    }
+
+    @Override
+    public void sendMessage(Component message) {
         Bukkit.getServer().getConsoleSender().sendMessage(message);
     }
 

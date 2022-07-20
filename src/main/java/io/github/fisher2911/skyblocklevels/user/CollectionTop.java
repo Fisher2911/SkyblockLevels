@@ -6,6 +6,8 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
 import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
+import io.github.fisher2911.skyblocklevels.item.impl.spawner.MobSpawner;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.util.Pair;
 import org.bukkit.Bukkit;
@@ -40,6 +42,12 @@ public class CollectionTop {
     }
 
     private void load(String itemId) {
+        final SpecialSkyItem item = plugin.getItemManager().getItem(itemId);
+        if (item instanceof final MobSpawner spawner) {
+            final var types = spawner.getEntityTypes();
+            if (!types.isEmpty()) itemId = types.get(0);
+        }
+
         final SelectStatement statement = SelectStatement.
                 builder(UserManager.TABLE).
                 whereEqual(UserManager.ITEM_ID, itemId).
@@ -98,6 +106,11 @@ public class CollectionTop {
     }
 
     public void displayMenu(BukkitUser user, String category) {
+        final SpecialSkyItem item = this.plugin.getItemManager().getItem(category);
+        if (item instanceof final MobSpawner spawner) {
+            final var types = spawner.getEntityTypes();
+            if (!types.isEmpty()) category = types.get(0);
+        }
         final var top = this.getTop(category);
         int i = 1;
         final Gui gui = Gui.gui(GuiType.CHEST).rows(4).title(Adventure.parse("<blue>Top 10 in " + category)).disableAllInteractions().create();

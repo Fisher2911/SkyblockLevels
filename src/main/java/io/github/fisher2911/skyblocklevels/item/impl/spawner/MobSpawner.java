@@ -13,7 +13,6 @@ import io.github.fisher2911.skyblocklevels.util.Range;
 import io.github.fisher2911.skyblocklevels.util.weight.Weight;
 import io.github.fisher2911.skyblocklevels.util.weight.WeightedList;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -33,6 +32,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -188,6 +188,14 @@ public class MobSpawner implements Spawner, Delayed {
 
     public static Serializer serializer() {
         return Serializer.INSTANCE;
+    }
+
+    public WeightedList<String> getWeightedEntityTypes() {
+        return entityTypes;
+    }
+
+    public List<String> getEntityTypes() {
+        return entityTypes.getWeightList().stream().map(Weight::getValue).toList();
     }
 
     public static class Serializer implements TypeSerializer<Supplier<MobSpawner>> {

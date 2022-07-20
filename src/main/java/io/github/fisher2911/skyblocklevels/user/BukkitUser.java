@@ -6,6 +6,7 @@ import io.github.fisher2911.skyblocklevels.booster.Boosters;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.world.WorldPosition;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -58,6 +59,13 @@ public class BukkitUser implements User {
         final Player player = this.getPlayer();
         if (player == null) return;
         player.sendMessage(Adventure.MINI_MESSAGE.deserialize(message));
+    }
+
+    @Override
+    public void sendMessage(Component message) {
+        final Player player = this.getPlayer();
+        if (player == null) return;
+        player.sendMessage(message);
     }
 
     public void forceChat(String message) {

@@ -110,6 +110,10 @@ public class ItemBuilder implements ItemSupplier {
         return this;
     }
 
+    public Component name() {
+        return this.itemMeta.displayName();
+    }
+
     public ItemBuilder name(Component name) {
         if (this.itemMeta == null) return this;
         this.itemMeta.displayName(name);
@@ -120,6 +124,10 @@ public class ItemBuilder implements ItemSupplier {
         if (this.itemMeta == null) return this;
         this.itemMeta.lore(lore);
         return this;
+    }
+
+    public List<Component> lore() {
+        return this.itemMeta.lore();
     }
 
     public ItemBuilder lore(Component... lore) {
