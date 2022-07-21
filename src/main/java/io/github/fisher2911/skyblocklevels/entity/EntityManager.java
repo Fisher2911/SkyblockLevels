@@ -90,7 +90,7 @@ public class EntityManager implements Listener {
                 entity.setCustomNameVisible(true);
             }
         }
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntity(skyEntity));
+        this.saveEntity(skyEntity);
     }
 
     public SkyEntity getEntity(UUID uuid) {
@@ -159,7 +159,7 @@ public class EntityManager implements Listener {
         final Entity entity = event.getEntity();
         if (!Keys.isSkyEntity(entity)) return;
         final UUID uuid = entity.getUniqueId();
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
+        this.deleteEntity(uuid);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -167,16 +167,13 @@ public class EntityManager implements Listener {
         final Entity entity = event.getEntity();
         if (!Keys.isSkyEntity(entity)) return;
         final UUID uuid = entity.getUniqueId();
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.deleteEntity(uuid));
+        this.deleteEntity(uuid);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onWorldUnload(WorldUnloadEvent event) {
         final Collection<Entity> entities = event.getWorld().getEntities();
-        if (!this.plugin.isShuttingDown()) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(entities));
-            return;
-        }
+        this.saveEntities(entities);
         this.saveEntities(entities);
     }
 
@@ -184,7 +181,7 @@ public class EntityManager implements Listener {
     public void onChunkUnload(ChunkUnloadEvent event) {
         final Entity[] entities = event.getChunk().getEntities();
         if (!this.plugin.isShuttingDown()) {
-            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveEntities(entities));
+            this.saveEntities(entities);
             return;
         }
         this.saveEntities(entities);
@@ -227,20 +224,20 @@ public class EntityManager implements Listener {
 
     public void saveEntity(SkyEntity entity) {
         this.plugin.getDataManager().addSaveTask(() -> {
-        InsertStatement.builder(TABLE).
-                addEntry(UUID, entity.getUUID().toString()).
-                addEntry(ENTITY_TYPE, entity.getType()).
-                build().
-                execute(this.plugin.getDataManager().getConnection());
+            InsertStatement.builder(TABLE).
+                    addEntry(UUID, entity.getUUID().toString()).
+                    addEntry(ENTITY_TYPE, entity.getType()).
+                    build().
+                    execute(this.plugin.getDataManager().getConnection());
         });
     }
 
     public void deleteEntity(UUID uuid) {
         this.plugin.getDataManager().addSaveTask(() -> {
             DeleteStatement.builder(TABLE).
-                condition(UUID, uuid.toString()).
-                build().
-                execute(this.plugin.getDataManager().getConnection());
+                    condition(UUID, uuid.toString()).
+                    build().
+                    execute(this.plugin.getDataManager().getConnection());
         });
     }
 

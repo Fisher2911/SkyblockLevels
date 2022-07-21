@@ -68,7 +68,7 @@ public class DataManager {
         try {
             if (this.connection != null) return this.connection;
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH.toString());
+            connection = DriverManager.getConnection("jdbc:sqlite:" + FILE_PATH);
             return this.connection;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -82,9 +82,16 @@ public class DataManager {
 
     public void shutdown() {
         if (this.saveTask != null) this.saveTask.cancel();
-        for (Runnable task : this.saveTasks) {
+        this.closeTasks();
+    }
+
+    private void closeTasks() {
+        final List<Runnable> tasks = new ArrayList<>(this.saveTasks);
+        this.saveTasks.clear();
+        for (Runnable task : tasks) {
             task.run();
         }
+        if (!this.saveTasks.isEmpty()) this.closeTasks();
     }
 
     public void start(int interval) {
