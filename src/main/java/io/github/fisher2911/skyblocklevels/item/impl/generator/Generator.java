@@ -197,7 +197,8 @@ public class Generator implements SkyBlock, Delayed, Durable {
                         () -> this.onBreak(user, new BlockBreakEvent(block, player))
                 )
         );
-        if (!this.isGenerated || block.getDrops(event.getPlayer().getInventory().getItemInMainHand()).isEmpty()) {
+        final ItemStack holding = event.getPlayer().getInventory().getItemInMainHand();
+        if (!this.isGenerated || (block.getDrops(holding).isEmpty() && !this.mineSpeeds.hasModifier(holding))) {
             this.isGenerated = false;
             block.setType(this.resetBlock);
             return;

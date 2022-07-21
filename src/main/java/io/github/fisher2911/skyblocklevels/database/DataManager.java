@@ -90,9 +90,7 @@ public class DataManager {
     public void start(int interval) {
         final List<Runnable> current = new ArrayList<>(this.saveTasks);
         this.saveTasks.clear();
-        this.saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, () -> {
-            current.forEach(Runnable::run);
-        }, interval, interval);
+        this.saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, () -> current.forEach(Runnable::run), interval, interval);
     }
 
     public void addTable(CreateTableStatement statement) {

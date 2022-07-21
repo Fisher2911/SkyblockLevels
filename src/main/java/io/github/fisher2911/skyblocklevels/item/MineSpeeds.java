@@ -36,6 +36,10 @@ public class MineSpeeds {
         return this.getModifier(item, itemStack);
     }
 
+    public boolean hasModifier(ItemStack itemStack) {
+        return this.getModifier(itemStack) != MineSpeedModifier.SELF;
+    }
+
     public static Serializer serializer() {
         return Serializer.INSTANCE;
     }
