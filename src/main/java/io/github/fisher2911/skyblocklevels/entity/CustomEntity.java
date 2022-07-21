@@ -1,11 +1,11 @@
 package io.github.fisher2911.skyblocklevels.entity;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
-import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
-import io.github.fisher2911.skyblocklevels.database.KeyType;
-import io.github.fisher2911.skyblocklevels.database.VarChar;
+import io.github.fisher2911.skyblocklevels.database.statement.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.KeyType;
+import io.github.fisher2911.skyblocklevels.database.statement.VarChar;
 import io.github.fisher2911.skyblocklevels.item.ItemSerializer;
 import io.github.fisher2911.skyblocklevels.item.ItemSupplier;
 import io.github.fisher2911.skyblocklevels.item.impl.bridger.LimitedBridger;

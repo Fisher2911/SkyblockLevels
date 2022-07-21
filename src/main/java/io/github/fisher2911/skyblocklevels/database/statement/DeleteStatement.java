@@ -1,4 +1,4 @@
-package io.github.fisher2911.skyblocklevels.database;
+package io.github.fisher2911.skyblocklevels.database.statement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

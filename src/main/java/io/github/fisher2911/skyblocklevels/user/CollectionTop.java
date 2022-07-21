@@ -5,7 +5,7 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.database.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.SelectStatement;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import io.github.fisher2911.skyblocklevels.item.impl.spawner.MobSpawner;
 import io.github.fisher2911.skyblocklevels.message.Adventure;

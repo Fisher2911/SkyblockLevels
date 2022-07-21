@@ -3,12 +3,12 @@ package io.github.fisher2911.skyblocklevels.world;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
-import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
-import io.github.fisher2911.skyblocklevels.database.InsertStatement;
-import io.github.fisher2911.skyblocklevels.database.KeyType;
-import io.github.fisher2911.skyblocklevels.database.SelectStatement;
-import io.github.fisher2911.skyblocklevels.database.VarChar;
+import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.KeyType;
+import io.github.fisher2911.skyblocklevels.database.statement.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.VarChar;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import org.bukkit.Bukkit;
@@ -112,7 +112,7 @@ public class Worlds implements Listener {
         if (worldManager == null) return;
         final ChunkMap map = worldManager.onChunkUnload(event);
         if (map == null) return;
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveChunk(world, map));
+        this.saveChunk(world, map);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -127,7 +127,7 @@ public class Worlds implements Listener {
     private void saveChunk(World world, ChunkMap chunkMap) {
         this.saveBlocks(chunkMap.getBlocks().entrySet().stream().
                 map(e -> Map.entry(new WorldPosition(world, e.getKey()), e.getValue())).
-                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)), this.plugin.isShuttingDown());
+                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     public void addBlock(SkyBlock block, WorldPosition position) {
@@ -135,9 +135,7 @@ public class Worlds implements Listener {
         final WorldManager worldManager = this.worlds.get(position.getWorld().getUID());
         if (worldManager == null) return;
         worldManager.addBlock(block, position);
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            this.saveBlocks(Map.of(position, block), this.plugin.isShuttingDown());
-        });
+        this.saveBlocks(Map.of(position, block));
     }
 
     public void removeBlock(WorldPosition worldPosition) {
@@ -145,9 +143,7 @@ public class Worlds implements Listener {
         if (worldManager == null) return;
         final SkyBlock block = worldManager.removeBlock(worldPosition);
         if (block == SkyBlock.EMPTY) return;
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            this.deleteBlock(block, worldPosition);
-        });
+        this.deleteBlock(block, worldPosition);
     }
 
     public SkyBlock getBlockAt(WorldPosition worldPosition) {
@@ -183,7 +179,7 @@ public class Worlds implements Listener {
     }
 
     public void deleteBlock(SkyBlock block, WorldPosition worldPosition) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
+        this.plugin.getDataManager().addSaveTask(() -> {
             final Position position = worldPosition.getPosition();
             DeleteStatement.builder(DATABASE_TABLE_COLUMN).
                     condition(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
@@ -200,40 +196,33 @@ public class Worlds implements Listener {
     }
 
     private void saveBlocks(Map<WorldPosition, SkyBlock> blocks) {
-//        final InsertStatement.Builder builder = ;
         final int batchSize = 50;
         final Multimap<Class<?>, SkyBlock> toSave = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
-        for (var entry : blocks.entrySet()) {
-            final WorldPosition worldPosition = entry.getKey();
-            final Position position = worldPosition.getPosition();
-            final SkyBlock block = entry.getValue();
-            toSave.put(block.getClass(), block);
-            InsertStatement.builder(DATABASE_TABLE_COLUMN).
-                    newEntry().
-                    addEntry(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
-                    addEntry(DATABASE_BLOCK_ID_COLUMN, block.getId()).
-                    addEntry(DATABASE_BLOCK_TYPE_COLUMN, block.getItemId()).
-                    addEntry(DATABASE_TABLE_NAME_COLUMN, block.getTableName()).
-                    addEntry(DATABASE_CHUNK_X_COLUMN, position.getChunkX()).
-                    addEntry(DATABASE_CHUNK_Z_COLUMN, position.getChunkZ()).
-                    addEntry(DATABASE_X_COLUMN, (int) position.getX()).
-                    addEntry(DATABASE_Y_COLUMN, (int) position.getY()).
-                    addEntry(DATABASE_Z_COLUMN, (int) position.getZ()).
-                    batchSize(batchSize).
-                    build().
-                    execute(this.plugin.getDataManager().getConnection());
-        }
-        if (toSave.isEmpty()) return;
-        for (var entry : toSave.asMap().entrySet()) {
-            this.plugin.getDataManager().saveItems(entry.getValue(), entry.getKey());
-        }
-    }
-
-    private void saveBlocks(Map<WorldPosition, SkyBlock> blocks, boolean async) {
-        if (!async) {
-            this.saveBlocks(blocks);
-            return;
-        }
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> this.saveBlocks(blocks));
+        this.plugin.getDataManager().addSaveTask(() -> {
+            for (var entry : blocks.entrySet()) {
+                final WorldPosition worldPosition = entry.getKey();
+                final Position position = worldPosition.getPosition();
+                final SkyBlock block = entry.getValue();
+                toSave.put(block.getClass(), block);
+                InsertStatement.builder(DATABASE_TABLE_COLUMN).
+                        newEntry().
+                        addEntry(DATABASE_WORLD_COLUMN, worldPosition.getWorld().getUID().toString()).
+                        addEntry(DATABASE_BLOCK_ID_COLUMN, block.getId()).
+                        addEntry(DATABASE_BLOCK_TYPE_COLUMN, block.getItemId()).
+                        addEntry(DATABASE_TABLE_NAME_COLUMN, block.getTableName()).
+                        addEntry(DATABASE_CHUNK_X_COLUMN, position.getChunkX()).
+                        addEntry(DATABASE_CHUNK_Z_COLUMN, position.getChunkZ()).
+                        addEntry(DATABASE_X_COLUMN, (int) position.getX()).
+                        addEntry(DATABASE_Y_COLUMN, (int) position.getY()).
+                        addEntry(DATABASE_Z_COLUMN, (int) position.getZ()).
+                        batchSize(batchSize).
+                        build().
+                        execute(this.plugin.getDataManager().getConnection());
+            }
+            if (toSave.isEmpty()) return;
+            for (var entry : toSave.asMap().entrySet()) {
+                this.plugin.getDataManager().saveItems(entry.getValue(), entry.getKey());
+            }
+        });
     }
 }

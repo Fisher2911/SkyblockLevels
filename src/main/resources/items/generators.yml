@@ -13,16 +13,17 @@
   generator-block: COBBLESTONE
   ticks-to-break: 40
   speed-modifiers:
-    STONE_PICKAXE:
-      value: "*0.50"
-    IRON_PICKAXE:
-      value: "*0.40"
-    GOLDEN_PICKAXE:
-      value: "*0.35"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      STONE_PICKAXE:
+        value: "*0.85"
+      IRON_PICKAXE:
+        value: "*0.40"
+      GOLDEN_PICKAXE:
+        value: "*0.35"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       cobblestone-generator-pickaxe:
         value: "*0.80"
@@ -30,7 +31,6 @@
         value: "*0.70"
       diorite-generator-pickaxe:
         value: "*0.60"
-    materials:
   items:
     1:
       weight: 100
@@ -67,14 +67,15 @@
   generator-block: STONE
   ticks-to-break: 40
   speed-modifiers:
-    IRON_PICKAXE:
-      value: "*0.50"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      IRON_PICKAXE:
+        value: "*0.50"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       cobblestone-generator-pickaxe:
         value: "*0.95"
@@ -126,14 +127,15 @@
   generator-block: DIORITE
   ticks-to-break: 40
   speed-modifiers:
-    IRON_PICKAXE:
-      value: "*0.50"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      IRON_PICKAXE:
+        value: "*0.50"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       cobblestone-generator-pickaxe:
         value: "*0.95"
@@ -187,14 +189,15 @@
   generator-block: ANDESITE
   ticks-to-break: 40
   speed-modifiers:
-    IRON_PICKAXE:
-      value: "*0.50"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      IRON_PICKAXE:
+        value: "*0.50"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       cobblestone-generator-pickaxe:
         value: "*0.95"
@@ -250,18 +253,19 @@
   generator-block: GRANITE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.50"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.50"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       granite-generator-pickaxe:
         value: "*0.80"
@@ -311,18 +315,19 @@
   generator-block: COAL_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.50"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.50"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       coal-ore-generator-pickaxe:
         value: "*0.80"
@@ -340,7 +345,7 @@
     1:
       weight: 100
       item:
-        material: "COAL_ORE"
+        material: "COAL"
   bonus-items:
     1:
       weight: 92
@@ -350,11 +355,11 @@
     2:
       weight: 5
       item:
-        id: "coal-ore-generator-fragment"
+        id: "coal-generator-fragment"
     3:
       weight: 1
       item:
-        id: "coal-ore-generator-core"
+        id: "coal-generator-core"
   collection-requirements:
     granite-generator: 400
 7:
@@ -372,18 +377,19 @@
   generator-block: COPPER_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       copper-ore-generator-pickaxe:
         value: "*0.80"
@@ -401,7 +407,7 @@
     1:
       weight: 100
       item:
-        material: "COPPER_ORE"
+        material: "RAW_COPPER"
   bonus-items:
     1:
       weight: 92
@@ -411,11 +417,11 @@
     2:
       weight: 5
       item:
-        id: "copper-ore-generator-fragment"
+        id: "copper-generator-fragment"
     3:
       weight: 1
       item:
-        id: "copper-ore-generator-core"
+        id: "copper-generator-core"
   collection-requirements:
     coal-ore-generator: 602
 8:
@@ -433,18 +439,19 @@
   generator-block: IRON_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.40"
-    DIAMOND_PICKAXE:
-      value: "*0.30"
-    NETHERITE_PICKAXE:
-      value: "*0.20"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.40"
+      DIAMOND_PICKAXE:
+        value: "*0.30"
+      NETHERITE_PICKAXE:
+        value: "*0.20"
     sky-items:
       iron-ore-generator-pickaxe:
         value: "*0.80"
@@ -470,11 +477,11 @@
     2:
       weight: 5
       item:
-        id: "iron-ore-generator-fragment"
+        id: "iron-generator-fragment"
     3:
       weight: 1
       item:
-        id: "iron-ore-generator-core"
+        id: "iron-generator-core"
   collection-requirements:
     copper-ore-generator: 921
 9:
@@ -482,7 +489,7 @@
   item-id: "redstone-ore-generator"
   item:
     material: "REDSTONE_ORE"
-    name: "<!i><green> Generator"
+    name: "<!i><green>Redstone Generator"
     lore:
       - "<!i>"
       - "<!i><green>Speed: 1 item / %delay% seconds"
@@ -492,18 +499,19 @@
   generator-block: REDSTONE_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.60"
-    DIAMOND_PICKAXE:
-      value: "*0.40"
-    NETHERITE_PICKAXE:
-      value: "*0.30"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.60"
+      DIAMOND_PICKAXE:
+        value: "*0.40"
+      NETHERITE_PICKAXE:
+        value: "*0.30"
     sky-items:
       redstone-ore-generator-pickaxe:
         value: "*0.80"
@@ -529,11 +537,11 @@
     2:
       weight: 5
       item:
-        id: "redstone-ore-generator-fragment"
+        id: "redstone-generator-fragment"
     3:
       weight: 1
       item:
-        id: "redstone-ore-generator-core"
+        id: "redstone-generator-core"
   collection-requirements:
     iron-ore-generator: 1431
 10:
@@ -551,18 +559,19 @@
   generator-block: LAPIS_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.60"
-    DIAMOND_PICKAXE:
-      value: "*0.50"
-    NETHERITE_PICKAXE:
-      value: "*0.40"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.60"
+      DIAMOND_PICKAXE:
+        value: "*0.50"
+      NETHERITE_PICKAXE:
+        value: "*0.40"
     sky-items:
       lapis-ore-generator-pickaxe:
         value: "*0.80"
@@ -588,11 +597,11 @@
     2:
       weight: 5
       item:
-        id: "lapis-ore-generator-fragment"
+        id: "lapis-generator-fragment"
     3:
       weight: 1
       item:
-        id: "lapis-ore-generator-core"
+        id: "lapis-generator-core"
   collection-requirements:
     redstone-ore-generator: 2253
 11:
@@ -610,18 +619,19 @@
   generator-block: GOLD_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.60"
-    DIAMOND_PICKAXE:
-      value: "*0.50"
-    NETHERITE_PICKAXE:
-      value: "*0.40"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.60"
+      DIAMOND_PICKAXE:
+        value: "*0.50"
+      NETHERITE_PICKAXE:
+        value: "*0.40"
     sky-items:
       gold-ore-generator-pickaxe:
         value: "*0.80"
@@ -645,11 +655,11 @@
     2:
       weight: 5
       item:
-        id: "gold-ore-generator-fragment"
+        id: "gold-generator-fragment"
     3:
       weight: 1
       item:
-        id: "gold-ore-generator-core"
+        id: "gold-generator-core"
   collection-requirements:
     lapis-ore-generator: 3587
 12:
@@ -667,18 +677,19 @@
   generator-block: EMERALD_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.80"
-    DIAMOND_PICKAXE:
-      value: "*0.80"
-    NETHERITE_PICKAXE:
-      value: "*0.60"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.80"
+      DIAMOND_PICKAXE:
+        value: "*0.80"
+      NETHERITE_PICKAXE:
+        value: "*0.60"
     sky-items:
       emerald-ore-generator-pickaxe:
         value: "*0.80"
@@ -700,11 +711,11 @@
     2:
       weight: 5
       item:
-        id: "emerald-ore-generator-fragment"
+        id: "emerald-generator-fragment"
     3:
       weight: 1
       item:
-        id: "emerald-ore-generator-core"
+        id: "emerald-generator-core"
   collection-requirements:
     gold-ore-generator: 5774
 13:
@@ -722,18 +733,19 @@
   generator-block: DIAMOND_ORE
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.80"
-    DIAMOND_PICKAXE:
-      value: "*0.80"
-    NETHERITE_PICKAXE:
-      value: "*0.70"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.80"
+      DIAMOND_PICKAXE:
+        value: "*0.80"
+      NETHERITE_PICKAXE:
+        value: "*0.70"
     sky-items:
       diamond-ore-generator-pickaxe:
         value: "*0.80"
@@ -753,11 +765,11 @@
     2:
       weight: 5
       item:
-        id: "diamond-ore-generator-fragment"
+        id: "diamond-generator-fragment"
     3:
       weight: 1
       item:
-        id: "diamond-ore-generator-core"
+        id: "diamond-generator-core"
   collection-requirements:
     emerald-ore-generator: 9386
 14:
@@ -775,18 +787,19 @@
   generator-block: OBSIDIAN
   ticks-to-break: 40
   speed-modifiers:
-    WOODEN_PICAXE:
-      value: "*0.95"
-    STONE_PICAXE:
-      value: "*0.95"
-    IRON_PICKAXE:
-      value: "*0.95"
-    GOLDEN_PICKAXE:
-      value: "*0.80"
-    DIAMOND_PICKAXE:
-      value: "*0.80"
-    NETHERITE_PICKAXE:
-      value: "*0.80"
+    materials:
+      WOODEN_PICKAXE:
+        value: "*0.95"
+      STONE_PICKAXE:
+        value: "*0.95"
+      IRON_PICKAXE:
+        value: "*0.95"
+      GOLDEN_PICKAXE:
+        value: "*0.80"
+      DIAMOND_PICKAXE:
+        value: "*0.80"
+      NETHERITE_PICKAXE:
+        value: "*0.80"
     sky-items:
       obsidian-generator-pickaxe:
         value: "*0.80"

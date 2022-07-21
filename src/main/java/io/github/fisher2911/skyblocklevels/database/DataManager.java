@@ -1,9 +1,14 @@
 package io.github.fisher2911.skyblocklevels.database;
 
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
+import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.KeyType;
+import io.github.fisher2911.skyblocklevels.database.statement.SelectStatement;
 import io.github.fisher2911.skyblocklevels.entity.SkyEntity;
 import io.github.fisher2911.skyblocklevels.item.SpecialSkyItem;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +45,11 @@ public class DataManager {
     private final Map<String, BiFunction<Connection, UUID, ? extends SkyEntity>> entityLoadFunctions = new HashMap<>();
     private final Map<Class<?>, BiConsumer<Connection, SkyEntity>> entityDeleteConsumer = new HashMap<>();
 
+    private final List<Runnable> saveTasks = Collections.synchronizedList(new ArrayList<>());
 
     private Connection connection;
+
+    private BukkitTask saveTask;
 
     public DataManager(SkyblockLevels plugin) {
         this.plugin = plugin;
@@ -65,6 +74,25 @@ public class DataManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void addSaveTask(Runnable task) {
+        this.saveTasks.add(task);
+    }
+
+    public void shutdown() {
+        if (this.saveTask != null) this.saveTask.cancel();
+        for (Runnable task : this.saveTasks) {
+            task.run();
+        }
+    }
+
+    public void start(int interval) {
+        final List<Runnable> current = new ArrayList<>(this.saveTasks);
+        this.saveTasks.clear();
+        this.saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, () -> {
+            current.forEach(Runnable::run);
+        }, interval, interval);
     }
 
     public void addTable(CreateTableStatement statement) {
@@ -96,7 +124,7 @@ public class DataManager {
 
     public void saveItems(Collection<? extends SpecialSkyItem> items, Class<?> clazz) {
         final BiConsumer<Connection, Collection<? extends SpecialSkyItem>> consumer = itemSaveConsumer.get(clazz);
-        if (consumer != null) consumer.accept(this.getConnection(), items);
+        if (consumer != null) this.saveTasks.add(() -> consumer.accept(this.getConnection(), items));
     }
 
     public SpecialSkyItem loadItem(String tableName, String itemId, long id) {
@@ -109,12 +137,12 @@ public class DataManager {
 
     public void deleteItem(SpecialSkyItem item, Class<?> clazz) {
         final BiConsumer<Connection, SpecialSkyItem> consumer = itemDeleteConsumer.get(clazz);
-        if (consumer != null) consumer.accept(this.getConnection(), item);
+        if (consumer != null) this.saveTasks.add(() -> consumer.accept(this.getConnection(), item));
     }
 
     public void saveEntities(Collection<? extends SkyEntity> entities, Class<?> clazz) {
         final BiConsumer<Connection, Collection<? extends SkyEntity>> consumer = entitySaveConsumer.get(clazz);
-        if (consumer != null) consumer.accept(this.getConnection(), entities);
+        if (consumer != null) this.saveTasks.add(() -> consumer.accept(this.getConnection(), entities));
     }
 
     public SkyEntity loadEntity(String tableName, UUID id) {
@@ -125,7 +153,7 @@ public class DataManager {
 
     public void deleteEntity(SkyEntity entity, Class<?> clazz) {
         final BiConsumer<Connection, SkyEntity> consumer = entityDeleteConsumer.get(clazz);
-        if (consumer != null) consumer.accept(this.getConnection(), entity);
+        if (consumer != null) this.saveTasks.add(() -> consumer.accept(this.getConnection(), entity));
     }
 
     private static final String ID_TABLE = "id_table";

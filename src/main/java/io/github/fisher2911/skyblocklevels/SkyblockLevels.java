@@ -112,6 +112,7 @@ public final class SkyblockLevels extends JavaPlugin {
         this.userManager.load(this);
         this.registerListeners();
         this.initCommands();
+        this.dataManager.start(30 * 20);
         this.dataManager.createTables();
         this.userManager.startSaveTask();
         this.teleportManager = new TeleportManager(this, new HashSet<>());
@@ -127,6 +128,7 @@ public final class SkyblockLevels extends JavaPlugin {
     @Override
     public void onDisable() {
         this.shuttingDown = true;
+        this.dataManager.shutdown();
         this.userManager.endSaveTask();
         this.userManager.saveAll();
     }

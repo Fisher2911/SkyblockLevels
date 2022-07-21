@@ -3,13 +3,13 @@ package io.github.fisher2911.skyblocklevels.entity;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.database.CreateTableStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
-import io.github.fisher2911.skyblocklevels.database.DeleteStatement;
-import io.github.fisher2911.skyblocklevels.database.InsertStatement;
-import io.github.fisher2911.skyblocklevels.database.KeyType;
-import io.github.fisher2911.skyblocklevels.database.SelectStatement;
-import io.github.fisher2911.skyblocklevels.database.VarChar;
+import io.github.fisher2911.skyblocklevels.database.statement.DeleteStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.InsertStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.KeyType;
+import io.github.fisher2911.skyblocklevels.database.statement.SelectStatement;
+import io.github.fisher2911.skyblocklevels.database.statement.VarChar;
 import io.github.fisher2911.skyblocklevels.item.SkyBlock;
 import io.github.fisher2911.skyblocklevels.message.Adventure;
 import io.github.fisher2911.skyblocklevels.user.User;
@@ -226,18 +226,22 @@ public class EntityManager implements Listener {
     }
 
     public void saveEntity(SkyEntity entity) {
+        this.plugin.getDataManager().addSaveTask(() -> {
         InsertStatement.builder(TABLE).
                 addEntry(UUID, entity.getUUID().toString()).
                 addEntry(ENTITY_TYPE, entity.getType()).
                 build().
                 execute(this.plugin.getDataManager().getConnection());
+        });
     }
 
     public void deleteEntity(UUID uuid) {
-        DeleteStatement.builder(TABLE).
+        this.plugin.getDataManager().addSaveTask(() -> {
+            DeleteStatement.builder(TABLE).
                 condition(UUID, uuid.toString()).
                 build().
                 execute(this.plugin.getDataManager().getConnection());
+        });
     }
 
     public void loadTypes() {
