@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BlockLogger {
 
@@ -20,7 +22,8 @@ public class BlockLogger {
 
     private final SkyblockLevels plugin;
     private String currentDayFileName;
-    private Map<LogAction, BufferedWriter> writers = new HashMap<>();
+    private final Map<LogAction, BufferedWriter> writers = new HashMap<>();
+    final ExecutorService SERVICE = Executors.newSingleThreadExecutor();
 
     public BlockLogger(SkyblockLevels plugin) {
         this.plugin = plugin;
@@ -69,9 +72,16 @@ public class BlockLogger {
                 this.writers.put(LogAction.SKYBLOCK_BLOCK_PLACE, writer);
             }
             final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " placed a " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
-            writer.write(log);
-            writer.newLine();
-            writer.flush();
+            final BufferedWriter finalWriter = writer;
+            SERVICE.submit(() -> {
+                try {
+                    finalWriter.write(log);
+                    finalWriter.newLine();
+                    finalWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,9 +96,16 @@ public class BlockLogger {
                 this.writers.put(LogAction.SKYBLOCK_BLOCK_PLACE, writer);
             }
             final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " saved a placed " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
-            writer.write(log);
-            writer.newLine();
-            writer.flush();
+            final BufferedWriter finalWriter = writer;
+            SERVICE.submit(() -> {
+                try {
+                    finalWriter.write(log);
+                    finalWriter.newLine();
+                    finalWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,9 +120,16 @@ public class BlockLogger {
                 this.writers.put(LogAction.SKYBLOCK_BLOCK_BREAK, writer);
             }
             final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " broke a " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
-            writer.write(log);
-            writer.newLine();
-            writer.flush();
+            final BufferedWriter finalWriter = writer;
+            SERVICE.submit(() -> {
+                try {
+                    finalWriter.write(log);
+                    finalWriter.newLine();
+                    finalWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,9 +144,16 @@ public class BlockLogger {
                 this.writers.put(LogAction.SKYBLOCK_BLOCK_BREAK, writer);
             }
             final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " saved a broken a " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
-            writer.write(log);
-            writer.newLine();
-            writer.flush();
+            final BufferedWriter finalWriter = writer;
+            SERVICE.submit(() -> {
+                try {
+                    finalWriter.write(log);
+                    finalWriter.newLine();
+                    finalWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
