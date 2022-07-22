@@ -21,6 +21,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -126,19 +127,23 @@ public class Worlds implements Listener {
 
     private void saveChunk(World world, ChunkMap chunkMap) {
         this.saveBlocks(
-                "Chunk",
+                null,
                 chunkMap.getBlocks().entrySet().stream().
-                map(e -> Map.entry(new WorldPosition(world, e.getKey()), e.getValue())).
-                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                        map(e -> Map.entry(new WorldPosition(world, e.getKey()), e.getValue())).
+                        collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
-    public void addBlock(String player, SkyBlock block, WorldPosition position) {
+    public void addBlock(@Nullable String player, SkyBlock block, WorldPosition position) {
+        this.addBlock(player, block, position, true);
+    }
+
+    public void addBlock(@Nullable String player, SkyBlock block, WorldPosition position, boolean save) {
         if (block == null) return;
         final WorldManager worldManager = this.worlds.get(position.getWorld().getUID());
         if (worldManager == null) return;
         worldManager.addBlock(block, position);
-        this.saveBlocks(player, Map.of(position, block));
-        this.plugin.getBlockLogger().logBlockPlace(player, block, position);
+        if (save) this.saveBlocks(player, Map.of(position, block));
+        if (player != null) this.plugin.getBlockLogger().logBlockPlace(player, block, position);
     }
 
     public void removeBlock(String player, WorldPosition worldPosition) {
@@ -177,7 +182,7 @@ public class Worlds implements Listener {
             final WorldPosition position = new WorldPosition(Bukkit.getWorld(world), new Position(x, y, z));
             final SpecialSkyItem item = this.plugin.getDataManager().loadItem(tableName, itemId, id);
             if (!(item instanceof final SkyBlock block)) return null;
-            this.addBlock("chunk load", block, position);
+            this.addBlock(null, block, position, false);
             return block;
         });
     }
@@ -200,7 +205,7 @@ public class Worlds implements Listener {
         });
     }
 
-    private void saveBlocks(String name, Map<WorldPosition, SkyBlock> blocks) {
+    private void saveBlocks(@Nullable String name, Map<WorldPosition, SkyBlock> blocks) {
         final int batchSize = 50;
         final Multimap<Class<?>, SkyBlock> toSave = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
         this.plugin.getDataManager().addSaveTask(() -> {
@@ -223,7 +228,7 @@ public class Worlds implements Listener {
                         batchSize(batchSize).
                         build().
                         execute(this.plugin.getDataManager().getConnection());
-                this.plugin.getBlockLogger().logBlockPlaceSave(name, block, worldPosition);
+                if (name != null) this.plugin.getBlockLogger().logBlockPlaceSave(name, block, worldPosition);
             }
             if (toSave.isEmpty()) return;
             for (var entry : toSave.asMap().entrySet()) {

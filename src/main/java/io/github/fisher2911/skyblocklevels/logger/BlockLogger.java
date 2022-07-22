@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class BlockLogger {
 
     private static final DateTimeFormatter FILE_NAME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter LOG_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter LOG_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:s:A");
     private static final String LOG_FOLDER_NAME = "logs";
 
     private final SkyblockLevels plugin;

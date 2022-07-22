@@ -95,9 +95,11 @@ public class DataManager {
     }
 
     public void start(int interval) {
-        final List<Runnable> current = new ArrayList<>(this.saveTasks);
-        this.saveTasks.clear();
-        this.saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, () -> current.forEach(Runnable::run), interval, interval);
+        this.saveTask = Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
+            final List<Runnable> current = new ArrayList<>(this.saveTasks);
+            this.saveTasks.clear();
+            Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> current.forEach(Runnable::run));
+        }, interval, interval);
     }
 
     public void addTable(CreateTableStatement statement) {

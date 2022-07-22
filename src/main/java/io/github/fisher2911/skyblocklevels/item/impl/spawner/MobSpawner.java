@@ -132,7 +132,7 @@ public class MobSpawner implements Spawner, Delayed {
     public void onSpawn(Entity entity) {
         final String type = this.entityTypes.getRandom();
         if (type == null) return;
-        this.plugin.getEntityManager().create(type, entity);
+        this.plugin.getEntityManager().create(type, entity, true);
     }
 
     @Override

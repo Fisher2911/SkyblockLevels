@@ -3,8 +3,8 @@ package io.github.fisher2911.skyblocklevels.entity;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import io.github.fisher2911.skyblocklevels.SkyblockLevels;
-import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.DataManager;
+import io.github.fisher2911.skyblocklevels.database.statement.CreateTableStatement;
 import io.github.fisher2911.skyblocklevels.database.statement.DeleteStatement;
 import io.github.fisher2911.skyblocklevels.database.statement.InsertStatement;
 import io.github.fisher2911.skyblocklevels.database.statement.KeyType;
@@ -35,7 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -71,15 +70,15 @@ public class EntityManager implements Listener {
         this.entityProvider.put(type, provider);
     }
 
-    public SkyEntity create(String type, Entity entity) {
+    public SkyEntity create(String type, Entity entity, boolean save) {
         final Function<Entity, ? extends SkyEntity> provider = this.entityProvider.get(type);
         if (provider == null) return SkyEntity.EMPTY;
         final SkyEntity skyEntity = provider.apply(entity);
-        this.addEntity(skyEntity);
+        this.addEntity(skyEntity, save);
         return skyEntity;
     }
 
-    public void addEntity(SkyEntity skyEntity) {
+    public void addEntity(SkyEntity skyEntity, boolean save) {
         this.entityMap.put(skyEntity.getUUID(), skyEntity);
         final Entity entity = skyEntity.getEntity();
         if (entity != null) {
@@ -90,7 +89,7 @@ public class EntityManager implements Listener {
                 entity.setCustomNameVisible(true);
             }
         }
-        this.saveEntity(skyEntity);
+        if (save) this.saveEntity(skyEntity);
     }
 
     public SkyEntity getEntity(UUID uuid) {
@@ -208,18 +207,16 @@ public class EntityManager implements Listener {
     }
 
     public void loadEntity(Entity entity) {
-        final List<SkyEntity> skyEntities = SelectStatement.builder(TABLE).
+        SelectStatement.builder(TABLE).
                 whereEqual(UUID, entity.getUniqueId().toString()).
                 selectAll().
                 build().
                 execute(this.plugin.getDataManager().getConnection(), results -> {
                     final String type = results.getString(ENTITY_TYPE);
-                    final SkyEntity skyEntity = this.create(type, entity);
+                    final SkyEntity skyEntity = this.create(type, entity, false);
                     if (skyEntity == SkyEntity.EMPTY) return null;
                     return skyEntity;
                 });
-        if (skyEntities.isEmpty()) return;
-        this.addEntity(skyEntities.get(0));
     }
 
     public void saveEntity(SkyEntity entity) {
