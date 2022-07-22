@@ -125,7 +125,9 @@ public class Worlds implements Listener {
     }
 
     private void saveChunk(World world, ChunkMap chunkMap) {
-        this.saveBlocks(chunkMap.getBlocks().entrySet().stream().
+        this.saveBlocks(
+                "Chunk",
+                chunkMap.getBlocks().entrySet().stream().
                 map(e -> Map.entry(new WorldPosition(world, e.getKey()), e.getValue())).
                 collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
@@ -135,7 +137,7 @@ public class Worlds implements Listener {
         final WorldManager worldManager = this.worlds.get(position.getWorld().getUID());
         if (worldManager == null) return;
         worldManager.addBlock(block, position);
-        this.saveBlocks(Map.of(position, block));
+        this.saveBlocks(player, Map.of(position, block));
         this.plugin.getBlockLogger().logBlockPlace(player, block, position);
     }
 
@@ -144,7 +146,7 @@ public class Worlds implements Listener {
         if (worldManager == null) return;
         final SkyBlock block = worldManager.removeBlock(worldPosition);
         if (block == SkyBlock.EMPTY) return;
-        this.deleteBlock(block, worldPosition);
+        this.deleteBlock(player, block, worldPosition);
         this.plugin.getBlockLogger().logBlockBreak(player, block, worldPosition);
     }
 
@@ -180,7 +182,7 @@ public class Worlds implements Listener {
         });
     }
 
-    private void deleteBlock(SkyBlock block, WorldPosition worldPosition) {
+    private void deleteBlock(String name, SkyBlock block, WorldPosition worldPosition) {
         this.plugin.getDataManager().addSaveTask(() -> {
             final Position position = worldPosition.getPosition();
             DeleteStatement.builder(DATABASE_TABLE_COLUMN).
@@ -194,10 +196,11 @@ public class Worlds implements Listener {
                     build().
                     execute(this.plugin.getDataManager().getConnection());
             this.plugin.getDataManager().deleteItem(block, block.getClass());
+            this.plugin.getBlockLogger().logBlockBreakSave(name, block, worldPosition);
         });
     }
 
-    private void saveBlocks(Map<WorldPosition, SkyBlock> blocks) {
+    private void saveBlocks(String name, Map<WorldPosition, SkyBlock> blocks) {
         final int batchSize = 50;
         final Multimap<Class<?>, SkyBlock> toSave = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
         this.plugin.getDataManager().addSaveTask(() -> {
@@ -220,6 +223,7 @@ public class Worlds implements Listener {
                         batchSize(batchSize).
                         build().
                         execute(this.plugin.getDataManager().getConnection());
+                this.plugin.getBlockLogger().logBlockPlaceSave(name, block, worldPosition);
             }
             if (toSave.isEmpty()) return;
             for (var entry : toSave.asMap().entrySet()) {

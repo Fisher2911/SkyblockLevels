@@ -77,6 +77,23 @@ public class BlockLogger {
         }
     }
 
+    public void logBlockPlaceSave(String player, SkyBlock block, WorldPosition at) {
+        final File file = this.getFile(LogCategory.SKYBLOCK, LogAction.SKYBLOCK_BLOCK_PLACE);
+        try {
+            BufferedWriter writer = this.writers.get(LogAction.SKYBLOCK_BLOCK_PLACE);
+            if (writer == null) {
+                writer = new BufferedWriter(new java.io.FileWriter(file, true));
+                this.writers.put(LogAction.SKYBLOCK_BLOCK_PLACE, writer);
+            }
+            final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " saved a placed " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
+            writer.write(log);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void logBlockBreak(String player, SkyBlock block, WorldPosition at) {
         final File file = this.getFile(LogCategory.SKYBLOCK, LogAction.SKYBLOCK_BLOCK_BREAK);
         try {
@@ -86,6 +103,23 @@ public class BlockLogger {
                 this.writers.put(LogAction.SKYBLOCK_BLOCK_BREAK, writer);
             }
             final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " broke a " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
+            writer.write(log);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void logBlockBreakSave(String player, SkyBlock block, WorldPosition at) {
+        final File file = this.getFile(LogCategory.SKYBLOCK, LogAction.SKYBLOCK_BLOCK_BREAK);
+        try {
+            BufferedWriter writer = this.writers.get(LogAction.SKYBLOCK_BLOCK_BREAK);
+            if (writer == null) {
+                writer = new BufferedWriter(new java.io.FileWriter(file, true));
+                this.writers.put(LogAction.SKYBLOCK_BLOCK_BREAK, writer);
+            }
+            final String log = LOG_FORMATTER.format(LocalDateTime.now()) + " - " + player + " saved a broken a " + block.getItemId() + " : " + block.getClass().getSimpleName() + " block at " + at;
             writer.write(log);
             writer.newLine();
             writer.flush();
