@@ -2,6 +2,7 @@ package io.github.fisher2911.skyblocklevels.user;
 
 import io.github.fisher2911.skyblocklevels.database.Changeable;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Collection implements Changeable<Set<String>> {
     }
 
     public static Collection empty() {
-        return new Collection(Map.of());
+        return new Collection(new HashMap<>());
     }
 
     public void set(String id, int amount) {

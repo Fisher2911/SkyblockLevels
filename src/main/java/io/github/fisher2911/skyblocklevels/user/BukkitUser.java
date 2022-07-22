@@ -149,6 +149,13 @@ public class BukkitUser implements User {
         return lastInteractPosition;
     }
 
+    @Override
+    public String getName() {
+        final Player player = this.getPlayer();
+        if (player == null) return null;
+        return player.getName();
+    }
+
     public void setLastInteractPosition(WorldPosition lastInteractPosition, boolean onlyCountPitchAndYaw) {
         if (lastInteractPosition.equals(this.lastInteractPosition) && !onlyCountPitchAndYaw) {
             this.samePositionCount++;

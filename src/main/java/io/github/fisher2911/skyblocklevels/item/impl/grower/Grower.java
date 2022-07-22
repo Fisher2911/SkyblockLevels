@@ -133,7 +133,7 @@ public class Grower implements SkyBlock {
     public void onBreak(User user, BlockBreakEvent event) {
         event.getBlock().setType(Material.AIR);
         this.plugin.getItemManager().giveItem(user, this);
-        this.plugin.getWorlds().removeBlock(this.worldPosition);
+        this.plugin.getWorlds().removeBlock(user.getName(), this.worldPosition);
     }
 
     @Override
@@ -142,14 +142,14 @@ public class Grower implements SkyBlock {
         final Block block = event.getBlock();
         block.setBlockData(event.getNewState(), true);
         block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         final Block block = event.getBlock();
         this.worldPosition = WorldPosition.fromLocation(block.getLocation());
-        this.plugin.getWorlds().addBlock(this, this.worldPosition);
+        this.plugin.getWorlds().addBlock(user.getName(), this, this.worldPosition);
         block.setType(this.block);
         DirectionUtil.setBlockDirection(block, BlockFace.UP);
         event.getItemInHand().setAmount(event.getItemInHand().getAmount() - 1);
@@ -256,7 +256,7 @@ public class Grower implements SkyBlock {
                                         collect(Collectors.toList()));
 
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Grower(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, block, tickDelay, items);
+                return () -> new Grower(plugin, -1, itemId, itemSupplier, block, tickDelay, items);
             } catch (SerializationException e) {
                 throw new RuntimeException(e);
             }

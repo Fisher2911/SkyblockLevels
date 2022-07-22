@@ -147,7 +147,7 @@ public class Transformer implements SkyBlock, Delayed {
                 }
             }, 1);
         }
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock(user.getName(), WorldPosition.fromLocation(block.getLocation()));
         this.plugin.getItemManager().giveItem(user, this);
     }
 
@@ -171,7 +171,7 @@ public class Transformer implements SkyBlock, Delayed {
         final Block block = event.getBlock();
         final Location location = block.getLocation();
         final WorldPosition position = WorldPosition.fromLocation(location);
-        this.plugin.getWorlds().addBlock(this, position);
+        this.plugin.getWorlds().addBlock(user.getName(), this, position);
         block.setType(Material.TRAPPED_CHEST);
         DirectionUtil.setBlockDirection(block, event.getPlayer());
     }
@@ -241,7 +241,7 @@ public class Transformer implements SkyBlock, Delayed {
     public void onDestroy(BlockDestroyEvent event) {
         final Location location = event.getBlock().getLocation();
         final WorldPosition worldPosition = WorldPosition.fromLocation(location);
-        this.plugin.getWorlds().removeBlock(worldPosition);
+        this.plugin.getWorlds().removeBlock("Nobody", worldPosition);
         location.getWorld().dropItem(location, this.itemSupplier.get());
     }
 
@@ -315,7 +315,7 @@ public class Transformer implements SkyBlock, Delayed {
                 }
                 final CollectionCondition collectionCondition = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new Transformer(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, tickDelay, collectionCondition, requirements, rewards);
+                return () -> new Transformer(plugin, -1, itemId, itemSupplier, tickDelay, collectionCondition, requirements, rewards);
             } catch (SerializationException e) {
                 throw new RuntimeException();
             }

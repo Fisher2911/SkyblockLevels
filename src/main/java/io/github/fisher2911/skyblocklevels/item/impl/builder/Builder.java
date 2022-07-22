@@ -54,7 +54,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(event.getBlock().getLocation()));
+        this.plugin.getWorlds().removeBlock(user.getName(), WorldPosition.fromLocation(event.getBlock().getLocation()));
         this.plugin.getItemManager().giveItem(user, this);
     }
 
@@ -64,7 +64,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
         final Block block = event.getBlock();
         block.setBlockData(event.getNewState(), true);
         block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody ", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Builder implements SkyBlock, RedstoneBlock, Delayed {
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         final Block block = event.getBlock();
-        this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().addBlock(user.getName(), this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(Material.DISPENSER);
         DirectionUtil.setBlockDirection(block, event.getPlayer());
         event.getItemInHand().setAmount(event.getItemInHand().getAmount() - 1);

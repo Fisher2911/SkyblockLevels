@@ -17,5 +17,6 @@ public interface User {
     void forceCommand(String command);
     @NotNull Audience getAudience();
     Cooldowns getCooldowns();
+    String getName();
 
 }

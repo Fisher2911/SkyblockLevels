@@ -81,6 +81,6 @@ public abstract class SkyCrop implements SkyBlock {
         }
         block.setType(this.material);
         final WorldPosition position = WorldPosition.fromLocation(block.getLocation());
-        this.plugin.getWorlds().addBlock(this, position);
+        this.plugin.getWorlds().addBlock(user.getName(), this, position);
     }
 }

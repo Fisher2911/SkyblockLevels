@@ -127,7 +127,7 @@ public class ItemCatcher implements SkyBlock, Delayed {
 
     @Override
     public void onBreak(User user, BlockBreakEvent event) {
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(event.getBlock().getLocation()));
+        this.plugin.getWorlds().removeBlock(user.getName(), WorldPosition.fromLocation(event.getBlock().getLocation()));
         this.plugin.getItemManager().giveItem(user, this);
     }
 
@@ -137,7 +137,7 @@ public class ItemCatcher implements SkyBlock, Delayed {
         final Block block = event.getBlock();
         block.setBlockData(event.getNewState(), true);
         block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ItemCatcher implements SkyBlock, Delayed {
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         final Block block = event.getBlock();
-        this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().addBlock(user.getName(), this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(Material.DROPPER);
         final Directional directional = (Directional) block.getBlockData();
         directional.setFacing(DirectionUtil.getPlayerFace(event.getPlayer()).getOppositeFace());
@@ -244,7 +244,7 @@ public class ItemCatcher implements SkyBlock, Delayed {
                                         collect(Collectors.toList()));
 
                 final SkyblockLevels plugin = SkyblockLevels.getPlugin(SkyblockLevels.class);
-                return () -> new ItemCatcher(plugin, plugin.getDataManager().generateNextId(), itemId, itemSupplier, tickDelay, items);
+                return () -> new ItemCatcher(plugin, -1, itemId, itemSupplier, tickDelay, items);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

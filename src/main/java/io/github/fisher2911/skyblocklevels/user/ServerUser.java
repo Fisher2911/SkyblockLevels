@@ -51,4 +51,9 @@ public class ServerUser implements User {
     public Cooldowns getCooldowns() {
         return this.cooldowns;
     }
+
+    @Override
+    public String getName() {
+        return "Server";
+    }
 }

@@ -73,7 +73,7 @@ public class SingleSkyCrop extends SkyCrop {
         final Player player = event.getPlayer();
         final boolean shifting = player.isSneaking();
         event.setDropItems(false);
-        if (!this.isMelonOrPumpkin(block) || shifting) this.plugin.getWorlds().removeBlock(position);
+        if (!this.isGrownMelonOrPumpkin(block) || shifting) this.plugin.getWorlds().removeBlock(user.getName(), position);
         final Material setType = this.fromBlock(block);
         if (setType != Material.AIR && !shifting) {
             block.getRelative(BlockFace.DOWN).setType(Material.FARMLAND);
@@ -120,7 +120,7 @@ public class SingleSkyCrop extends SkyCrop {
         final Block block = event.getBlock();
         this.dropItems(block, User.SERVER);
         block.setBlockData(event.getNewState(), true);
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
@@ -167,6 +167,11 @@ public class SingleSkyCrop extends SkyCrop {
                 block.getType() == Material.PUMPKIN ||
                 block.getType() == Material.PUMPKIN_STEM ||
                 block.getType() == Material.MELON_STEM;
+    }
+
+    private boolean isGrownMelonOrPumpkin(Block block) {
+        return block.getType() == Material.MELON ||
+                block.getType() == Material.PUMPKIN;
     }
 
     private Material fromStem(Material material) {
@@ -289,7 +294,7 @@ public class SingleSkyCrop extends SkyCrop {
                         collect(Collectors.toSet());
                 return () -> new SingleSkyCrop(
                         plugin,
-                        plugin.getDataManager().generateNextId(),
+                        -1,
                         itemId,
                         material,
                         itemSupplier,

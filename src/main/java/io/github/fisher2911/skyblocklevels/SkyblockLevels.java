@@ -32,6 +32,7 @@ import io.github.fisher2911.skyblocklevels.listener.PlayerInteractListener;
 import io.github.fisher2911.skyblocklevels.listener.PlayerJoinListener;
 import io.github.fisher2911.skyblocklevels.listener.SkyblockMoveListener;
 import io.github.fisher2911.skyblocklevels.listener.VoidDamageListener;
+import io.github.fisher2911.skyblocklevels.logger.BlockLogger;
 import io.github.fisher2911.skyblocklevels.packet.PacketHelper;
 import io.github.fisher2911.skyblocklevels.papi.SkyblockExpansion;
 import io.github.fisher2911.skyblocklevels.shopguiplus.ShopListener;
@@ -82,6 +83,7 @@ public final class SkyblockLevels extends JavaPlugin {
     private TeleportManager teleportManager;
     private RegisteredServiceProvider<LuckPerms> provider;
     private Essentials essentials;
+    private BlockLogger blockLogger;
 
 
     @Override
@@ -123,6 +125,7 @@ public final class SkyblockLevels extends JavaPlugin {
             this.entityManager.load();
         }, 20);
         this.essentials = JavaPlugin.getPlugin(Essentials.class);
+        this.blockLogger = new BlockLogger(this);
     }
 
     @Override
@@ -131,6 +134,7 @@ public final class SkyblockLevels extends JavaPlugin {
         this.dataManager.shutdown();
         this.userManager.endSaveTask();
         this.userManager.saveAll();
+        this.blockLogger.close();
     }
 
     public boolean isShuttingDown() {
@@ -293,5 +297,9 @@ public final class SkyblockLevels extends JavaPlugin {
 
     public Essentials getEssentials() {
         return essentials;
+    }
+
+    public BlockLogger getBlockLogger() {
+        return blockLogger;
     }
 }

@@ -130,20 +130,22 @@ public class Worlds implements Listener {
                 collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
-    public void addBlock(SkyBlock block, WorldPosition position) {
+    public void addBlock(String player, SkyBlock block, WorldPosition position) {
         if (block == null) return;
         final WorldManager worldManager = this.worlds.get(position.getWorld().getUID());
         if (worldManager == null) return;
         worldManager.addBlock(block, position);
         this.saveBlocks(Map.of(position, block));
+        this.plugin.getBlockLogger().logBlockPlace(player, block, position);
     }
 
-    public void removeBlock(WorldPosition worldPosition) {
+    public void removeBlock(String player, WorldPosition worldPosition) {
         final WorldManager worldManager = this.worlds.get(worldPosition.getWorld().getUID());
         if (worldManager == null) return;
         final SkyBlock block = worldManager.removeBlock(worldPosition);
         if (block == SkyBlock.EMPTY) return;
         this.deleteBlock(block, worldPosition);
+        this.plugin.getBlockLogger().logBlockBreak(player, block, worldPosition);
     }
 
     public SkyBlock getBlockAt(WorldPosition worldPosition) {
@@ -173,12 +175,12 @@ public class Worlds implements Listener {
             final WorldPosition position = new WorldPosition(Bukkit.getWorld(world), new Position(x, y, z));
             final SpecialSkyItem item = this.plugin.getDataManager().loadItem(tableName, itemId, id);
             if (!(item instanceof final SkyBlock block)) return null;
-            this.addBlock(block, position);
+            this.addBlock("chunk load", block, position);
             return block;
         });
     }
 
-    public void deleteBlock(SkyBlock block, WorldPosition worldPosition) {
+    private void deleteBlock(SkyBlock block, WorldPosition worldPosition) {
         this.plugin.getDataManager().addSaveTask(() -> {
             final Position position = worldPosition.getPosition();
             DeleteStatement.builder(DATABASE_TABLE_COLUMN).

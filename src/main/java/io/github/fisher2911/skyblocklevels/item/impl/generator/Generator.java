@@ -258,14 +258,14 @@ public class Generator implements SkyBlock, Delayed, Durable {
         final Block block = event.getBlock();
         block.setBlockData(event.getNewState());
         block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
     public void onPlace(User user, BlockPlaceEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
         final Block block = event.getBlock();
-        this.plugin.getWorlds().addBlock(this, WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().addBlock(user.getName(), this, WorldPosition.fromLocation(block.getLocation()));
         block.setType(this.resetBlock);
     }
 
@@ -282,7 +282,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
             final GeneratorBreakEvent generatorBreakEvent = new GeneratorBreakEvent(block, event.getPlayer());
             Bukkit.getPluginManager().callEvent(generatorBreakEvent);
             if (generatorBreakEvent.isCancelled()) return;
-            this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+            this.plugin.getWorlds().removeBlock(user.getName(), WorldPosition.fromLocation(block.getLocation()));
             this.plugin.getItemManager().giveItem(user, this);
             block.setType(Material.AIR);
             this.running = false;
@@ -485,7 +485,7 @@ public class Generator implements SkyBlock, Delayed, Durable {
                 final CollectionCondition requirements = CollectionCondition.serializer().deserialize(CollectionCondition.class, node.node(COLLECTION_REQUIREMENTS));
                 return () -> new Generator(
                         plugin,
-                        plugin.getDataManager().generateNextId(),
+                        -1,
                         itemId,
                         itemSupplier,
                         tickDelay,

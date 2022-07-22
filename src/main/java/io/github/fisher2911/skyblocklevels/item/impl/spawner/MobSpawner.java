@@ -67,7 +67,7 @@ public class MobSpawner implements Spawner, Delayed {
         if (!(user instanceof final BukkitUser bukkitUser)) return;
         event.setExpToDrop(0);
         final WorldPosition position = WorldPosition.fromLocation(event.getBlock().getLocation());
-        this.plugin.getWorlds().removeBlock(position);
+        this.plugin.getWorlds().removeBlock(user.getName(), position);
         this.plugin.getItemManager().giveItem(bukkitUser, this);
     }
 
@@ -77,7 +77,7 @@ public class MobSpawner implements Spawner, Delayed {
         final Block block = event.getBlock();
         block.setBlockData(event.getNewState(), true);
         block.getWorld().dropItem(block.getLocation(), this.plugin.getItemManager().getItem(this));
-        this.plugin.getWorlds().removeBlock(WorldPosition.fromLocation(block.getLocation()));
+        this.plugin.getWorlds().removeBlock("Nobody", WorldPosition.fromLocation(block.getLocation()));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class MobSpawner implements Spawner, Delayed {
             spawner.setSpawnCount(1);
             spawner.update(true, false);
         }
-        this.plugin.getWorlds().addBlock(this, worldPosition);
+        this.plugin.getWorlds().addBlock(user.getName(), this, worldPosition);
         user.sendMessage("<green>You placed a " + this.name + " mob spawner!");
     }
 
